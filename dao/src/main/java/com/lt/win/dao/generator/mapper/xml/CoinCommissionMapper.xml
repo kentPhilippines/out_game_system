@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.dao.generator.mapper.CoinCommissionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lt.win.dao.generator.po.CoinCommission">
+        <id column="id" property="id" />
+        <result column="uid" property="uid" />
+        <result column="username" property="username" />
+        <result column="agent_level" property="agentLevel" />
+        <result column="riqi" property="riqi" />
+        <result column="coin" property="coin" />
+        <result column="sub_uid" property="subUid" />
+        <result column="sub_username" property="subUsername" />
+        <result column="sub_bet_trunover" property="subBetTrunover" />
+        <result column="rate" property="rate" />
+        <result column="coin_before" property="coinBefore" />
+        <result column="status" property="status" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, uid, username, agent_level, riqi, coin, sub_uid, sub_username, sub_bet_trunover, rate, coin_before, status, created_at, updated_at
+    </sql>
+
+</mapper>

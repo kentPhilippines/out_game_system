@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.apiend.mapper.CenterAgentMapper">
+    <!-- 开启二级缓存
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->
+    <!--代理中心-我的报表-->
+    <select id="getReportsCoinStatistics" resultType="bigDecimal">
+        select ifnull(sum(${columnName}),0) as coin from ${tableName}
+        where uid in (select uid from `win_user_profile` where `sup_uid_1` = #{uid})
+        <if test="startTime != null">
+            and created_at &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            and created_at &lt;= #{endTime}
+        </if>
+        <if test="depStatusList != null">
+            and dep_status in
+            <foreach collection="depStatusList" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="statusList != null">
+            and status in
+            <foreach collection="statusList" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+    <!--代理中心-我的报表 统计充值笔数-->
+    <select id="getReportsDepositCountStatistics" resultType="int">
+        select count(id) as count from ${tableName}
+        where uid in (select uid from `win_user_profile` where `sup_uid_1` = #{uid})
+        <if test="startTime != null">
+            and created_at &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            and created_at &lt;= #{endTime}
+        </if>
+        <if test="depStatusList != null">
+            and dep_status in
+            <foreach collection="depStatusList" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+    <!--代理中心-我的下级-列表-->
+    <select id="subordinateList" resultType="com.lt.win.dao.generator.po.User">
+        select id, username,role,coin,created_at as createdAt,level_id as levelId from win_user
+        where id in (SELECT uid FROM win_user_profile WHERE sup_uid_1 = #{po.uid})
+        <if test="po != null">
+            <if test="po.role != null">
+                and role = #{po.role}
+            </if>
+            <if test="po.role == null">
+                and role in (0,1)
+            </if>
+            <if test="po.username != null and po.username != ''">
+                and username = #{po.username}
+            </if>
+            <if test="po.startTime != null">
+                and created_at &gt;= #{po.startTime}
+            </if>
+            <if test="po.endTime != null">
+                and created_at &lt;= #{po.endTime}
+            </if>
+        </if>
+    </select>
+    <!--代理中心-我的下级-统计-直推sup_uid_1-->
+    <select id="getSubordinateStatisticsZT" resultType="int">
+        select count(id) as count from win_user
+        where id in (SELECT uid FROM win_user_profile WHERE sup_uid_1 = #{uid} )
+        <if test="role != null">
+            and role = #{role}
+        </if>
+        <if test="role == null">
+            and role in (0,1)
+        </if>
+    </select>
+    <!--代理中心-我的下级-统计-团队sup_uid_1至sup_uid_6-->
+    <select id="getSubordinateStatisticsTD" resultType="int">
+        select count(id) as count from win_user
+        where id in (SELECT uid FROM win_user_profile
+        WHERE sup_uid_1 = #{uid} OR sup_uid_2 = #{uid} OR sup_uid_3 = #{uid} OR sup_uid_4 = #{uid} OR sup_uid_5 = #{uid}
+        OR sup_uid_6 = #{uid} )
+        <if test="role != null">
+            and role = #{role}
+        </if>
+        <if test="role == null">
+            and role in (0,1)
+        </if>
+    </select>
+    <!--代理中心-我的报表-奖金与佣金详情-列表 查询邀请好友奖励记录-->
+    <select id="pageRewardsInviteList" resultType="com.lt.win.apiend.io.dto.mapper.RewardsInviteRes">
+        select b.username,b.`coin`,a.coin as rewardsCoin,a.`created_at` as createdAt,b.`category`,a.uid
+        from win_coin_rewards a
+        left join win_coin_rewards_invite b
+        on a.id = b.refer_id
+        where a.refer_id=9 and a.uid = #{po.uid}
+        <if test="po != null">
+            <if test="po.category != null">
+                and b.category = #{po.category}
+            </if>
+            <if test="po.username != null and po.username != ''">
+                and b.username = #{po.username}
+            </if>
+            <if test="po.startTime != null">
+                and a.created_at &gt;= #{po.startTime}
+            </if>
+            <if test="po.endTime != null">
+                and a.created_at &lt;= #{po.endTime}
+            </if>
+        </if>
+    </select>
+    <!--代理中心-我的报表-奖金与佣金详情-统计 邀请好友奖励统计-->
+    <select id="getCoinRewardsInviteStatistics" resultType="com.lt.win.apiend.io.dto.mapper.RewardsInviteRes">
+        select ifnull(sum(b.`coin`),0) as coin,ifnull(sum(a.`coin`),0) as rewardsCoin
+        from win_coin_rewards a
+        left join win_coin_rewards_invite b
+        on a.id = b.refer_id
+        where a.refer_id=9 and a.uid = #{uid}
+        <if test="category != null">
+            and b.category = #{category}
+        </if>
+        <if test="username != null and username != ''">
+            and b.username = #{username}
+        </if>
+        <if test="startTime != null">
+            and a.created_at &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            and a.created_at &lt;= #{endTime}
+        </if>
+    </select>
+</mapper>

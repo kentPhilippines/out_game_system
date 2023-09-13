@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.service.mapper.CoinLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lt.win.service.io.dto.CoinLog">
+        <id column="id" property="id" />
+        <result column="uid" property="uid" />
+        <result column="username" property="username" />
+        <result column="category" property="category" />
+        <result column="sub_category" property="subCategory" />
+        <result column="refer_id" property="referId" />
+        <result column="coin" property="coin" />
+        <result column="currency" property="currency" />
+        <result column="coin_before" property="coinBefore" />
+        <result column="coin_after" property="coinAfter" />
+        <result column="out_in" property="outIn" />
+        <result column="status" property="status" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, uid, username, category, sub_category, refer_id, coin, currency, coin_before, coin_after, out_in, status, created_at, updated_at
+    </sql>
+
+</mapper>

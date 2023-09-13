@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.backend.mapper.PlatManagerMapper">
+    <!-- 平台管理-列表 -->
+    <select id="listPlat" resultType="com.lt.win.backend.io.po.ListPlatPO">
+        select a.id,a.sort,a.name,a.updated_at as updatedAt,a.status,a.model,b.name_zh as nameZh,b.`name` as
+        code,b.rate,b.config
+        from win_game_list a left join win_plat_list b on a.plat_list_id = b.id
+        <if test="null != po">
+            <where>
+                <if test="null != po.code">
+                    and b.`name` = #{po.code}
+                </if>
+                <if test="po.nameZh != null and po.nameZh != ''">
+                    and b.name_zh like '${po.nameZh}%'
+                </if>
+                <if test="po.status != null">
+                    and a.status = #{po.status}
+                </if>
+                <if test="po.startTime != null">
+                    and a.updated_at &gt;= #{po.startTime}
+                </if>
+                <if test="po.endTime != null">
+                    and a.updated_at &lt;= #{po.endTime}
+                </if>
+            </where>
+        </if>
+    </select>
+</mapper>

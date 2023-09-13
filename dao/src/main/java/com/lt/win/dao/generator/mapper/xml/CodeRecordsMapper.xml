@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.dao.generator.mapper.CodeRecordsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lt.win.dao.generator.po.CodeRecords">
+        <id column="id" property="id" />
+        <result column="uid" property="uid" />
+        <result column="username" property="username" />
+        <result column="coin" property="coin" />
+        <result column="code_require" property="codeRequire" />
+        <result column="category" property="category" />
+        <result column="refer_id" property="referId" />
+        <result column="refer_withdrawal_id" property="referWithdrawalId" />
+        <result column="remarks" property="remarks" />
+        <result column="status" property="status" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, uid, username, coin, code_require, category, refer_id, refer_withdrawal_id, remarks, status, created_at, updated_at
+    </sql>
+
+</mapper>

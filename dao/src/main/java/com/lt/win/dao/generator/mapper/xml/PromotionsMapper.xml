@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.dao.generator.mapper.PromotionsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lt.win.dao.generator.po.Promotions">
+        <id column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="code_zh" property="codeZh" />
+        <result column="img" property="img" />
+        <result column="category" property="category" />
+        <result column="info" property="info" />
+        <result column="descript" property="descript" />
+        <result column="started_at" property="startedAt" />
+        <result column="payout_category" property="payoutCategory" />
+        <result column="ended_at" property="endedAt" />
+        <result column="sort" property="sort" />
+        <result column="status" property="status" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, code, code_zh, img, category, info, descript, started_at, payout_category, ended_at, sort, status, created_at, updated_at
+    </sql>
+
+</mapper>

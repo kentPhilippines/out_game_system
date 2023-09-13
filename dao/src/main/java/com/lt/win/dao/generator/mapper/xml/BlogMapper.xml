@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.dao.generator.mapper.BlogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lt.win.dao.generator.po.Blog">
+        <id column="id" property="id" />
+        <result column="lang" property="lang" />
+        <result column="category" property="category" />
+        <result column="image" property="image" />
+        <result column="title" property="title" />
+        <result column="title_sub" property="titleSub" />
+        <result column="content" property="content" />
+        <result column="recommend" property="recommend" />
+        <result column="status" property="status" />
+        <result column="sort" property="sort" />
+        <result column="create_by" property="createBy" />
+        <result column="update_by" property="updateBy" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, lang, category, image, title, title_sub, content, recommend, status, sort, create_by, update_by, created_at, updated_at
+    </sql>
+
+</mapper>

@@ -1,0 +1,6 @@
+FROM amazoncorretto:11
+MAINTAINER David David@admin.com
+
+COPY target/apiend-0.0.1-SNAPSHOT.jar /sports-api.jar
+
+ENTRYPOINT ["java", "-jar", "/sports-api.jar"]

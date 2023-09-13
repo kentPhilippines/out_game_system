@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.backend.mapper.AdminPermissionMapper">
+    <!--管理信息列表查询-->
+    <select id="adminList" resultType="map">
+        select t1.id, t1.username,t3.title,t1.admin_group_id as adminGroupId , t1.operate_id as operateId,t1.agent_id as
+        agentId,t1.updated_at as updatedAt,t1.id as uid,t3.id as group_id,t1.parent,t1.secret
+        from win_admin t1 left join win_auth_group_access t2 on t1.id =t2.uid left join win_auth_group t3 on t2.group_id =
+        t3.id
+        where t1.status=10
+        <if test="map.username != null and map.username !=''">
+            and t1.username like '${map.username}%'
+        </if>
+        order by t1.updated_at desc
+    </select>
+
+    <!--查询角色-->
+    <select id="getauthGroup" resultType="map">
+        select id,admin_group_id as adminGroupId,title,rules,parent,operate_id as operateId,data_permission as
+        dataPermission,updated_at as updatedAt from
+        win_auth_group where status=1
+        <if test="map.title != null and map.title !=''">
+            and title= #{map.title}
+        </if>
+        order by updated_at desc
+    </select>
+
+    <!--查询admin-->
+    <select id="getAdminByUsername" resultType="map">
+        select id from win_admin where username = #{map.username} limit 1
+    </select>
+    <!-- 添加管理员-->
+    <insert id="addAdmin">
+        insert into win_admin(username, agent_id,password_hash, parent,status,admin_group_id,operate_id,
+        secret,created_at, updated_at)
+        values
+        (#{map.username},#{map.agentId},#{map.password_hash},#{map.parent},#{map.status},#{map.adminGroupId}
+        ,#{map.operate_id},#{map.secret}, unix_timestamp(now()),unix_timestamp(now()))
+    </insert>
+    <!--添加管理表信息-->
+    <insert id="addAuthGroupAccess">
+        insert into win_auth_group_access(uid,group_id,created_at, updated_at)
+        VALUES(#{map.uid},#{map.group_id},unix_timestamp(now()),unix_timestamp(now()))
+    </insert>
+    <!--修改管理员-->
+    <update id="updateAdmin">
+        update win_admin set updated_at=unix_timestamp(now())
+        <if test="map.username != null and map.username !=''">
+            ,username= #{map.username}
+        </if>
+        <if test="map.password_hash != null and map.password_hash !=''">
+            ,password_hash= #{map.password_hash}
+        </if>
+        <if test="map.agentId != null and map.agentId !=''">
+            ,agent_id= #{map.agentId}
+        </if>
+        <if test="map.operate_id != null and map.operate_id !=''">
+            ,operate_id= #{map.operate_id}
+        </if>
+        <if test="map.admin_group_id != null and map.admin_group_id !=''">
+            ,admin_group_id= #{map.admin_group_id}
+        </if>
+        <if test="map.secret != null and map.secret !=''">
+            ,secret= #{map.secret}
+        </if>
+        where id=#{map.uid}
+    </update>
+    <!--修改关联表-->
+    <update id="updateGroupAccess">
+        update win_auth_group_access set group_id = #{map.role_id},updated_at=unix_timestamp(now()) where uid= #{map.uid}
+        and group_id=#{map.group_id}
+    </update>
+
+    <!--修改管理表的状态-->
+    <update id="updateAdminStatus">
+        update win_admin set status=#{map.status},updated_at=unix_timestamp(now()) where id=#{map.uid}
+    </update>
+    <!--删除管理表-->
+    <delete id="deleteAdmin">
+        delete from win_auth_group_access where uid= #{map.uid} and group_id=#{map.group_id}
+    </delete>
+
+    <!--查询权限配置-->
+    <select id="ruleList" resultType="map">
+        select id,title,icon, menu_name,pid,is_menu from win_auth_rule where status =1
+        <if test="map.title!=null and map.title!='' ">
+            and title like '%${map.title}%'
+        </if>
+    </select>
+
+    <!--增加权限配置-->
+    <insert id="insertRule">
+        insert into win_auth_rule(
+        <if test="map.icon!=null and map.icon!='' ">
+            icon,
+        </if>
+        <if test="map.menu_name!=null and map.menu_name!='' ">
+            menu_name,
+        </if>
+        <if test="map.title!=null and map.title!='' ">
+            title,
+        </if>
+        <if test="map.pid!=null and map.pid!='' ">
+            pid,
+        </if>
+        <if test="map.is_race_menu!=null and map.is_race_menu!='' ">
+            is_race_menu,
+        </if>
+        <if test="map.is_menu!=null and map.is_menu!='' ">
+            is_menu,
+        </if>
+        status,
+        created_at,
+        updated_at)
+        values(
+        <if test="map.icon!=null and map.icon!='' ">
+            #{map.icon},
+        </if>
+        <if test="map.menu_name!=null and map.menu_name!='' ">
+            #{map.menu_name},
+        </if>
+        <if test="map.title!=null and map.title!='' ">
+            #{map.title},
+        </if>
+        <if test="map.pid!=null and map.pid!='' ">
+            #{map.pid},
+        </if>
+        <if test="map.is_race_menu!=null and map.is_race_menu!='' ">
+            #{map.is_race_menu},
+        </if>
+        <if test="map.is_menu!=null and map.is_menu!='' ">
+            #{map.is_menu},
+        </if>
+        1,
+        unix_timestamp(now()),
+        unix_timestamp(now()))
+    </insert>
+
+    <!--修改权限配置-->
+    <update id="updateRule">
+        update win_auth_rule set
+        <if test="map.icon!=null and map.icon!='' ">
+            icon=#{map.icon},
+        </if>
+        menu_name=#{map.menu_name},title=#{map.title},updated_at=unix_timestamp(now())
+        where id=#{map.id}
+    </update>
+
+    <!--删除权限配置-->
+    <delete id="deleteRule">
+        update win_auth_rule set status=#{map.status},updated_at=unix_timestamp(now()) where id=#{map.id}
+    </delete>
+    <!--修改角色-->
+    <update id="updateAuthGroup">
+        update win_auth_group set rules=#{map.rules},updated_at=unix_timestamp(now()) where id=#{map.id}
+    </update>
+
+</mapper>

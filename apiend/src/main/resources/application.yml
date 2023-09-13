@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: UTC
+  mail:
+    host: email-smtp.ap-northeast-1.amazonaws.com
+    username: AKIAYULJJIKTQNRMA4ZB
+    password: BK8hbzJW8+S2l112J78yffznsdHKnVq1RhwY5NAHwb5W
+    port: 2465
+    protocol: smtps
+    # GMT
+# 日志配置
+logging:
+  level:
+    com.pk: info
+    org.springframework: info
+    org.spring.springboot.dao: info
+
+
+

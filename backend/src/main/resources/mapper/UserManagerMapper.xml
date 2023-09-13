@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.backend.mapper.UserManagerMapper">
+    <!-- 开启二级缓存
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->
+    <!-- 会员管理-会员列表 -->
+    <select id="list" resultType="com.lt.win.backend.io.bo.user.ListResBody">
+        select a.id, username, level_id as levelId, role, status, flag, sup_username_1 as supUsername1, created_at as
+        createdAt,
+        (select ifnull(max(created_at),0) from win_user_login_log where uid = a.id) as loginTime, mobile
+        from win_user a
+        <where>
+            <if test="po != null">
+                <if test="po.id != null">
+                    and a.id = #{po.id}
+                </if>
+                <if test="po.username != null and po.username !=''">
+                    and a.username = #{po.username}
+                </if>
+                <if test="po.role != null">
+                    and a.role in
+                    <foreach collection="po.role" item="item" index="index" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="po.levelId != null">
+                    and a.level_id = #{po.levelId}
+                </if>
+                <if test="po.status != null">
+                    and b.status = #{po.status}
+                </if>
+                <if test="po.mobile != null and po.mobile !=''">
+                    and a.mobile = #{po.mobile}
+                </if>
+                <if test="po.startTime != null">
+                    and a.created_at &gt;= #{po.startTime}
+                </if>
+                <if test="po.endTime != null">
+                    and a.created_at &lt;= #{po.endTime}
+                </if>
+
+                <if test="po.uidList != null">
+                    and a.id in
+                    <foreach collection="po.uidList" item="item" index="index" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- 会员管理-会员详情 -->
+    <select id="getDetail" resultType="com.lt.win.backend.io.bo.user.DetailResBody">
+        select id              as uid,
+               username,
+               realname,
+               level_id        as levelId,
+               role,
+               mobile,
+               created_at      as createdAt,
+               status,
+               flag,
+               sex,
+               area_code       as areaCode,
+               birthday,
+               extra_code      as extraCode,
+               extra_code_rule as extraCodeRule
+        from win_user
+        where a.id = #{uid}
+    </select>
+
+    <!-- 会员管理-添加会员 -->
+    <select id="getUserInfo" resultType="com.lt.win.backend.io.bo.user.AddUserResBody">
+        select id,
+               username,
+               email,
+               avatar,
+               area_code  as areaCode,
+               mobile,
+               fcoin,
+               level_id   as levelId,
+               score,
+               promo_code as promoCode
+        from win_user
+        where id = #{uid}
+    </select>
+
+    <!-- 会员列表-团队在线 and exists (select uid from `win_user_login_log` where status=0 and uid = t.uid)-->
+    <select id="listOnline" resultType="com.lt.win.backend.io.bo.user.ListResBody">
+        select uid
+        from win_user t
+        where (sup_uid_1 = #{po.uid} or sup_uid_2 = #{po.uid} or sup_uid_3 = #{po.uid} or sup_uid_4 = #{po.uid} or
+               sup_uid_5 = #{po.uid} or sup_uid_6 = #{po.uid})
+          and exists(select uid from `win_user_login_log` where status = 0 and uid = t.uid)
+    </select>
+    <!-- 会员旗管理-列表查询 -->
+    <select id="listFlag" resultType="com.lt.win.backend.io.bo.user.ListFlagResBody">
+        select id,
+               name,
+               bit_code   as bitCode,
+               icon,
+               icon_color as iconColor,
+               status,
+               (select count(id)
+                from win_user
+                where flag <![CDATA[&]]> t1.bit_code) as userCount
+        from win_user_flag t1
+    </select>
+    <!-- 会员旗管理-弹框-已被使用的会员旗列表 -->
+    <select id="listFlagUsed" resultType="com.lt.win.backend.io.bo.user.ListFlagUsedPO">
+        select t1.id as uid,t1.username,GROUP_CONCAT(t2.bit_code) as bitCode, GROUP_CONCAT(t2.icon) as icon,
+        GROUP_CONCAT(t2.icon_color) as iconColor,GROUP_CONCAT(t2.name) as name
+        from win_user t1 right join win_user_flag t2 on t1.flag  <![CDATA[&]]> t2.bit_code where t1.flag <![CDATA[&]]>
+        #{po.bitCode}
+        <if test="null != po">
+            <if test="null != po.uid">
+                and t1.id like '${po.uid}%'
+            </if>
+            <if test="po.username != null and po.username != ''">
+                and t1.username like '${po.username}%'
+            </if>
+        </if>
+        group by t1.id
+    </select>
+    <!-- 会员旗管理-获取用户会员旗-->
+    <select id="listUserFlag" resultType="integer">
+        select bit_code as bitCode
+        from win_user_flag
+        where bit_code <![CDATA[&]]> #{bitCode}
+    </select>
+
+    <!--在线人数->列表查询(分页)-->
+    <select id="onlineUserCountList" resultType="com.lt.win.backend.io.bo.user.OnlineUserCountListResBody">
+        select id as uid,username,level_id as levelId, flag,
+        sup_uid_1 as supUid1, c.created_at as loginTime, c.ip, c.device
+        from win_user a
+        left join (select uid,ip,device,created_at from (select id,uid,ip,device,created_at from win_user_login_log
+        order by id desc limit 1000000000) t
+        group by uid ) c on a.id = c.uid
+
+        <where>
+            <if test="po != null">
+                <if test="po.supUid1 != null">
+                    and a.sup_uid_1 = #{po.supUid1}
+                </if>
+                <if test="po.startTime != null">
+                    and c.created_at &gt;= #{po.startTime}
+                </if>
+                <if test="po.endTime != null">
+                    and c.created_at &lt;= #{po.endTime}
+                </if>
+                <if test="po.device != null">
+                    and c.device = #{po.device}
+                </if>
+                <if test="po.ip != null">
+                    and c.ip like '${po.ip}%'
+                </if>
+                <if test="po.uidList != null">
+                    and a.id in
+                    <foreach collection="po.uidList" item="item" index="index" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+            </if>
+        </where>
+    </select>
+</mapper>

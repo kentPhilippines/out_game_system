@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.dao.generator.mapper.UserLevelMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lt.win.dao.generator.po.UserLevel">
+        <id column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="icon" property="icon" />
+        <result column="score_upgrade_min" property="scoreUpgradeMin" />
+        <result column="score_upgrade_max" property="scoreUpgradeMax" />
+        <result column="score_upgrade_rate" property="scoreUpgradeRate" />
+        <result column="score_relegation" property="scoreRelegation" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, code, name, icon, score_upgrade_min, score_upgrade_max, score_upgrade_rate, score_relegation, created_at, updated_at
+    </sql>
+
+</mapper>

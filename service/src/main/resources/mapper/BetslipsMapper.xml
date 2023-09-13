@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.service.mapper.BetslipsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lt.win.service.io.dto.Betslips">
+        <id column="id" property="id"/>
+        <result column="xb_uid" property="xbUid"/>
+        <result column="xb_username" property="xbUsername"/>
+        <result column="amount_type" property="amountType"/>
+        <result column="currency" property="currency"/>
+        <result column="game_id" property="gameId"/>
+        <result column="game_type_id" property="gameTypeId"/>
+        <result column="game_plat_id" property="gamePlatId"/>
+        <result column="dt_started" property="dtStarted"/>
+        <result column="dt_completed" property="dtCompleted"/>
+        <result column="stake" property="stake"/>
+        <result column="payout" property="payout"/>
+        <result column="xb_profit" property="xbProfit"/>
+        <result column="xb_status" property="xbStatus"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="sports_type" property="sportsType"/>
+        <result column="win_lost_date" property="winLostDate"/>
+        <result column="odds_style" property="oddsStyle"/>
+        <result column="bet_json" property="betJson"/>
+        <result column="reward_json" property="rewardJson"/>
+        <result column="refund_json" property="refundJson"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, xb_uid, xb_username, amount_type, currency, game_id, game_type_id, game_plat_id, dt_started, dt_completed, stake, payout, xb_profit, xb_status, created_at, updated_at, sports_type, win_lost_date, odds_style, bet_json, reward_json, refundJson
+    </sql>
+
+</mapper>

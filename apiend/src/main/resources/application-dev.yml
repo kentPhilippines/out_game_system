@@ -1,0 +1,63 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /api/
+spring:
+  # 数据库连接池
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: org.mariadb.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/lottery?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+      username: root
+      password: 123456
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    platform: mariadb
+  # Redis 相关信息配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    database: 10
+    timeout: 60000
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+# 驼峰到下划线自动切换
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+#logback根目录
+loghome: /tmp/logs/sports/sports_api
+
+# swagger文档显示开关:true=显示 false=关闭
+swagger:
+  enable: true
+elasticsearch:
+  host: 18.166.2.57:19200
+  #  #连接池里的最大连接数
+  max_connect_total: 30
+  ##  #某一个/每服务每次能并行接收的请求数量
+  max_connect_per_route: 10
+  ##  #http clilent中从connetcion pool中获得一个connection的超时时间
+  connection_request_timeout_millis: 2000
+  ##  #响应超时时间，超过此时间不再读取响应
+  socket_timeout_millis: 30000
+  ##  #链接建立的超时时间
+  connect_timeout_millis: 2000
+  username: elastic
+  password: debuilders

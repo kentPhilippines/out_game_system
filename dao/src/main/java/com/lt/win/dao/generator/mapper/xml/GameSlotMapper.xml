@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.dao.generator.mapper.GameSlotMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lt.win.dao.generator.po.GameSlot">
+        <id column="id" property="id" />
+        <result column="game_id" property="gameId" />
+        <result column="game_group_id" property="gameGroupId" />
+        <result column="plat_id" property="platId" />
+        <result column="provider" property="provider" />
+        <result column="name" property="name" />
+        <result column="name_zh" property="nameZh" />
+        <result column="img" property="img" />
+        <result column="is_new" property="isNew" />
+        <result column="is_casino" property="isCasino" />
+        <result column="game_type_id" property="gameTypeId" />
+        <result column="game_type_name" property="gameTypeName" />
+        <result column="favorite_star" property="favoriteStar" />
+        <result column="hot_star" property="hotStar" />
+        <result column="sort" property="sort" />
+        <result column="status" property="status" />
+        <result column="device" property="device" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, game_id, game_group_id, plat_id, provider, name, name_zh, img, is_new, is_casino, game_type_id, game_type_name, favorite_star, hot_star, sort, status, device, created_at, updated_at
+    </sql>
+
+</mapper>

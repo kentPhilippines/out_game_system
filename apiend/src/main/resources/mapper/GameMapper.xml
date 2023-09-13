@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.apiend.mapper.GamePropMapper">
+
+    <!-- 开启二级缓存 -->
+    <!--<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
+
+    <!-- 通用查询结果列 -->
+    <select id="getGameProp" resultType="com.lt.win.apiend.io.dto.platform.GameModelDto">
+        select a.model as gameModel, a.status as gameStatus, b.name as platModel, b.status as platStatus, group_id as
+        groupId from win_game_list a
+        inner join win_plat_list b on a.plat_list_id = b.id where a.id=#{id}
+    </select>
+
+    <!-- 通用查询结果列 -->
+    <select id="getGamePropList" resultType="com.lt.win.apiend.io.dto.platform.GameModelDto">
+        select a.model as gameModel, a.status as gameStatus, b.name as platModel, b.status as platStatus, group_id as
+        groupId from win_game_list a
+        inner join win_plat_list b on a.plat_list_id = b.id
+        where b.status!=0
+        <if test="gameId !=null and gameId !=''">
+            and a.id=#{gameId}
+        </if>
+    </select>
+
+</mapper>

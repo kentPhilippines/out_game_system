@@ -1,0 +1,38 @@
+# phpstorm project files
+.idea
+
+# netbeans project files
+nbproject
+
+# zend studio for eclipse project files
+.buildpath
+.project
+.settings
+
+# windows thumbnail cache
+Thumbs.db
+
+# composer itself is not needed
+composer.phar
+
+# Mac DS_Store Files
+.DS_Store
+**/.DS_Store
+
+# maven配置文件
+*/.mvn
+*/target
+**/HELP.md
+**/mvnw
+**/mvnw.cmd
+**/*.iml
+**/docker-compose.yml
+**/application-*.yml
+**/Dockerfile
+!**/application-dev.yml
+!**/application-test.yml
+!**/application-prod.yml
+
+# 忽略SQL迁移文件
+**/migration/*.sql
+LOG_HOME_IS_UNDEFINED

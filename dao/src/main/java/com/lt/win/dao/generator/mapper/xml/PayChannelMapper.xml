@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.dao.generator.mapper.PayChannelMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lt.win.dao.generator.po.PayChannel">
+        <id column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="plat_id" property="platId" />
+        <result column="plat_name" property="platName" />
+        <result column="category" property="category" />
+        <result column="category_transfer" property="categoryTransfer" />
+        <result column="category_currency" property="categoryCurrency" />
+        <result column="min_coin" property="minCoin" />
+        <result column="max_coin" property="maxCoin" />
+        <result column="status" property="status" />
+        <result column="request_url" property="requestUrl" />
+        <result column="notify_url" property="notifyUrl" />
+        <result column="currency" property="currency" />
+        <result column="channel_config" property="channelConfig" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, code, name, plat_id, plat_name, category, category_transfer, category_currency, min_coin, max_coin, status, request_url, notify_url, currency, channel_config, created_at, updated_at
+    </sql>
+
+</mapper>

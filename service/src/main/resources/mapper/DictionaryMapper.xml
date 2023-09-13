@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.service.mapper.DictionaryMapper">
+
+    <select id="listDictionary" resultType="com.lt.win.service.io.bo.DictionaryBo">
+        select a.category as category,b.code as code ,b.title as title
+        from `win_dict` a
+        left join win_dict_item b
+        on a.id = b.`refer_id`
+        where b.code is not null and b.status = 1
+        <if test="category != null and category !=''">
+            and a.category = #{category}
+        </if>
+        <if test="isShowList != null">
+            and b.`is_show` in
+            <foreach collection="isShowList" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+</mapper>

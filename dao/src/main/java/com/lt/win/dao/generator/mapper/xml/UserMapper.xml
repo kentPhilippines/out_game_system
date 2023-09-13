@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.dao.generator.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lt.win.dao.generator.po.User">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="avatar" property="avatar" />
+        <result column="fcoin" property="fcoin" />
+        <result column="coin_commission" property="coinCommission" />
+        <result column="level_id" property="levelId" />
+        <result column="role" property="role" />
+        <result column="is_promoter" property="isPromoter" />
+        <result column="flag" property="flag" />
+        <result column="real_name" property="realName" />
+        <result column="signature" property="signature" />
+        <result column="birthday" property="birthday" />
+        <result column="area_code" property="areaCode" />
+        <result column="mobile" property="mobile" />
+        <result column="email" property="email" />
+        <result column="sex" property="sex" />
+        <result column="bind_bank" property="bindBank" />
+        <result column="address" property="address" />
+        <result column="score" property="score" />
+        <result column="promo_code" property="promoCode" />
+        <result column="sup_uid_1" property="supUid1" />
+        <result column="sup_username_1" property="supUsername1" />
+        <result column="sup_uid_2" property="supUid2" />
+        <result column="sup_uid_3" property="supUid3" />
+        <result column="sup_uid_4" property="supUid4" />
+        <result column="sup_uid_5" property="supUid5" />
+        <result column="sup_uid_6" property="supUid6" />
+        <result column="sup_uid_top" property="supUidTop" />
+        <result column="sup_username_top" property="supUsernameTop" />
+        <result column="sup_level_top" property="supLevelTop" />
+        <result column="password_hash" property="passwordHash" />
+        <result column="password_coin" property="passwordCoin" />
+        <result column="status" property="status" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, username, avatar, fcoin, coin_commission, level_id, role, is_promoter, flag, real_name, signature, birthday, area_code, mobile, email, sex, bind_bank, address, score, promo_code, sup_uid_1, sup_username_1, sup_uid_2, sup_uid_3, sup_uid_4, sup_uid_5, sup_uid_6, sup_uid_top, sup_username_top, sup_level_top, password_hash, password_coin, status, created_at, updated_at
+    </sql>
+
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.dao.generator.mapper.AuthRuleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lt.win.dao.generator.po.AuthRule">
+        <id column="id" property="id" />
+        <result column="icon" property="icon" />
+        <result column="menu_name" property="menuName" />
+        <result column="title" property="title" />
+        <result column="pid" property="pid" />
+        <result column="is_menu" property="isMenu" />
+        <result column="is_race_menu" property="isRaceMenu" />
+        <result column="status" property="status" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, icon, menu_name, title, pid, is_menu, is_race_menu, status, created_at, updated_at
+    </sql>
+
+</mapper>

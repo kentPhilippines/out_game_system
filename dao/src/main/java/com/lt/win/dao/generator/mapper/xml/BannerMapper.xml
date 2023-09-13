@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.dao.generator.mapper.BannerMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lt.win.dao.generator.po.Banner">
+        <id column="id" property="id" />
+        <result column="img" property="img" />
+        <result column="href" property="href" />
+        <result column="sort" property="sort" />
+        <result column="status" property="status" />
+        <result column="device" property="device" />
+        <result column="language" property="language" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, img, href, sort, status, device, language, created_at, updated_at
+    </sql>
+
+</mapper>

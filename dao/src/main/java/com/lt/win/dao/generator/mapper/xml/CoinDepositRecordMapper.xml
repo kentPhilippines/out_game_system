@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.dao.generator.mapper.CoinDepositRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lt.win.dao.generator.po.CoinDepositRecord">
+        <id column="id" property="id" />
+        <result column="order_id" property="orderId" />
+        <result column="plat_order_id" property="platOrderId" />
+        <result column="uid" property="uid" />
+        <result column="username" property="username" />
+        <result column="code" property="code" />
+        <result column="plat_name" property="platName" />
+        <result column="coin_before" property="coinBefore" />
+        <result column="pay_address" property="payAddress" />
+        <result column="pay_amount" property="payAmount" />
+        <result column="exchange_rate" property="exchangeRate" />
+        <result column="real_amount" property="realAmount" />
+        <result column="currency" property="currency" />
+        <result column="dep_status" property="depStatus" />
+        <result column="category" property="category" />
+        <result column="category_currency" property="categoryCurrency" />
+        <result column="category_transfer" property="categoryTransfer" />
+        <result column="admin_uid" property="adminUid" />
+        <result column="mark" property="mark" />
+        <result column="status" property="status" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_id, plat_order_id, uid, username, code, plat_name, coin_before, pay_address, pay_amount, exchange_rate, real_amount, currency, dep_status, category, category_currency, category_transfer, admin_uid, mark, status, created_at, updated_at
+    </sql>
+
+</mapper>

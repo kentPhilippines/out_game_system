@@ -1,0 +1,76 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /admin/
+spring:
+  # 数据库连接池
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: org.mariadb.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/lottery?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+      username: root
+      password: 123456
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    platform: mariadb
+  # Redis 相关信息配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    database: 10
+    timeout: 60000
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  file-storage:
+    default-platform: aws-s3-1
+    thumbnail-suffix: ".min.jpg"
+    aws-s3: # AWS S3，其它兼容 AWS S3 协议的存储平台也都可配置在这里
+      - platform: aws-s3-1 # 存储平台标识
+        enable-storage: true  # 启用存储
+        access-key: AKIAYULJJIKTZ6VSN4F7
+        secret-key: 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
+        region:  ap-east-1 # 与 end-point 参数至少填一个
+        #end-point:  # 与 region 参数至少填一个
+        bucket-name: 1xwin
+        domain: https://1xwin.s3.ap-east-1.amazonaws.com/ # 访问域名，注意“/”结尾，例如：https://abc.hn-bkt.clouddn.com/
+        base-path: s3/upload/ # 基础路径
+# 驼峰到下划线自动切换
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+#logback根目录
+loghome: /tmp/logs/sports/sports_api
+# swagger文档显示开关:true=显示 false=关闭
+swagger:
+  enable: true
+
+elasticsearch:
+  host: 18.166.2.57:9200
+  #  #连接池里的最大连接数
+  #  max_connect_total: 30
+  ##  #某一个/每服务每次能并行接收的请求数量
+  #  max_connect_per_route: 10
+  ##  #http clilent中从connetcion pool中获得一个connection的超时时间
+  #  connection_request_timeout_millis: 2000
+  ##  #响应超时时间，超过此时间不再读取响应
+  #  socket_timeout_millis: 30000
+  ##  #链接建立的超时时间
+  #  connect_timeout_millis: 2000
+  username: elastic
+  password: debuilders

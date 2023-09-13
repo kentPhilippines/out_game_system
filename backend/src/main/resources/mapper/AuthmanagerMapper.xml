@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.backend.mapper.AuthManagerMapper">
+
+    <select id="queryMenuId" resultType="map">
+        select DISTINCT pid from win_auth_rule
+    </select>
+
+    <select id="queryUserRule" parameterType="map" resultType="map">
+        select
+        menu_id AS menuId
+        from
+        win_auth_group_access
+        where
+        uid = #{map.uid}
+    </select>
+
+    <update id="updateUserRule" parameterType="map">
+        update
+        win_auth_group_access
+        set
+        menu_id = #{map.menuId}
+        where
+        uid = #{map.uid}
+    </update>
+
+    <select id="queryRulesByRoleId" parameterType="map" resultType="java.lang.String">
+        SELECT
+        rules
+        FROM
+        win_auth_group
+        where status = 1
+        <if test="map.id != null and map.id != ''">
+            and id = #{map.id,jdbcType=NUMERIC}
+        </if>
+    </select>
+
+    <select id="queryRulesByUid" parameterType="map" resultType="map">
+        SELECT
+        b.rules AS roleRules,
+        a.menu_id AS userRules
+        FROM
+        win_auth_group_access a
+        LEFT JOIN win_auth_group b
+        ON a.group_id = b.id
+        where b.status = 1
+        <if test="map.uid != null and map.uid != ''">
+            and a.uid = #{map.uid}
+        </if>
+    </select>
+
+
+    <select id="queryAllRuleTitle" resultType="map">
+        select
+        `id` as `id`,
+        `pid` as `pid`,
+        `title` as `label`,
+        `is_race_menu` as `isRaceMenu`
+        from
+        win_auth_rule
+        where status = 1
+    </select>
+    <select id="queryAllRule" resultType="map">
+        select
+        `id` as `id`,
+        `icon` as `type`,
+        `title` as `text`,
+        `pid` as `pid`,
+        `menu_name` as `name`,
+        `is_race_menu` as `isRaceMenu`
+        from
+        win_auth_rule
+        where status = 1
+        <if test="map.rules != null and map.rules != ''">
+            and id in (${map.rules})
+        </if>
+    </select>
+
+    <insert id="insertRole" parameterType="map">
+        INSERT INTO
+        `win_auth_group`
+        (
+        `title`,
+        `admin_group_id`,
+        `parent`,
+        `pid`,
+        `status`,
+        `rules`,
+        `operate_id`,
+        `created_at`,
+        `updated_at`
+        )
+        VALUES
+        (
+        #{map.title},
+        #{map.adminGroupId},
+        #{map.parent},
+        #{map.pid},
+        #{map.status},
+        #{map.rules},
+        #{map.operate_id},
+        unix_timestamp(now()),
+        unix_timestamp(now())
+        )
+    </insert>
+
+    <update id="updateRole" parameterType="map">
+        UPDATE `win_auth_group`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="map.rules!=null">rules=#{map.rules},</if>
+            <if test="map.adminGroupId!=null">admin_group_id=#{map.adminGroupId},</if>
+            <if test="map.dataPermission!=null">data_permission=#{map.dataPermission},</if>
+            <if test="map.operateId!=null">operate_id=#{map.operateId},</if>
+            <if test="map.title!=null">title= #{map.title},</if>
+        </trim>
+        ,updated_at= unix_timestamp(now())
+        WHERE
+        `id` = #{map.id};
+    </update>
+
+    <delete id="deleteRole" parameterType="map">
+        update `win_auth_group` SET status=0 where id = #{map.id,jdbcType=NUMERIC}
+    </delete>
+
+    <!--查询补单信息-->
+    <select id="queryRepair" resultType="map">
+        select (case when menu_id ='' or menu_id =null then (select rules from win_auth_group where id= t.group_id)
+        else menu_id end) as menu_id from win_auth_group_access t where uid=#{map.uid} limit 1
+    </select>
+</mapper>

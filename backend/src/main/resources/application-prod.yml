@@ -1,0 +1,49 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /admin/
+spring:
+  # 数据库连接池
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: org.mariadb.jdbc.Driver
+      url: jdbc:mysql://${db_host}:${db_port}/${db_database}?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+      username: ${db_username}
+      password: ${db_password}
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    platform: mariadb
+  # Redis 相关信息配置
+  redis:
+    host: ${redis_host}
+    port: ${redis_port}
+    password: ${redis_password}
+    database: ${redis_database}
+    timeout: 60000
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+# 驼峰到下划线自动切换
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+#logback根目录
+loghome: /tmp/logs/sports/sports_api
+# swagger文档显示开关:true=显示 false=关闭
+swagger:
+  enable: false
+
