@@ -28,6 +28,7 @@ import java.util.function.BiConsumer;
 @Slf4j
 public class ExceptionHandlerAspect {
 
+
     //异常日志打印函数
     BiConsumer<String, Exception> biConsumer = (message, exception) -> {
         log.info(message + exception);
