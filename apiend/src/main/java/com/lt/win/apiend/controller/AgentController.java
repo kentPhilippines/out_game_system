@@ -44,6 +44,7 @@ public class AgentController {
         return Result.ok(centerAgentStatisticsServiceImpl.teamBenefits());
     }
 
+
     @ApiOperationSupport(author = "David", order = 2)
     @ApiOperation(value = "代理中心-佣金明细", notes = "代理中心-佣金明细")
     @PostMapping("/subordinateDetails")
