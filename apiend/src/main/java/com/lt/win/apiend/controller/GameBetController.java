@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Api(tags = "注单接口")
 @ApiSort(4)
-@RestController
+//@RestController
 @RequestMapping("/v1/bet")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class GameBetController {

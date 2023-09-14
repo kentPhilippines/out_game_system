@@ -29,7 +29,7 @@ import java.util.List;
  * @author david
  */
 @Slf4j
-@RestController
+//@RestController
 @RequestMapping("/v1/agent")
 @Api(tags = "代理中心")
 @ApiSort(6)

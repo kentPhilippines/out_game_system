@@ -46,7 +46,7 @@ import java.util.Map;
 //@RestController
 @Api(tags = "首页 - 平台游戏")
 @ApiSort(3)
-@RestController
+//@RestController
 @RequestMapping("/v1/platform")
 //@Deprecated
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description:
  */
 @Slf4j
-@RestController
+//@RestController
 @RequestMapping("/v1/test")
 @Api(tags = "代理中心")
 @ApiSort(7)

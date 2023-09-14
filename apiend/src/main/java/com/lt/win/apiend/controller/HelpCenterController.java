@@ -24,7 +24,7 @@ import javax.validation.Valid;
  * @description:
  */
 @Slf4j
-@RestController
+//@RestController
 @Api(tags = "首页 - 帮助中心")
 @ApiSort(2)
 @RequestMapping("/v1/help")

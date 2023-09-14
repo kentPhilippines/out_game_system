@@ -30,7 +30,7 @@ import javax.validation.Valid;
  * @since 2022/11/11
  */
 @Slf4j
-@RestController
+//@RestController
 @RequestMapping("/v1/agentSuper")
 @Api(tags = "超级代理管理")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))

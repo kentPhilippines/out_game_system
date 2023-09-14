@@ -23,7 +23,7 @@ import java.util.List;
  * @author david
  */
 @Slf4j
-@RestController
+//@RestController
 @RequestMapping("/v1/vip")
 @Api(tags = "VIP会员之家")
 @ApiSort(6)
