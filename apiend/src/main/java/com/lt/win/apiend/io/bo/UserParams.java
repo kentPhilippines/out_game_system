@@ -27,7 +27,7 @@ public interface UserParams {
         @Pattern(regexp = "^[A-Za-z\\d~'`!@#￥$%^&*()-+_=:|]{4,16}$", message = "4到16位英文、字母、特殊符号组成")
         @ApiModelProperty(name = "password", value = "密码", example = "******")
         private String password;
-        @ApiModelProperty(name = "谷歌验证码", value = "谷歌验证码", example = "******")
+        @ApiModelProperty(name = "谷歌验证码", value = "谷歌验证码", example = "213212")
         private Long googleCode;
     }
 
@@ -99,7 +99,7 @@ public interface UserParams {
         @Pattern(regexp = "^[A-Za-z\\d~'`!@#￥$%^&*()-+_=:|]{4,16}$", message = "4到16位英文、字母、特殊符号组成")
         @ApiModelProperty(name = "password", value = "密码", example = "******")
         private String password;
-        @NotNull(message = "邮箱不能为空")
+       // @NotNull(message = "邮箱不能为空")
         @Pattern(regexp = "^[A-Za-z\\d]+([_.][A-Za-z\\d]+)*@([A-Za-z\\d\\-]+\\.)+[A-Za-z]{2,6}$", message = "Email format incorrect")
         @ApiModelProperty(name = "email", value = "邮箱", example = "123@gmail.com")
         private String email;
@@ -111,6 +111,7 @@ public interface UserParams {
         private String mobile;
         @ApiModelProperty(name = "link", value = "推广域名", example = "testwww.xinbosports.com", hidden = true)
         private String link;
+        @NotNull(message = "推广码不能为空")
         @ApiModelProperty(name = "promoCode", value = "推广码")
         private String promoCode;
         @ApiModelProperty(name = "verifyCode", value = "验证码", example = "5500")
