@@ -46,7 +46,8 @@ public class HeaderBase {
         String lang = request.getHeader(ConstData.LANG);
         String device = request.getHeader(ConstData.DEVICE);
         String apiToken = request.getHeader(ConstData.TOKEN);
-        // 不强制校验Token、语言、设备信息直接返回 
+     //   apiToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ3ZWJSb2xlIjoiYWRtaW4iLCJpZCI6IjMiLCJ1c2VybmFtZSI6IndlbGxzODg4IiwianRpIjoiZGRhMTRiY2ViNzM5NDMzMGJjYzI4YzUyYjgyYzc5MDEiLCJzdWIiOiIxeFdpbiIsImlhdCI6MTY5NDY3Nzc3OCwiZXhwIjoxNjk3MjY5Nzc4fQ.dkO0SFmVvKl-BShfgL0QEotyxKQ24m-kqMlrGvzX4_c";
+        // 不强制校验Token、语言、设备信息直接返回
         //TODO 2022-09-30 删除  && apiToken == null
         if (Boolean.FALSE.equals(isValid) && (apiToken == null || !apiToken.startsWith(ConstData.TOKEN_START_WITH))) {
             return HeaderInfo.builder().lang(lang).device(device).id(0).build();

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -82,11 +83,10 @@ public class AgentSuperServiceImpl implements IAgentSuperService {
                 throw new BusinessException(CodeInfo.ACCOUNT_EXISTS);
             }
             // 判断邮箱号码
-            count = userServiceImpl.lambdaQuery().eq(Optional.ofNullable(dto.getEmail()).isPresent(), User::getEmail, dto.getEmail()).count();
+           /* count = userServiceImpl.lambdaQuery().eq(Optional.ofNullable(dto.getEmail()).isPresent(), User::getEmail, dto.getEmail()).count();
             if (count > 0) {
                 throw new BusinessException(CodeInfo.EMAIL_EXISTS);
-            }
-
+            }*/
             // 邀请码生成
             var promoCode = TextUtils.generateRandomString(6).toUpperCase();
             while (userServiceImpl.lambdaQuery().eq(User::getPromoCode, promoCode).count() != ConstData.ZERO) {
@@ -94,7 +94,13 @@ public class AgentSuperServiceImpl implements IAgentSuperService {
             }
             user.setPromoCode(promoCode);
             user.setSupLevelTop(ConstData.ZERO);
+            user.setEmail(TextUtils.generatePromoCode()+"@gmail.com");
+            user.setMobile(TextUtils.generatePromoCode()+"");
         } else {
+            User byId = userServiceImpl.getById(user.getId());
+            if (Objects.isNull(byId) || null == byId) {
+                throw new BusinessException(CodeInfo.ACCOUNT_NOT_EXISTS);
+            }
             // 不可以修改用户名
             user.setUsername(null);
             userCache.delUserCache(user.getId(), true);

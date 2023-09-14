@@ -84,15 +84,20 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserInfoResDto register(UserParams.@NotNull RegisterReqDto dto, HttpServletRequest request) {
-        verifySesCode(dto.getEmail(), dto.getVerifyCode());
+      //  verifySesCode(dto.getEmail(), dto.getVerifyCode());
 
         // 检查用户名是否已存在
         User user = userServiceImpl.lambdaQuery().eq(User::getUsername, dto.getUsername()).one();
         if (ObjectUtils.isNotEmpty(user)) {
             throw new BusinessException(CodeInfo.ACCOUNT_EXISTS);
         }
+        String promoCode = dto.getPromoCode();
+        if (ObjectUtils.isEmpty(promoCode)) {
+            throw new BusinessException(CodeInfo.PROMO_CODE_INVALID);
+        }
 
-        // 检查手机号是否存在
+
+       /* // 检查手机号是否存在
         var checkMobile = userServiceImpl.lambdaQuery().eq(User::getAreaCode, dto.getAreaCode()).eq(User::getMobile, dto.getMobile()).one();
         if (ObjectUtils.isNotEmpty(checkMobile)) {
             throw new BusinessException(CodeInfo.MOBILE_EXISTS);
@@ -102,7 +107,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
         var userProfile = userServiceImpl.lambdaQuery().eq(User::getEmail, dto.getEmail()).one();
         if (ObjectUtils.isNotEmpty(userProfile)) {
             throw new BusinessException(CodeInfo.EMAIL_EXISTS);
-        }
+        }*/
 
         // 获取推广域名
         String host = request.getHeader("Host");

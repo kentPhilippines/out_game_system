@@ -63,6 +63,7 @@ public class HeaderBase {
 
         try {
             String apiToken = request.getHeader(ConstData.TOKEN);
+        //    apiToken = "eyJhbGciOiJIUzI1NiJ9.eyJ3ZWJSb2xlIjoiYWRtaW4iLCJpZCI6IjMiLCJ1c2VybmFtZSI6IndlbGxzODg4IiwianRpIjoiZGRhMTRiY2ViNzM5NDMzMGJjYzI4YzUyYjgyYzc5MDEiLCJzdWIiOiIxeFdpbiIsImlhdCI6MTY5NDY3Nzc3OCwiZXhwIjoxNjk3MjY5Nzc4fQ.dkO0SFmVvKl-BShfgL0QEotyxKQ24m-kqMlrGvzX4_c";
             if (StringUtils.isNotBlank(apiToken) && apiToken.startsWith(ConstData.TOKEN_START_WITH)) {
                 // 获取正式apiToken
                 apiToken = apiToken.substring(ConstData.TOKEN_START_WITH.length());

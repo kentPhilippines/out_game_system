@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8082
   servlet:
     context-path: /api/
 spring:
@@ -8,9 +8,9 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: org.mariadb.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/lottery?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+      url: jdbc:mysql://35.220.247.103:3306/lottery10?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
       username: root
-      password: 123456
+      password: 123456test
       initial-size: 5
       min-idle: 5
       max-active: 20
@@ -28,9 +28,9 @@ spring:
     platform: mariadb
   # Redis 相关信息配置
   redis:
-    host: 127.0.0.1
+    host: 34.150.94.93
     port: 6379
-    password: 123456
+    password: redis123456
     database: 10
     timeout: 60000
   servlet:
