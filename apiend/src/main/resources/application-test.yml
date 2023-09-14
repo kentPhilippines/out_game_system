@@ -8,9 +8,9 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: org.mariadb.jdbc.Driver
-      url: jdbc:mysql://18.163.109.183:3306/1xWin?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
-      username: Admin
-      password: Admin123@
+      url: jdbc:mysql://35.220.247.103:3306/lottery10?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+      username: root
+      password: 123456test
       initial-size: 5
       min-idle: 5
       max-active: 20
@@ -28,9 +28,9 @@ spring:
     platform: mariadb
   # Redis 相关信息配置
   redis:
-    host: 18.163.109.183
-    port: 6382
-    password: 'e1b18bced4ab4a3cb8d46741ff4c83fe'
+    host: 34.150.94.93
+    port: 6379
+    password: redis123456
     database: 10
     timeout: 60000
   servlet:
@@ -48,27 +48,3 @@ loghome: /tmp/logs/sports/sports_api
 swagger:
   enable: true
 
-#ES 配置
-#elasticsearch:
-#  nodes: 18.166.2.57
-#  port: 9200
-#  userName: elastic
-#  password: debuilders
-#  socketTimeout:
-#  connectTimeout:
-#  connectionRequestTimeout:
-
-elasticsearch:
-  host: 18.166.2.57:9200
-  #连接池里的最大连接数
-  max_connect_total: 30
-  #  #某一个/每服务每次能并行接收的请求数量
-  max_connect_per_route: 10
-  #  #http clilent中从connetcion pool中获得一个connection的超时时间
-  connection_request_timeout_millis: 2000
-  #  #响应超时时间，超过此时间不再读取响应
-  socket_timeout_millis: 30000
-  #  #链接建立的超时时间
-  connect_timeout_millis: 2000
-  username: elastic
-  password: debuilders
