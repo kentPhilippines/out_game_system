@@ -179,7 +179,7 @@ public class AutoGeneratorUtils {
         // 自定义继承的Controller类全称，带包名
         // strategyConfig.setSuperControllerClass();
         // 需要包含的表名（与exclude二选一配置） [null]
-        strategyConfig.setInclude("win_user_wallet");
+        strategyConfig.setInclude("win_lottery_betslips");
         // 需要排除的表名 [null
         // strategyConfig.setExclude();
         // strategyConfig.setInclude("datasource_config");
@@ -239,7 +239,7 @@ public class AutoGeneratorUtils {
 //                "/dao/src/main/java"),
 //        TEST("Admin", "Admin123@", "jdbc:mysql://18.163.109.183:3306/1xWin?tinyInt1isBit=false&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&", "com.lt.win.dao",
 //                "/dao/src/main/java"),
-        TEST("Admin", "Admin123@", "jdbc:mysql://18.163.109.183:3306/1xWin?tinyInt1isBit=false&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&", "com.lt.win.dao",
+        TEST("root", "123456test", "jdbc:mysql://35.220.247.103:3306/lottery10?tinyInt1isBit=false&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&", "com.lt.win.dao",
                 "/dao/src/main/java")
 
 //        NETTY("root", "123456", "jdbc:mysql://127.0.0.1:3306/1xWin?tinyInt1isBit=false&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&", "com.lt.win.dao", "/dao/src/main/java"),

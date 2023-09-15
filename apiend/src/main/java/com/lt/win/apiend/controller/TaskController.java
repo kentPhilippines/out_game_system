@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @Date: 2022/10/15 19:59
  * @Description:
  */
-@RestController
+//@RestController
 @RequestMapping("/v1/task")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TaskController {

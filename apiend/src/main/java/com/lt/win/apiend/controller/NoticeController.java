@@ -27,7 +27,7 @@ import java.util.List;
  * @Description:
  */
 @Slf4j
-@RestController
+//@RestController
 @Api(tags = "消息")
 @ApiSort(5)
 @RequestMapping("/v1/notice")

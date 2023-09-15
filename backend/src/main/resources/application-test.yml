@@ -11,9 +11,9 @@ spring:
 #      url: jdbc:mysql://47.241.77.23:3306/1xWin?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
 #      username: temp9999
 #      password: temp9999
-      url: jdbc:mysql://18.163.109.183:3306/1xWin?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
-      username: Admin
-      password: Admin123@
+      url: jdbc:mysql://35.220.247.103:3306/lottery10?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+      username: root
+      password: 123456test
       initial-size: 5
       min-idle: 5
       max-active: 20
@@ -34,9 +34,9 @@ spring:
   redis:
 #    host: 47.241.77.23
 #    port: 6379
-    host: 18.163.109.183
-    port: 6382
-    password: e1b18bced4ab4a3cb8d46741ff4c83fe
+    host: 34.150.94.93
+    port: 6379
+    password: redis123456
     database: 10
     timeout: 60000
   servlet:

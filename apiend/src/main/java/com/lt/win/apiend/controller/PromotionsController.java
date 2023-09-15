@@ -28,7 +28,7 @@ import java.util.List;
  * @author david
  */
 @Slf4j
-@RestController
+//@RestController
 @ApiSupport(author = "David")
 @Api(tags = "优惠活动")
 @RequestMapping("/v1/promotions")

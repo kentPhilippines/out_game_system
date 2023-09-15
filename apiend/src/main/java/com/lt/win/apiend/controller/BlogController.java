@@ -31,7 +31,7 @@ import java.util.List;
  * @author david
  */
 @Slf4j
-@RestController
+//@RestController
 @Api(tags = "首页 - 博客")
 @ApiSort(2)
 @RequestMapping("/v1/blog")

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lt.win.dao.generator.mapper.LotteryBetslipsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lt.win.dao.generator.po.LotteryBetslips">
+        <id column="id" property="id" />
+        <result column="issue" property="issue" />
+        <result column="uid" property="uid" />
+        <result column="username" property="username" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="coin_bet" property="coinBet" />
+        <result column="coin_payout" property="coinPayout" />
+        <result column="status" property="status" />
+        <result column="plate_code" property="plateCode" />
+        <result column="plate_name" property="plateName" />
+        <result column="bet_code" property="betCode" />
+        <result column="bet_name" property="betName" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, issue, uid, username, code, name, coin_bet, coin_payout, status, plate_code, plate_name, bet_code, bet_name, created_at, updated_at
+    </sql>
+
+</mapper>
