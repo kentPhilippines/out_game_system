@@ -2,6 +2,7 @@ package com.lt.win;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lt.win.apiend.ApiendApplication;
+import com.lt.win.apiend.task.LotteryTask;
 import com.lt.win.service.base.*;
 import com.lt.win.service.impl.BetslipsServiceImpl;
 import com.lt.win.service.io.dto.Betslips;
@@ -60,6 +61,8 @@ public class CodeTest {
     private EsTableNameBase esTableNameBase;
     @Resource
     private BetStatisticBase betStatisticBase;
+    @Resource
+    private LotteryTask task;
 
 
     @Test
@@ -186,6 +189,10 @@ public class CodeTest {
 //        //  list.forEach(out::println);
     }
 
+    @Test
+    public void testLotteryOpen(){
+        task.initLotteryOpen();
+    }
 
     @Test
     @SneakyThrows
@@ -214,6 +221,9 @@ public class CodeTest {
         EsTableNameBase.getTableName(CoinLog.class);
         EsTableNameBase.getTableName(Betslips.class);
     }
+
+
+
 
 }
 

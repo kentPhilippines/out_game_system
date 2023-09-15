@@ -15,8 +15,8 @@ import java.io.Serializable;
  * @author David
  * @since 2023-09-14
  */
-@TableName("win_lottery_plate_name")
-public class LotteryPlateName extends Model<LotteryPlateName> {
+@TableName("win_lottery_plate")
+public class LotteryPlate extends Model<LotteryPlate> {
 
     private static final long serialVersionUID=1L;
 
@@ -103,7 +103,7 @@ public class LotteryPlateName extends Model<LotteryPlateName> {
 
     @Override
     public String toString() {
-        return "LotteryPlateName{" +
+        return "LotteryPlate{" +
         "id=" + id +
         ", code=" + code +
         ", name=" + name +

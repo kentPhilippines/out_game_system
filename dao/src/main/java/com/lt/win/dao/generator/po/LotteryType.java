@@ -1,5 +1,6 @@
 package com.lt.win.dao.generator.po;
 
+import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -13,7 +14,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author David
- * @since 2023-09-14
+ * @since 2023-09-15
  */
 @TableName("win_lottery_type")
 public class LotteryType extends Model<LotteryType> {
@@ -34,6 +35,12 @@ public class LotteryType extends Model<LotteryType> {
      */
     @TableField("name")
     private String name;
+
+    /**
+     * 赔率
+     */
+    @TableField("odds")
+    private BigDecimal odds;
 
     @TableField("created_at")
     private Integer createdAt;
@@ -66,6 +73,14 @@ public class LotteryType extends Model<LotteryType> {
         this.name = name;
     }
 
+    public BigDecimal getOdds() {
+        return odds;
+    }
+
+    public void setOdds(BigDecimal odds) {
+        this.odds = odds;
+    }
+
     public Integer getCreatedAt() {
         return createdAt;
     }
@@ -93,6 +108,7 @@ public class LotteryType extends Model<LotteryType> {
         "id=" + id +
         ", code=" + code +
         ", name=" + name +
+        ", odds=" + odds +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
         "}";

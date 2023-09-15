@@ -7,13 +7,14 @@
         <id column="id" property="id" />
         <result column="code" property="code" />
         <result column="name" property="name" />
+        <result column="odds" property="odds" />
         <result column="created_at" property="createdAt" />
         <result column="updated_at" property="updatedAt" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, code, name, created_at, updated_at
+        id, code, name, odds, created_at, updated_at
     </sql>
 
 </mapper>
