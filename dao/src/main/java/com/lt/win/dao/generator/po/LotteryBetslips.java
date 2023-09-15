@@ -2,7 +2,6 @@ package com.lt.win.dao.generator.po;
 
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -14,21 +13,21 @@ import java.io.Serializable;
  * </p>
  *
  * @author David
- * @since 2023-09-14
+ * @since 2023-09-15
  */
 @TableName("win_lottery_betslips")
 public class LotteryBetslips extends Model<LotteryBetslips> {
 
     private static final long serialVersionUID=1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    @TableId("id")
+    private Long id;
 
     /**
      * 期号
      */
-    @TableField("issue")
-    private Integer issue;
+    @TableField("periods_no")
+    private String periodsNo;
 
     /**
      * 用户ID
@@ -55,6 +54,12 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
     private String name;
 
     /**
+     * 赔率
+     */
+    @TableField("odds")
+    private BigDecimal odds;
+
+    /**
      * 投注金额
      */
     @TableField("coin_bet")
@@ -67,7 +72,7 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
     private BigDecimal coinPayout;
 
     /**
-     * 注单状态 1:待开彩  2:派彩成功  3: 退款
+     * 注单状态 0:待开彩  1派彩成功  2: 退款
      */
     @TableField("status")
     private Integer status;
@@ -75,14 +80,14 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
     /**
      * 开奖板块编号
      */
-    @TableField("plate_code")
-    private Integer plateCode;
+    @TableField("payout_code")
+    private Integer payoutCode;
 
     /**
      * 开奖板块名称
      */
-    @TableField("plate_name")
-    private String plateName;
+    @TableField("payout_name")
+    private String payoutName;
 
     /**
      * 投注板块编号
@@ -103,20 +108,20 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
     private Integer updatedAt;
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getIssue() {
-        return issue;
+    public String getPeriodsNo() {
+        return periodsNo;
     }
 
-    public void setIssue(Integer issue) {
-        this.issue = issue;
+    public void setPeriodsNo(String periodsNo) {
+        this.periodsNo = periodsNo;
     }
 
     public Integer getUid() {
@@ -151,6 +156,14 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
         this.name = name;
     }
 
+    public BigDecimal getOdds() {
+        return odds;
+    }
+
+    public void setOdds(BigDecimal odds) {
+        this.odds = odds;
+    }
+
     public BigDecimal getCoinBet() {
         return coinBet;
     }
@@ -175,20 +188,20 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
         this.status = status;
     }
 
-    public Integer getPlateCode() {
-        return plateCode;
+    public Integer getPayoutCode() {
+        return payoutCode;
     }
 
-    public void setPlateCode(Integer plateCode) {
-        this.plateCode = plateCode;
+    public void setPayoutCode(Integer payoutCode) {
+        this.payoutCode = payoutCode;
     }
 
-    public String getPlateName() {
-        return plateName;
+    public String getPayoutName() {
+        return payoutName;
     }
 
-    public void setPlateName(String plateName) {
-        this.plateName = plateName;
+    public void setPayoutName(String payoutName) {
+        this.payoutName = payoutName;
     }
 
     public Integer getBetCode() {
@@ -232,16 +245,17 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
     public String toString() {
         return "LotteryBetslips{" +
         "id=" + id +
-        ", issue=" + issue +
+        ", periodsNo=" + periodsNo +
         ", uid=" + uid +
         ", username=" + username +
         ", code=" + code +
         ", name=" + name +
+        ", odds=" + odds +
         ", coinBet=" + coinBet +
         ", coinPayout=" + coinPayout +
         ", status=" + status +
-        ", plateCode=" + plateCode +
-        ", plateName=" + plateName +
+        ", payoutCode=" + payoutCode +
+        ", payoutName=" + payoutName +
         ", betCode=" + betCode +
         ", betName=" + betName +
         ", createdAt=" + createdAt +

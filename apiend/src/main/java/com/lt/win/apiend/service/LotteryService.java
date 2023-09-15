@@ -1,6 +1,8 @@
 package com.lt.win.apiend.service;
 
 import com.lt.win.apiend.io.dto.lottery.LotteryParams;
+import com.lt.win.utils.components.pagination.ReqPage;
+import com.lt.win.utils.components.pagination.ResPage;
 import com.lt.win.utils.components.response.Result;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -25,7 +27,7 @@ public interface LotteryService {
      * @Description 查询开奖结果
      * @Param []
      **/
-    LotteryParams.LotteryResultRep queryLotteryResult();
+    ResPage<LotteryParams.LotteryResultRep> queryLotteryResult(ReqPage<Object> reqPage);
 
     /**
      * @return com.lt.win.apiend.io.dto.lottery.LotteryParams.BetRep
@@ -33,4 +35,12 @@ public interface LotteryService {
      * @Param [res]
      **/
     LotteryParams.BetRep bet(LotteryParams.BetRes res);
+
+    /**
+     * @return com.lt.win.utils.components.pagination.ResPage<com.lt.win.apiend.io.dto.lottery.LotteryParams.BetRecordRes>
+     * @Description 查询注单记录
+     * @Param [reqPage]
+     **/
+    ResPage<LotteryParams.BetRecordRes> queryBetRecord(@Valid @RequestBody ReqPage<LotteryParams.BetRecordReq> reqPage);
 }
+

@@ -1,6 +1,6 @@
 package com.lt.win.dao.generator.service;
 
-import com.lt.win.dao.generator.po.LotteryPlateName;
+import com.lt.win.dao.generator.po.LotteryPlate;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author David
  * @since 2023-09-14
  */
-public interface LotteryPlateNameService extends IService<LotteryPlateName> {
+public interface LotteryPlateService extends IService<LotteryPlate> {
 
 }

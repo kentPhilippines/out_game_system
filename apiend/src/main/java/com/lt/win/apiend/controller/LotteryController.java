@@ -5,10 +5,14 @@ import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import com.lt.win.apiend.aop.annotation.UnCheckToken;
 import com.lt.win.apiend.io.dto.lottery.LotteryParams;
 import com.lt.win.apiend.service.LotteryService;
+import com.lt.win.utils.components.pagination.ReqPage;
+import com.lt.win.utils.components.pagination.ResPage;
 import com.lt.win.utils.components.response.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +31,9 @@ import javax.validation.Valid;
 @Api(tags = " 彩票")
 @ApiSort(2)
 @RequestMapping("/v1/lottery")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class LotteryController {
-    private LotteryService lotteryServiceImpl;
+    private final LotteryService lotteryServiceImpl;
 
     @UnCheckToken
     @PostMapping(value = "/queryLotteryInfo")
@@ -42,8 +47,8 @@ public class LotteryController {
     @PostMapping(value = "/queryLotteryResult")
     @ApiOperation(value = "查询开奖结果", notes = "查询开奖结果")
     @ApiOperationSupport(author = "jess", order = 2)
-    public Result<LotteryParams.LotteryResultRep> queryLotteryResult() {
-        return Result.ok(lotteryServiceImpl.queryLotteryResult());
+    public Result<ResPage<LotteryParams.LotteryResultRep>> queryLotteryResult(@Valid @RequestBody ReqPage<Object> reqPage ) {
+        return Result.ok(lotteryServiceImpl.queryLotteryResult(reqPage));
     }
 
 
@@ -54,4 +59,11 @@ public class LotteryController {
         return Result.ok(lotteryServiceImpl.bet(res));
     }
 
+    @UnCheckToken
+    @PostMapping(value = "/queryBetRecord")
+    @ApiOperation(value = "查询注单记录", notes = "查询注单记录")
+    @ApiOperationSupport(author = "jess", order = 4)
+    public Result<ResPage<LotteryParams.BetRecordRes>> queryBetRecord(@Valid @RequestBody ReqPage<LotteryParams.BetRecordReq> reqPage ) {
+        return Result.ok(lotteryServiceImpl.queryBetRecord(reqPage));
+    }
 }

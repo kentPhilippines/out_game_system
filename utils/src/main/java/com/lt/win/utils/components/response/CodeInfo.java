@@ -155,6 +155,8 @@ public enum CodeInfo {
     WITHDRAWAL_ADDRESS_REPEAT(70313, "withdrawal address repeat"),
     COIN_INVALID(70314, "amount is invalid"),
 
+    BET_COIN_EXCEPTION(80001, "钱包余额不足!"),
+
     // 不要直接抛出异常、仅作用于中转
     DUPLICATE_KEY_ERROR(10004, "Not Allow Duplicate data"),
     DEFINED_EXCEPTION(99000, "自定义异常"),

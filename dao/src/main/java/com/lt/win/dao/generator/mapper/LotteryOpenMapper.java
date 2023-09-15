@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author David
- * @since 2023-09-14
+ * @since 2023-09-15
  */
 public interface LotteryOpenMapper extends BaseMapper<LotteryOpen> {
 

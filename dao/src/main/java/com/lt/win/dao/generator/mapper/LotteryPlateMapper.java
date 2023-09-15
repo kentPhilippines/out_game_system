@@ -1,6 +1,6 @@
 package com.lt.win.dao.generator.mapper;
 
-import com.lt.win.dao.generator.po.LotteryPlateName;
+import com.lt.win.dao.generator.po.LotteryPlate;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author David
  * @since 2023-09-14
  */
-public interface LotteryPlateNameMapper extends BaseMapper<LotteryPlateName> {
+public interface LotteryPlateMapper extends BaseMapper<LotteryPlate> {
 
 }

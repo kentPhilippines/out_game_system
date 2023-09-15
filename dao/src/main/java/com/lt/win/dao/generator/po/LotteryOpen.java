@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author David
- * @since 2023-09-14
+ * @since 2023-09-15
  */
 @TableName("win_lottery_open")
 public class LotteryOpen extends Model<LotteryOpen> {
@@ -26,8 +26,8 @@ public class LotteryOpen extends Model<LotteryOpen> {
     /**
      * 期号
      */
-    @TableField("issue")
-    private Integer issue;
+    @TableField("periods_no")
+    private String periodsNo;
 
     /**
      * 彩种编码
@@ -59,6 +59,12 @@ public class LotteryOpen extends Model<LotteryOpen> {
     @TableField("open_all_code")
     private String openAllCode;
 
+    /**
+     * 开奖状态；0：未开奖 1:已开奖
+     */
+    @TableField("status")
+    private Integer status;
+
     @TableField("created_at")
     private Integer createdAt;
 
@@ -74,12 +80,12 @@ public class LotteryOpen extends Model<LotteryOpen> {
         this.id = id;
     }
 
-    public Integer getIssue() {
-        return issue;
+    public String getPeriodsNo() {
+        return periodsNo;
     }
 
-    public void setIssue(Integer issue) {
-        this.issue = issue;
+    public void setPeriodsNo(String periodsNo) {
+        this.periodsNo = periodsNo;
     }
 
     public String getLotteryCode() {
@@ -122,6 +128,14 @@ public class LotteryOpen extends Model<LotteryOpen> {
         this.openAllCode = openAllCode;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     public Integer getCreatedAt() {
         return createdAt;
     }
@@ -147,12 +161,13 @@ public class LotteryOpen extends Model<LotteryOpen> {
     public String toString() {
         return "LotteryOpen{" +
         "id=" + id +
-        ", issue=" + issue +
+        ", periodsNo=" + periodsNo +
         ", lotteryCode=" + lotteryCode +
         ", lotteryName=" + lotteryName +
         ", openCode=" + openCode +
         ", openName=" + openName +
         ", openAllCode=" + openAllCode +
+        ", status=" + status +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
         "}";
