@@ -193,6 +193,10 @@ public class CodeTest {
     public void testLotteryOpen(){
         task.initLotteryOpen();
     }
+    @Test
+    public void testLotterySettle(){
+        task.settle();
+    }
 
     @Test
     @SneakyThrows
