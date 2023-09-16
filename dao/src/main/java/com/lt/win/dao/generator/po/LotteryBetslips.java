@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author David
- * @since 2023-09-15
+ * @since 2023-09-17
  */
 @TableName("win_lottery_betslips")
 public class LotteryBetslips extends Model<LotteryBetslips> {

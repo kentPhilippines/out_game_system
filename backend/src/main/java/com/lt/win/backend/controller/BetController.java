@@ -4,11 +4,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.lt.win.backend.io.dto.Platform;
 import com.lt.win.backend.service.impl.PlatManagerServiceImpl;
+import com.lt.win.dao.generator.po.LotteryBetslips;
 import com.lt.win.service.impl.BetslipsServiceImpl;
+import com.lt.win.service.impl.LBServiceImpl;
+import com.lt.win.service.io.dto.BaseParams;
 import com.lt.win.service.io.dto.Betslips;
 import com.lt.win.service.io.dto.admin.BetStatisticsDto;
+import com.lt.win.service.io.dto.admin.BetStatisticsSumDto;
 import com.lt.win.service.io.qo.AdminBetQo;
+import com.lt.win.service.io.qo.Betslip;
 import com.lt.win.service.io.qo.GameTypeQo;
+import com.lt.win.service.thread.ThreadHeaderLocalData;
 import com.lt.win.utils.components.pagination.ReqPage;
 import com.lt.win.utils.components.pagination.ResPage;
 import com.lt.win.utils.components.response.Result;
@@ -21,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -41,7 +48,8 @@ public class BetController {
     private BetslipsServiceImpl betslipsServiceImpl;
     @Autowired
     private PlatManagerServiceImpl platManagerServiceImpl;
-
+    @Autowired
+    LBServiceImpl lBServiceImpl;
     @ApiOperationSupport(author = "dianfang", order = 1)
     @ApiOperation(value = "投注分页", notes = "投注分页")
     @PostMapping("/page")
@@ -62,6 +70,23 @@ public class BetController {
     @PostMapping("/gameList")
     public Result<List<Platform.GameListInfo>> gameList(@RequestBody GameTypeQo qo) {
         return Result.ok(platManagerServiceImpl.gameList(qo.getGroups()));
+    }
+
+
+
+    @ApiOperationSupport(author = "kent", order = 1)
+    @ApiOperation(value = "注单查询", notes = "注单查询")
+    @PostMapping("/queryBets")
+    public Result<ResPage<LotteryBetslips>> queryBets(@RequestBody @Valid ReqPage<Betslip.BetslipsDto> reqPage) throws Exception {
+        BaseParams.HeaderInfo userInfo = ThreadHeaderLocalData.HEADER_INFO_THREAD_LOCAL.get();
+        return Result.ok(lBServiceImpl.queryBets(reqPage, userInfo));
+    }
+    @ApiOperationSupport(author = "kent", order = 1)
+    @ApiOperation(value = "注单汇总查询", notes = "注单汇总查询")
+    @PostMapping("/queryBetsSum")
+    public Result< BetStatisticsSumDto> queryBetsSum(@RequestBody @Valid ReqPage<Betslip.BetslipsDtoSum> reqPage) throws Exception {
+        BaseParams.HeaderInfo userInfo = ThreadHeaderLocalData.HEADER_INFO_THREAD_LOCAL.get();
+        return Result.ok(lBServiceImpl.queryBetsSum(reqPage, userInfo));
     }
 
 
