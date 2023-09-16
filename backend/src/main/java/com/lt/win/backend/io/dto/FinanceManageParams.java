@@ -263,10 +263,14 @@ public interface FinanceManageParams {
         private BigDecimal coin;
         @ApiModelProperty(name = "category", value = "调整项目；调账原因:0-其他 1-误存调账 2-活动调账", example = "1")
         private Integer category;
-        @ApiModelProperty(name = "coinOperatorType", value = "金额操作类型；1：增加金额，2：减少金额", example = "1")
-        private Integer coinOperatorType;
+
+        @ApiModelProperty(name = "operatorType", value = "金额操作类型；1：系统调账，2：活动派彩，3：后台充值", example = "1")
+        private Integer operatorType;
         @ApiModelProperty(name = "mark", value = "备注", example = "转账异常")
         private String mark;
+        @NotNull(message = "type 不能为空")
+        @ApiModelProperty(name = "type", value = "加款或者减款 add:加款 pop:减款", example = "类型")
+        private String type;
     }
 
     @Data

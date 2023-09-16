@@ -16,6 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.stream.Collectors;
+
 /**
  * @Auther: wells
  * @Date: 2022/8/28 23:08
@@ -28,6 +32,7 @@ public class FinanceManageBase {
     private final UserService userServiceImpl;
     private final CoinAdminTransferService coinAdminTransferServiceImpl;
     private final UserCoinBase userCoinBase;
+    Integer[] OperatorType = {1, 2, 3};
 
     /**
      * 人工调整入库
@@ -38,17 +43,21 @@ public class FinanceManageBase {
         var uid = reqDto.getUid();
         var user = userServiceImpl.getById(uid);
         var now = DateUtils.getCurrentTime();
+        if (!Arrays.stream(OperatorType).collect(Collectors.toCollection(LinkedList::new)).contains(reqDto.getOperatorType())) {
+           log.info("当前操作类型不支持");
+            return false;
+        };
         //收支类型:0-支出 1-收入
         var outIn = 0;
         var transferCoin = reqDto.getCoin().negate();
-        //1：增加金额，2：减少金额
-        if (reqDto.getCoinOperatorType() == 1) {
+        //add：增加金额，pop：减少金额
+        if ("add".equals(reqDto.getType())) {
             outIn = 1;
             transferCoin = reqDto.getCoin();
         }
         //验证余额是否满足支出
         var coin = userCoinBase.getUserCoin(user.getId());
-        if (reqDto.getCoinOperatorType() == 2 && coin.compareTo(reqDto.getCoin()) < 0) {
+        if (reqDto.getOperatorType() == 2 && coin.compareTo(reqDto.getCoin()) < 0) {
             throw new BusinessException(CodeInfo.COIN_NOT_ENOUGH);
         }
         //调账
