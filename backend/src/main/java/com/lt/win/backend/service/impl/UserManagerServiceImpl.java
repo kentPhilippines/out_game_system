@@ -297,11 +297,11 @@ public class UserManagerServiceImpl extends ServiceImpl<UserManagerMapper, ListR
         user.setPasswordHash(passwordHash(reqBody.getPasswordHash()));
 
         // 邀请码生成
-        var promoCode = TextUtils.generateRandomString(6).toUpperCase();
+        var promoCode = TextUtils.generatePromoCode();
         while (userServiceImpl.lambdaQuery().eq(User::getPromoCode, promoCode).one() != null) {
-            promoCode = TextUtils.generateRandomString(6).toUpperCase();
+            promoCode = TextUtils.generatePromoCode();
         }
-        user.setPromoCode(promoCode);
+        user.setPromoCode(promoCode.toString());
         // VIP积分
         if (Optional.ofNullable(reqBody.getLevelId()).isPresent()) {
             var level = userLevelServiceImpl.getById(reqBody.getLevelId());

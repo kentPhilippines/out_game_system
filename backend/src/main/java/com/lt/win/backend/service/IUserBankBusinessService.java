@@ -1,6 +1,8 @@
 package com.lt.win.backend.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lt.win.service.io.bo.UserCacheBo;
+import com.lt.win.utils.components.pagination.ReqPage;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
@@ -21,7 +23,7 @@ public interface IUserBankBusinessService {
      * @param dto dto
      * @return res
      */
-    List<UserCacheBo.WithdrawalAddressResDto> withdrawalAddressList(UserCacheBo.WithdrawalAddressReqDto dto);
+    List<UserCacheBo.WithdrawalAddressResDto> withdrawalAddressList(ReqPage<UserCacheBo.WithdrawalAddressReqDto> dto);
 
     /**
      * 新增提款地址

@@ -88,11 +88,11 @@ public class AgentSuperServiceImpl implements IAgentSuperService {
                 throw new BusinessException(CodeInfo.EMAIL_EXISTS);
             }*/
             // 邀请码生成
-            var promoCode = TextUtils.generateRandomString(6).toUpperCase();
+            var promoCode = TextUtils.generatePromoCode();
             while (userServiceImpl.lambdaQuery().eq(User::getPromoCode, promoCode).count() != ConstData.ZERO) {
-                promoCode = TextUtils.generateRandomString(6).toUpperCase();
+                promoCode = TextUtils.generatePromoCode();
             }
-            user.setPromoCode(promoCode);
+            user.setPromoCode(promoCode.toString());
             user.setSupLevelTop(ConstData.ZERO);
             user.setEmail(TextUtils.generatePromoCode()+"@gmail.com");
             user.setMobile(TextUtils.generatePromoCode()+"");

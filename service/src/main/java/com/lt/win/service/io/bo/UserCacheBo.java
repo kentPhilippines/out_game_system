@@ -167,12 +167,12 @@ public interface UserCacheBo {
     class AddWithdrawalAddressReqDto {
         @ApiModelProperty(name = "uid", value = "会员ID", example = "1", required = true)
         private Integer uid;
-        @ApiModelProperty(name = "code", value = "主网名称:USDT-TRC20/ERC20 银行卡-PIX", example = "TRC-20", required = true)
-        private String code;
-        @ApiModelProperty(name = "address", value = "提款地址", example = "TEV6MRrbcQAGwzkb6pqMoHHb9b22xXb3zf", required = true)
-        private String address;
-        @ApiModelProperty(name = "accountType", value = "账户类型-字典dic_withdrawal_address_account_type", example = "TEV6MRrbcQAGwzkb6pqMoHHb9b22xXb3zf")
-        private String accountType;
+  /*      @ApiModelProperty(name = "code", value = "主网名称:USDT-TRC20/ERC20 银行卡-PIX", example = "TRC-20", required = true)
+        private String code;*/
+        @ApiModelProperty(name = "accountNumber", value = "提款地址或卡号", example = "TEV6MRrbcQAGwzkb6pqMoHHb9b22xXb3zf", required = true)
+        private String accountNumber;
+        @ApiModelProperty(name = "categoryTransfer", value = "账户类型-字典dic_withdrawal_address_account_type", example = "TEV6MRrbcQAGwzkb6pqMoHHb9b22xXb3zf")
+        private String categoryTransfer;
         @ApiModelProperty(name = "accountNo", value = "账户卡号", example = "TEV6MRrbcQAGwzkb6pqMoHHb9b22xXb3zf")
         private String accountNo;
     }

@@ -103,10 +103,10 @@ public interface UserParams {
         @Pattern(regexp = "^[A-Za-z\\d]+([_.][A-Za-z\\d]+)*@([A-Za-z\\d\\-]+\\.)+[A-Za-z]{2,6}$", message = "Email format incorrect")
         @ApiModelProperty(name = "email", value = "邮箱", example = "123@gmail.com")
         private String email;
-        @NotNull(message = "区号不能为空")
+     //   @NotNull(message = "区号不能为空")
         @ApiModelProperty(name = "areaCode", value = "区号", example = "86")
         private String areaCode;
-        @NotNull(message = "手机号码不能为空")
+     //   @NotNull(message = "手机号码不能为空")
         @ApiModelProperty(name = "mobile", value = "手机号码", example = "13812345678")
         private String mobile;
         @ApiModelProperty(name = "link", value = "推广域名", example = "testwww.xinbosports.com", hidden = true)

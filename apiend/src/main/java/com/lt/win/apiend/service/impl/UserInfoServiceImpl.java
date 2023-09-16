@@ -84,7 +84,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserInfoResDto register(UserParams.@NotNull RegisterReqDto dto, HttpServletRequest request) {
-      //  verifySesCode(dto.getEmail(), dto.getVerifyCode());
+        //  verifySesCode(dto.getEmail(), dto.getVerifyCode());
 
         // 检查用户名是否已存在
         User user = userServiceImpl.lambdaQuery().eq(User::getUsername, dto.getUsername()).one();
@@ -108,6 +108,16 @@ public class UserInfoServiceImpl implements IUserInfoService {
         if (ObjectUtils.isNotEmpty(userProfile)) {
             throw new BusinessException(CodeInfo.EMAIL_EXISTS);
         }*/
+
+        if (ObjectUtils.isNotEmpty(dto.getEmail())) {
+            dto.setEmail(TextUtils.generatePromoCode() + "@gmail.com");
+        }
+        if (ObjectUtils.isNotEmpty(dto.getMobile())) {
+            dto.setMobile(TextUtils.generatePromoCode() + "");
+        }
+        if (ObjectUtils.isNotEmpty(dto.getAreaCode())) {
+            dto.setAreaCode("+86");
+        }
 
         // 获取推广域名
         String host = request.getHeader("Host");
@@ -167,8 +177,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
         }
 
         var user = userServiceImpl.lambdaQuery()
-                .eq(User::getEmail, dto.getUsername())
-                .or()
+                //    .eq(User::getEmail, dto.getUsername())
+                //    .or()
                 .eq(User::getUsername, dto.getUsername())
                 .one();
         if (ObjectUtils.isEmpty(user)) {

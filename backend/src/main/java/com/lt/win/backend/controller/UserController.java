@@ -232,8 +232,8 @@ public class UserController {
     @ApiOperationSupport(author = "David", order = 90)
     @ApiOperation(value = "提款地址列表", notes = "提款地址列表")
     @PostMapping("/withdrawalAddressList")
-    public Result<List<UserCacheBo.WithdrawalAddressResDto>> withdrawalAddressList(@Valid @RequestBody UserCacheBo.WithdrawalAddressReqDto dto) {
-        return Result.ok(userBankBusinessServiceImpl.withdrawalAddressList(dto));
+    public Result<List<UserCacheBo.WithdrawalAddressResDto>> withdrawalAddressList(@Valid @RequestBody  ReqPage<UserCacheBo.WithdrawalAddressReqDto> dto) {
+        return Result.ok(  userBankBusinessServiceImpl.withdrawalAddressList(dto));
     }
 
     @ApiOperationSupport(author = "David", order = 91)
