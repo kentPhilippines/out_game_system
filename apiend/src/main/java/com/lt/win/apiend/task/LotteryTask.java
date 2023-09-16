@@ -155,11 +155,12 @@ public class LotteryTask {
      * @Param []
      **/
     private String getUpPeriodsNo() {
-        int toDaySecond = DateNewUtils.now() - DateNewUtils.todayStart();
+        int upTime = DateNewUtils.now() - INTERVAL_SECOND;
+        int toDaySecond = DateNewUtils.now() - INTERVAL_SECOND - DateNewUtils.todayStart();
         toDaySecond = toDaySecond < 0 ? toDaySecond + 24 * 3600 : toDaySecond;
         int num = toDaySecond / INTERVAL_SECOND;
         num = toDaySecond % INTERVAL_SECOND == 0 ? num : num + 1;
-        return DateUtils.yyyyMMdd2(DateUtils.getCurrentTime() - INTERVAL_SECOND) + String.format("%03d", num);
+        return DateUtils.yyyyMMdd2(upTime) + String.format("%03d", num);
     }
 
 }
