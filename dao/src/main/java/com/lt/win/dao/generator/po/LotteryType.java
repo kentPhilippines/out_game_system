@@ -14,7 +14,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author David
- * @since 2023-09-15
+ * @since 2023-09-17
  */
 @TableName("win_lottery_type")
 public class LotteryType extends Model<LotteryType> {
@@ -41,6 +41,12 @@ public class LotteryType extends Model<LotteryType> {
      */
     @TableField("odds")
     private BigDecimal odds;
+
+    /**
+     * 封盘时间（秒）
+     */
+    @TableField("pause_at")
+    private Integer pauseAt;
 
     @TableField("created_at")
     private Integer createdAt;
@@ -81,6 +87,14 @@ public class LotteryType extends Model<LotteryType> {
         this.odds = odds;
     }
 
+    public Integer getPauseAt() {
+        return pauseAt;
+    }
+
+    public void setPauseAt(Integer pauseAt) {
+        this.pauseAt = pauseAt;
+    }
+
     public Integer getCreatedAt() {
         return createdAt;
     }
@@ -109,6 +123,7 @@ public class LotteryType extends Model<LotteryType> {
         ", code=" + code +
         ", name=" + name +
         ", odds=" + odds +
+        ", pauseAt=" + pauseAt +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
         "}";

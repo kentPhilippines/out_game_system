@@ -118,6 +118,11 @@ public class LotteryServiceImpl implements LotteryService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public LotteryParams.BetRep bet(LotteryParams.BetRes req) {
+        int toDaySecond = DateNewUtils.now() - DateNewUtils.todayStart();
+        int restTime = INTERVAL - (toDaySecond % INTERVAL);
+        if (restTime <= 10) {
+            throw new BusinessException(CodeInfo.BET_TIME_EXCEPTION);
+        }
         BaseParams.HeaderInfo headerInfo = ThreadHeaderLocalData.HEADER_INFO_THREAD_LOCAL.get();
         Integer uid = headerInfo.id;
         UserWallet userWallet = userWalletServiceImpl.getOne(new LambdaQueryWrapper<UserWallet>().eq(UserWallet::getId, uid));

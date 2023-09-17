@@ -8,13 +8,14 @@
         <result column="code" property="code" />
         <result column="name" property="name" />
         <result column="odds" property="odds" />
+        <result column="pause_at" property="pauseAt" />
         <result column="created_at" property="createdAt" />
         <result column="updated_at" property="updatedAt" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, code, name, odds, created_at, updated_at
+        id, code, name, odds, pause_at, created_at, updated_at
     </sql>
 
 </mapper>

@@ -21,10 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -44,10 +41,6 @@ public class LotteryTask {
     private final UserCoinBase userCoinBase;
 
     /**
-     * 每期间隔时间(分钟)
-     **/
-    private static final int INTERVAL = 5;
-    /**
      * 每期间隔时间(秒)
      **/
     private static final int INTERVAL_SECOND = 300;
@@ -58,34 +51,55 @@ public class LotteryTask {
      * @Description 生成随机的开奖号码
      * @Param []
      **/
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "5 */5 * * * ?")
+    public void initFirst() {
+        String periodsNo = getUpPeriodsNo();
+        log.info("开始首次生产开奖号码：{}", periodsNo);
+        initLotteryOpen();
+    }
+
+    /**
+     * @Description 生成随机的开奖号码
+     * @Param []
+     **/
+    @Scheduled(cron = "15 */5 * * * ?")
+    public void initSecond() {
+        String periodsNo = getUpPeriodsNo();
+        log.info("开始二次生成开奖号码：{}", periodsNo);
+        initLotteryOpen();
+    }
+
+    /**
+     * @Description 生产开奖号码
+     * @Param []
+     **/
     public void initLotteryOpen() {
-        int totalMin = 24 * 60;
-        int num = totalMin / INTERVAL;
+        int toDaySecond = DateNewUtils.now() - DateNewUtils.todayStart();
+        int num = toDaySecond / INTERVAL_SECOND;
+        num = toDaySecond % INTERVAL_SECOND == 0 ? num : num + 1;
         List<Integer> list = IntStream.range(1, 11)
                 .boxed()
                 .collect(Collectors.toList());
         Map<Integer, String> plateMap = lotteryPlateServiceImpl.list().stream()
                 .collect(Collectors.toMap(LotteryPlate::getCode, LotteryPlate::getName));
         Integer now = DateUtils.getCurrentTime();
-        List<LotteryOpen> openList = new ArrayList<>();
-        for (int i = 1; i <= num; i++) {
-            Collections.shuffle(list);
-            //生成期号
-            String periodsNo = DateUtils.yyyyMMdd2(DateUtils.getCurrentTime()) + String.format("%03d", i);
-            Integer openCode = list.get(0);
-            LotteryOpen lotteryOpen = new LotteryOpen();
+        Collections.shuffle(list);
+        //生成期号
+        String periodsNo = DateUtils.yyyyMMdd2(DateUtils.getCurrentTime()) + String.format("%03d", num);
+        Integer openCode = list.get(0);
+        LotteryOpen lotteryOpen = lotteryOpenServiceImpl.getOne(new LambdaQueryWrapper<LotteryOpen>().eq(LotteryOpen::getPeriodsNo, periodsNo));
+        if (Objects.isNull(lotteryOpen)) {
+            lotteryOpen = new LotteryOpen();
             lotteryOpen.setPeriodsNo(periodsNo);
             lotteryOpen.setLotteryCode(PK10);
             lotteryOpen.setLotteryName(PK10);
-            lotteryOpen.setOpenCode(openCode);
-            lotteryOpen.setOpenName(plateMap.get(openCode));
-            lotteryOpen.setOpenAllCode(StringUtils.join(list, ","));
             lotteryOpen.setCreatedAt(now);
-            lotteryOpen.setUpdatedAt(now);
-            openList.add(lotteryOpen);
         }
-        lotteryOpenServiceImpl.saveBatch(openList);
+        lotteryOpen.setOpenCode(openCode);
+        lotteryOpen.setOpenName(plateMap.get(openCode));
+        lotteryOpen.setOpenAllCode(StringUtils.join(list, ","));
+        lotteryOpen.setUpdatedAt(now);
+        lotteryOpenServiceImpl.saveOrUpdate(lotteryOpen);
     }
 
     /**
@@ -94,6 +108,8 @@ public class LotteryTask {
      **/
     @Scheduled(cron = "0 */5 * * * ?")
     public void settleFirst() {
+        String periodsNo = getUpPeriodsNo();
+        log.info("开始首次结算：{}", periodsNo);
         settle();
     }
 
@@ -102,8 +118,10 @@ public class LotteryTask {
      * @Description 二次结算，防止第一次未结算完
      * @Param []
      **/
-    //@Scheduled(cron = "10 */5 * * * ?")
+    @Scheduled(cron = "10 */5 * * * ?")
     public void settleMore() {
+        String periodsNo = getUpPeriodsNo();
+        log.info("开始二次结算：{}", periodsNo);
         settle();
     }
 

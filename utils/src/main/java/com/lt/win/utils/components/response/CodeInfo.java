@@ -156,6 +156,7 @@ public enum CodeInfo {
     COIN_INVALID(70314, "amount is invalid"),
 
     BET_COIN_EXCEPTION(80001, "钱包余额不足!"),
+    BET_TIME_EXCEPTION(80002, "当前期投资结束,请下期继续!"),
 
     // 不要直接抛出异常、仅作用于中转
     DUPLICATE_KEY_ERROR(10004, "Not Allow Duplicate data"),

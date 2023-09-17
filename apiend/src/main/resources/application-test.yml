@@ -42,7 +42,7 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false
 #logback根目录
-loghome: /tmp/logs/sports/sports_api
+loghome: /opt/apiend
 
 # swagger文档显示开关:true=显示 false=关闭
 swagger:
