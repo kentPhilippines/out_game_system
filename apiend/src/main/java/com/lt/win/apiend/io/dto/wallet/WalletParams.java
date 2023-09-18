@@ -123,16 +123,16 @@ public interface WalletParams {
     @Data
     @ApiModel(value = "WithdrawalRes", description = "在线提款请求实体")
     class WithdrawalRes {
-        @ApiModelProperty(name = "categoryCurrency", value = "货币类型:0-数字货币 1-法币", example = "1")
-        private Integer categoryCurrency;
-        @ApiModelProperty(name = "categoryTransfer", value = "转账类型：1-TRC,2-ERC,3-BANK,4-PIX,5-GCASH", example = "1")
-        private Integer categoryTransfer;
+//        @ApiModelProperty(name = "categoryCurrency", value = "货币类型:0-数字货币 1-法币", example = "1")
+//        private Integer categoryCurrency;
+//        @ApiModelProperty(name = "categoryTransfer", value = "转账类型：1-TRC,2-ERC,3-BANK,4-PIX,5-GCASH", example = "1")
+//        private Integer categoryTransfer;
         @ApiModelProperty(name = "withdrawalAddress", value = "提款地址", example = "EV6MRrbcQAGwzkb6pqMoHHb9b22xXb3zf")
         private String withdrawalAddress;
         @ApiModelProperty(name = "withdrawalAmount", value = "提款金额", example = "99.99")
         private BigDecimal withdrawalAmount;
-        @ApiModelProperty(name = "category", value = "类型:佣金提现是0 正常提现是1", example = "")
-        private Integer category = 1;
+//        @ApiModelProperty(name = "category", value = "类型:佣金提现是0 正常提现是1", example = "")
+//        private Integer category = 1;
 
     }
 

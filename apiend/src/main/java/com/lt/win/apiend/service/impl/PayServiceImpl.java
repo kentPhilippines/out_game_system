@@ -273,7 +273,7 @@ public class PayServiceImpl implements PayService {
         BigDecimal userCoin = userCoinBase.getUserCoin(headerInfo.getId());
         BigDecimal withdrawalAmount = withdrawalRes.getWithdrawalAmount();
         BigDecimal realAmount = withdrawalRes.getWithdrawalAmount();
-        var currency = payConfigCache.getWithdrawalCurrency(withdrawalRes.getCategoryCurrency(), withdrawalRes.getCategoryTransfer());
+        //var currency = payConfigCache.getWithdrawalCurrency(withdrawalRes.getCategoryCurrency(), withdrawalRes.getCategoryTransfer());
         CoinWithdrawalRecord coinWithdrawalRecord = new CoinWithdrawalRecord();
         //最低提款判断
         BigDecimal minCoin = new BigDecimal(configCache.getConfigByTitle(MIN_COIN));
@@ -281,39 +281,39 @@ public class PayServiceImpl implements PayService {
         if (withdrawalAmount.compareTo(minCoin) < 0 || withdrawalAmount.compareTo(maxCoin) > 0) {
             throw new BusinessException(CodeInfo.WITHDRAWAL_AMOUNT_ERROR);
         }
-        if (COMM.equals(withdrawalRes.getCategory())) {
-            //提款佣金无需稽核
-            coinWithdrawalRecord.setStatus(3);
-            User user = userServiceImpl.getById(headerInfo.getId());
-            userCoin = user.getCoinCommission();
-        }
+//        if (COMM.equals(withdrawalRes.getCategory())) {
+//            //提款佣金无需稽核
+//            coinWithdrawalRecord.setStatus(3);
+//            User user = userServiceImpl.getById(headerInfo.getId());
+//            userCoin = user.getCoinCommission();
+//        }
         if (realAmount.compareTo(BigDecimal.ZERO) <= 0 || realAmount.compareTo(userCoin) > 0) {
             throw new BusinessException(CodeInfo.COIN_NOT_ENOUGH);
         }
-        String mainCurrency = configCache.getCurrency();
+       //String mainCurrency = configCache.getCurrency();
         //提款率处理
-        BigDecimal rate = BigDecimal.ONE;
-        if (!currency.equals(mainCurrency)) {
-            rate = coinRateCache.getCoinRate(currency, mainCurrency);
-        }
+//        BigDecimal rate = BigDecimal.ONE;
+//        if (!currency.equals(mainCurrency)) {
+//            rate = coinRateCache.getCoinRate(currency, mainCurrency);
+//        }
         //减除手续费
         BigDecimal fees = new BigDecimal(configCache.getConfigByTitle(FEES));
-        realAmount = realAmount.divide(rate, 4, RoundingMode.DOWN).subtract(fees);
+        realAmount = realAmount.subtract(fees);
         if (realAmount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new BusinessException(CodeInfo.WITHDRAWAL_AMOUNT_ERROR);
         }
         coinWithdrawalRecord.setOrderId(orderNo);
-        coinWithdrawalRecord.setCategoryCurrency(withdrawalRes.getCategoryCurrency());
-        coinWithdrawalRecord.setCategoryTransfer(withdrawalRes.getCategoryTransfer());
+        coinWithdrawalRecord.setCategoryCurrency(1);
+        coinWithdrawalRecord.setCategoryTransfer(3);
         coinWithdrawalRecord.setUid(headerInfo.getId());
         coinWithdrawalRecord.setUsername(headerInfo.getUsername());
-        coinWithdrawalRecord.setExchangeRate(rate);
+        coinWithdrawalRecord.setExchangeRate(BigDecimal.ONE);
         coinWithdrawalRecord.setWithdrawalAddress(withdrawalRes.getWithdrawalAddress());
         coinWithdrawalRecord.setWithdrawalAmount(withdrawalAmount);
         coinWithdrawalRecord.setRealAmount(realAmount);
         coinWithdrawalRecord.setCoinBefore(userCoin);
         coinWithdrawalRecord.setMainNetFees(mainNetFrees);
-        coinWithdrawalRecord.setCurrency(currency);
+        coinWithdrawalRecord.setCurrency("RMB");
         coinWithdrawalRecord.setCreatedAt(DateUtils.getCurrentTime());
         coinWithdrawalRecord.setUpdatedAt(DateUtils.getCurrentTime());
         coinWithdrawalRecordServiceImpl.save(coinWithdrawalRecord);
@@ -328,11 +328,11 @@ public class PayServiceImpl implements PayService {
         //发送提款消息
         noticeBase.writeDepositAndWithdrawalCount(Constant.PUSH_WN);
         boolean reFlag;
-        if (COMM.equals(withdrawalRes.getCategory())) {
-            reFlag = userCoinBase.changeCommCoin(userCoinChangeReq);
-        } else {
+//        if (COMM.equals(withdrawalRes.getCategory())) {
+//            reFlag = userCoinBase.changeCommCoin(userCoinChangeReq);
+//        } else {
             reFlag = userCoinBase.userCoinChange(userCoinChangeReq);
-        }
+      //  }
         return reFlag;
     }
 
