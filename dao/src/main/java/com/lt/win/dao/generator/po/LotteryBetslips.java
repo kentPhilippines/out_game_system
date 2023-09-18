@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author David
- * @since 2023-09-17
+ * @since 2023-09-18
  */
 @TableName("win_lottery_betslips")
 public class LotteryBetslips extends Model<LotteryBetslips> {
@@ -78,28 +78,22 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
     private Integer status;
 
     /**
+     * 主板编号
+     */
+    @TableField("main_code")
+    private Integer mainCode;
+
+    /**
      * 开奖板块编号
      */
     @TableField("payout_code")
     private Integer payoutCode;
 
     /**
-     * 开奖板块名称
-     */
-    @TableField("payout_name")
-    private String payoutName;
-
-    /**
      * 投注板块编号
      */
     @TableField("bet_code")
     private Integer betCode;
-
-    /**
-     * 投注板块名称
-     */
-    @TableField("bet_name")
-    private String betName;
 
     @TableField("created_at")
     private Integer createdAt;
@@ -188,6 +182,14 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
         this.status = status;
     }
 
+    public Integer getMainCode() {
+        return mainCode;
+    }
+
+    public void setMainCode(Integer mainCode) {
+        this.mainCode = mainCode;
+    }
+
     public Integer getPayoutCode() {
         return payoutCode;
     }
@@ -196,28 +198,12 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
         this.payoutCode = payoutCode;
     }
 
-    public String getPayoutName() {
-        return payoutName;
-    }
-
-    public void setPayoutName(String payoutName) {
-        this.payoutName = payoutName;
-    }
-
     public Integer getBetCode() {
         return betCode;
     }
 
     public void setBetCode(Integer betCode) {
         this.betCode = betCode;
-    }
-
-    public String getBetName() {
-        return betName;
-    }
-
-    public void setBetName(String betName) {
-        this.betName = betName;
     }
 
     public Integer getCreatedAt() {
@@ -254,10 +240,9 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
         ", coinBet=" + coinBet +
         ", coinPayout=" + coinPayout +
         ", status=" + status +
+        ", mainCode=" + mainCode +
         ", payoutCode=" + payoutCode +
-        ", payoutName=" + payoutName +
         ", betCode=" + betCode +
-        ", betName=" + betName +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
         "}";

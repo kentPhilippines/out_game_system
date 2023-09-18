@@ -183,4 +183,18 @@ public final class KeyConstant {
      * 用户退出缓存
      **/
     public static final String USER_LOGOUT_HASH = "USER_LOGOUT_HASH";
+
+    /**
+     * 彩种列表
+     **/
+    public static final String LOTTERY_TYPE_LIST = "LOTTERY_TYPE_LIST";
+    /**
+     * 主板列表
+     **/
+    public static final String LOTTERY_MAIN_PLATE_LIST = "LOTTERY_MAIN_PLATE_LIST";
+    /**
+     * 板块列表
+     **/
+    public static final String LOTTERY_PLATE_LIST = "LOTTERY_PLATE_LIST";
+
 }

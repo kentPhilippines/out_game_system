@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author David
- * @since 2023-09-17
+ * @since 2023-09-18
  */
 public interface LotteryBetslipsMapper extends BaseMapper<LotteryBetslips> {
 

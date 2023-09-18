@@ -1,15 +1,13 @@
 package com.lt.win.apiend.task;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.lt.win.dao.generator.po.LotteryBetslips;
-import com.lt.win.dao.generator.po.LotteryOpen;
-import com.lt.win.dao.generator.po.LotteryPlate;
-import com.lt.win.dao.generator.po.LotteryType;
+import com.lt.win.dao.generator.po.*;
 import com.lt.win.dao.generator.service.LotteryBetslipsService;
 import com.lt.win.dao.generator.service.LotteryOpenService;
 import com.lt.win.dao.generator.service.LotteryPlateService;
-import com.lt.win.dao.generator.service.LotteryTypeService;
 import com.lt.win.service.base.UserCoinBase;
+import com.lt.win.service.cache.redis.LotteryCache;
 import com.lt.win.utils.DateNewUtils;
 import com.lt.win.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +35,8 @@ public class LotteryTask {
     private final LotteryPlateService lotteryPlateServiceImpl;
     private final LotteryOpenService lotteryOpenServiceImpl;
     private final LotteryBetslipsService lotteryBetslipsServiceImpl;
-    private final LotteryTypeService lotteryTypeServiceImpl;
     private final UserCoinBase userCoinBase;
+    private final LotteryCache lotteryCache;
 
     /**
      * 每期间隔时间(秒)
@@ -51,9 +49,9 @@ public class LotteryTask {
      * @Description 生成随机的开奖号码
      * @Param []
      **/
-    @Scheduled(cron = "5 */5 * * * ?")
+    @Scheduled(cron = "15 */5 * * * ?")
     public void initFirst() {
-        String periodsNo = getUpPeriodsNo();
+        String periodsNo = lotteryCache.getUpPeriodsNo();
         log.info("开始首次生产开奖号码：{}", periodsNo);
         initLotteryOpen();
     }
@@ -62,9 +60,9 @@ public class LotteryTask {
      * @Description 生成随机的开奖号码
      * @Param []
      **/
-    @Scheduled(cron = "15 */5 * * * ?")
+    @Scheduled(cron = "20 */5 * * * ?")
     public void initSecond() {
-        String periodsNo = getUpPeriodsNo();
+        String periodsNo = lotteryCache.getUpPeriodsNo();
         log.info("开始二次生成开奖号码：{}", periodsNo);
         initLotteryOpen();
     }
@@ -80,35 +78,38 @@ public class LotteryTask {
         List<Integer> list = IntStream.range(1, 11)
                 .boxed()
                 .collect(Collectors.toList());
-        Map<Integer, String> plateMap = lotteryPlateServiceImpl.list().stream()
-                .collect(Collectors.toMap(LotteryPlate::getCode, LotteryPlate::getName));
         Integer now = DateUtils.getCurrentTime();
-        Collections.shuffle(list);
+        List<LotteryMainPlate> lotteryMainPlateList = lotteryCache.getLotteryMainPlateList();
         //生成期号
         String periodsNo = DateUtils.yyyyMMdd2(DateUtils.getCurrentTime()) + String.format("%03d", num);
-        Integer openCode = list.get(0);
-        LotteryOpen lotteryOpen = lotteryOpenServiceImpl.getOne(new LambdaQueryWrapper<LotteryOpen>().eq(LotteryOpen::getPeriodsNo, periodsNo));
-        if (Objects.isNull(lotteryOpen)) {
-            lotteryOpen = new LotteryOpen();
-            lotteryOpen.setPeriodsNo(periodsNo);
-            lotteryOpen.setLotteryCode(PK10);
-            lotteryOpen.setLotteryName(PK10);
-            lotteryOpen.setCreatedAt(now);
+        for (LotteryMainPlate mainPlate : lotteryMainPlateList) {
+            Collections.shuffle(list);
+            Integer openCode = list.get(0);
+            LotteryOpen lotteryOpen = lotteryOpenServiceImpl.getOne(new LambdaQueryWrapper<LotteryOpen>()
+                    .eq(LotteryOpen::getMainCode, mainPlate.getCode())
+                    .eq(LotteryOpen::getPeriodsNo, periodsNo));
+            if (Objects.isNull(lotteryOpen)) {
+                lotteryOpen = new LotteryOpen();
+                lotteryOpen.setPeriodsNo(periodsNo);
+                lotteryOpen.setLotteryCode(PK10);
+                lotteryOpen.setLotteryName(PK10);
+                lotteryOpen.setCreatedAt(now);
+            }
+            lotteryOpen.setMainCode(mainPlate.getCode());
+            lotteryOpen.setOpenCode(openCode);
+            lotteryOpen.setOpenAllCode(StringUtils.join(list, ","));
+            lotteryOpen.setUpdatedAt(now);
+            lotteryOpenServiceImpl.saveOrUpdate(lotteryOpen);
         }
-        lotteryOpen.setOpenCode(openCode);
-        lotteryOpen.setOpenName(plateMap.get(openCode));
-        lotteryOpen.setOpenAllCode(StringUtils.join(list, ","));
-        lotteryOpen.setUpdatedAt(now);
-        lotteryOpenServiceImpl.saveOrUpdate(lotteryOpen);
     }
 
     /**
      * @Description 结算
      * @Param []
      **/
-    @Scheduled(cron = "0 */5 * * * ?")
+    @Scheduled(cron = "5 */5 * * * ?")
     public void settleFirst() {
-        String periodsNo = getUpPeriodsNo();
+        String periodsNo = lotteryCache.getUpPeriodsNo();
         log.info("开始首次结算：{}", periodsNo);
         settle();
     }
@@ -120,7 +121,7 @@ public class LotteryTask {
      **/
     @Scheduled(cron = "10 */5 * * * ?")
     public void settleMore() {
-        String periodsNo = getUpPeriodsNo();
+        String periodsNo = lotteryCache.getUpPeriodsNo();
         log.info("开始二次结算：{}", periodsNo);
         settle();
     }
@@ -130,55 +131,50 @@ public class LotteryTask {
      * @Param []
      **/
     public void settle() {
-        String periodsNo = getUpPeriodsNo();
+        String periodsNo = lotteryCache.getUpPeriodsNo();
         // String periodsNo = "20230915208";
-        LotteryOpen lotteryOpen = lotteryOpenServiceImpl.getOne(new LambdaQueryWrapper<LotteryOpen>().eq(LotteryOpen::getPeriodsNo, periodsNo));
-        if (1 == lotteryOpen.getStatus()) {
-            log.error("当前期已开奖");
-            return;
-        }
-        LotteryType lotteryType = lotteryTypeServiceImpl.getOne(new LambdaQueryWrapper<LotteryType>()
-                .eq(LotteryType::getCode, PK10));
-        LotteryPlate plate = lotteryPlateServiceImpl.getById(lotteryOpen.getOpenCode());
-        List<LotteryBetslips> lotteryBetslipsList = lotteryBetslipsServiceImpl.lambdaQuery()
-                .eq(LotteryBetslips::getPeriodsNo, periodsNo)
-                .eq(LotteryBetslips::getStatus, 0)
-                .list();
+        List<LotteryMainPlate> lotteryMainPlateList = lotteryCache.getLotteryMainPlateList();
         Integer now = DateNewUtils.now();
-        //中奖更新注单，钱包表，开奖结果表状态，板块表
-        lotteryBetslipsList.forEach(lotteryBetslips -> {
-            lotteryBetslips.setPayoutCode(lotteryOpen.getOpenCode());
-            lotteryBetslips.setPayoutName(lotteryOpen.getOpenName());
-            lotteryBetslips.setStatus(1);
-            lotteryBetslips.setUpdatedAt(now);
-            if (lotteryBetslips.getBetCode().equals(lotteryOpen.getOpenCode())) {
-                BigDecimal coinPayout = lotteryBetslips.getCoinBet().multiply(lotteryType.getOdds())
-                        .setScale(2, RoundingMode.DOWN);
-                lotteryBetslips.setCoinPayout(coinPayout);
-                userCoinBase.updateConcurrentUserCoin(coinPayout, lotteryBetslips.getUid());
+        LotteryType lotteryType = lotteryCache.getLotteryType();
+        for (LotteryMainPlate mainPlate : lotteryMainPlateList) {
+            Integer mainCode = mainPlate.getCode();
+            LotteryOpen lotteryOpen = lotteryOpenServiceImpl.getOne(new LambdaQueryWrapper<LotteryOpen>()
+                    .eq(LotteryOpen::getMainCode, mainCode)
+                    .eq(LotteryOpen::getPeriodsNo, periodsNo));
+            if (1 == lotteryOpen.getStatus()) {
+                log.error("当前期已开奖");
+                return;
             }
-        });
-        lotteryBetslipsServiceImpl.updateBatchById(lotteryBetslipsList);
-        lotteryOpen.setStatus(1);
-        lotteryOpen.setUpdatedAt(now);
-        lotteryOpenServiceImpl.updateById(lotteryOpen);
-        plate.setPayoutCount(plate.getPayoutCount() + 1);
-        plate.setUpdatedAt(now);
-        lotteryPlateServiceImpl.updateById(plate);
+            LotteryPlate plate = lotteryCache.getLotteryPlate(mainCode, lotteryOpen.getOpenCode());
+            List<LotteryBetslips> lotteryBetslipsList = lotteryBetslipsServiceImpl.lambdaQuery()
+                    .eq(LotteryBetslips::getPeriodsNo, periodsNo)
+                    .eq(LotteryBetslips::getMainCode, mainCode)
+                    .eq(LotteryBetslips::getStatus, 0)
+                    .list();
+            //中奖更新注单，钱包表，开奖结果表状态，板块表
+            if (CollUtil.isNotEmpty(lotteryBetslipsList)) {
+                lotteryBetslipsList.forEach(lotteryBetslips -> {
+                    lotteryBetslips.setPayoutCode(lotteryOpen.getOpenCode());
+                    lotteryBetslips.setStatus(1);
+                    lotteryBetslips.setUpdatedAt(now);
+                    if (lotteryBetslips.getBetCode().equals(lotteryOpen.getOpenCode())) {
+                        BigDecimal coinPayout = lotteryBetslips.getCoinBet().multiply(lotteryType.getOdds())
+                                .setScale(2, RoundingMode.DOWN);
+                        lotteryBetslips.setCoinPayout(coinPayout);
+                        userCoinBase.updateConcurrentUserCoin(coinPayout, lotteryBetslips.getUid());
+                    }
+                });
+                lotteryBetslipsServiceImpl.updateBatchById(lotteryBetslipsList);
+            }
+
+            lotteryOpen.setStatus(1);
+            lotteryOpen.setUpdatedAt(now);
+            lotteryOpenServiceImpl.updateById(lotteryOpen);
+            plate.setPayoutCount(plate.getPayoutCount() + 1);
+            plate.setUpdatedAt(now);
+            lotteryPlateServiceImpl.updateById(plate);
+        }
     }
 
-    /**
-     * @return java.lang.String
-     * @Description 获取当前期号
-     * @Param []
-     **/
-    private String getUpPeriodsNo() {
-        int upTime = DateNewUtils.now() - INTERVAL_SECOND;
-        int toDaySecond = DateNewUtils.now() - INTERVAL_SECOND - DateNewUtils.todayStart();
-        toDaySecond = toDaySecond < 0 ? toDaySecond + 24 * 3600 : toDaySecond;
-        int num = toDaySecond / INTERVAL_SECOND;
-        num = toDaySecond % INTERVAL_SECOND == 0 ? num : num + 1;
-        return DateUtils.yyyyMMdd2(upTime) + String.format("%03d", num);
-    }
 
 }

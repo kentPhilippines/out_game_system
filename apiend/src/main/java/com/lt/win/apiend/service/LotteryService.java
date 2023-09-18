@@ -7,6 +7,7 @@ import com.lt.win.utils.components.response.Result;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @Auther: Jess
@@ -20,14 +21,14 @@ public interface LotteryService {
      * @Description 查询期数信息
      * @Param []
      **/
-    LotteryParams.LotteryInfoRep queryLotteryInfo();
+    LotteryParams.LotteryInfoRes queryLotteryInfo(LotteryParams.LotteryInfoReq req);
 
     /**
      * @return com.lt.win.apiend.io.dto.lottery.LotteryParams.LotteryResultRep
      * @Description 查询开奖结果
      * @Param []
      **/
-    ResPage<LotteryParams.LotteryResultRep> queryLotteryResult(ReqPage<Object> reqPage);
+    ResPage<LotteryParams.LotteryResultRes> queryLotteryResult(ReqPage<LotteryParams.LotteryResultReq> reqPage);
 
     /**
      * @return com.lt.win.apiend.io.dto.lottery.LotteryParams.BetRep
@@ -42,5 +43,19 @@ public interface LotteryService {
      * @Param [reqPage]
      **/
     ResPage<LotteryParams.BetRecordRes> queryBetRecord(@Valid @RequestBody ReqPage<LotteryParams.BetRecordReq> reqPage);
+
+    /**
+     * @return java.util.List<com.lt.win.apiend.io.dto.lottery.LotteryParams.MainPlateRes>
+     * @Description 查询主板列表
+     * @Param []
+     **/
+    List<LotteryParams.MainPlateRes> queryMainPlateList();
+
+    /**
+     * @return java.util.List<com.lt.win.apiend.io.dto.lottery.LotteryParams.PlateRes>
+     * @Description 查询板块列表
+     * @Param [req]
+     **/
+    List<LotteryParams.PlateRes> queryPlateList(LotteryParams.PlateReq req);
 }
 

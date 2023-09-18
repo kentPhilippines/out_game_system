@@ -74,7 +74,7 @@ public class UserTrans {
         userPo.setUsername(dto.getUsername().toLowerCase());
         userPo.setAvatar(String.format("/avatar/%s.png", index));
         userPo.setAreaCode(dto.getAreaCode());
-        userPo.setMobile(dto.getMobile());
+        userPo.setMobile(generateChinesePhoneNumber());
 
         userPo.setEmail(dto.getEmail());
         userPo.setPasswordHash(PasswordUtils.generatePasswordHash(dto.getPassword()));
@@ -118,5 +118,21 @@ public class UserTrans {
         userWalletServiceImpl.save(wallet);
         // 更新上级代理缓存
         userCache.delUserCache(userPo.getId());
+    }
+
+    public static String generateChinesePhoneNumber() {
+        Random random = new Random();
+
+        // 中国手机号码的第二位可以是3、4、5、6、7、8、9中的一个数字
+        int secondDigit = 3 + random.nextInt(7);
+
+        // 生成剩下的9位数字
+        StringBuilder phoneNumber = new StringBuilder("1");
+        phoneNumber.append(secondDigit);
+        for (int i = 0; i < 9; i++) {
+            phoneNumber.append(random.nextInt(10));
+        }
+
+        return phoneNumber.toString();
     }
 }

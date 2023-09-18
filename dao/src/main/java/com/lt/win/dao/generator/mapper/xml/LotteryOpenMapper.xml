@@ -9,7 +9,7 @@
         <result column="lottery_code" property="lotteryCode" />
         <result column="lottery_name" property="lotteryName" />
         <result column="open_code" property="openCode" />
-        <result column="open_name" property="openName" />
+        <result column="main_code" property="mainCode" />
         <result column="open_all_code" property="openAllCode" />
         <result column="status" property="status" />
         <result column="created_at" property="createdAt" />
@@ -18,7 +18,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, periods_no, lottery_code, lottery_name, open_code, open_name, open_all_code, status, created_at, updated_at
+        id, periods_no, lottery_code, lottery_name, open_code, main_code, open_all_code, status, created_at, updated_at
     </sql>
 
 </mapper>

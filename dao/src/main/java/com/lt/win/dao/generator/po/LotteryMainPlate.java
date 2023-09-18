@@ -9,14 +9,14 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 彩票板块表
+ * 彩票主板表
  * </p>
  *
  * @author David
  * @since 2023-09-18
  */
-@TableName("win_lottery_plate")
-public class LotteryPlate extends Model<LotteryPlate> {
+@TableName("win_lottery_main_plate")
+public class LotteryMainPlate extends Model<LotteryMainPlate> {
 
     private static final long serialVersionUID=1L;
 
@@ -24,28 +24,16 @@ public class LotteryPlate extends Model<LotteryPlate> {
     private Integer id;
 
     /**
-     * 板块编号
+     * 主板编号
      */
     @TableField("code")
     private Integer code;
 
     /**
-     * 板块名称
+     * 主板名称
      */
     @TableField("name")
     private String name;
-
-    /**
-     * 主板编号
-     */
-    @TableField("main_code")
-    private Integer mainCode;
-
-    /**
-     * 开奖次数
-     */
-    @TableField("payout_count")
-    private Integer payoutCount;
 
     @TableField("created_at")
     private Integer createdAt;
@@ -78,22 +66,6 @@ public class LotteryPlate extends Model<LotteryPlate> {
         this.name = name;
     }
 
-    public Integer getMainCode() {
-        return mainCode;
-    }
-
-    public void setMainCode(Integer mainCode) {
-        this.mainCode = mainCode;
-    }
-
-    public Integer getPayoutCount() {
-        return payoutCount;
-    }
-
-    public void setPayoutCount(Integer payoutCount) {
-        this.payoutCount = payoutCount;
-    }
-
     public Integer getCreatedAt() {
         return createdAt;
     }
@@ -117,12 +89,10 @@ public class LotteryPlate extends Model<LotteryPlate> {
 
     @Override
     public String toString() {
-        return "LotteryPlate{" +
+        return "LotteryMainPlate{" +
         "id=" + id +
         ", code=" + code +
         ", name=" + name +
-        ", mainCode=" + mainCode +
-        ", payoutCount=" + payoutCount +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
         "}";

@@ -7,12 +7,12 @@ import com.lt.win.apiend.service.LotteryService;
 import com.lt.win.dao.generator.po.*;
 import com.lt.win.dao.generator.service.*;
 import com.lt.win.service.base.UserCoinBase;
+import com.lt.win.service.cache.redis.LotteryCache;
 import com.lt.win.service.exception.BusinessException;
 import com.lt.win.service.io.dto.BaseParams;
 import com.lt.win.service.thread.ThreadHeaderLocalData;
 import com.lt.win.utils.BeanConvertUtils;
 import com.lt.win.utils.DateNewUtils;
-import com.lt.win.utils.DateUtils;
 import com.lt.win.utils.components.pagination.ReqPage;
 import com.lt.win.utils.components.pagination.ResPage;
 import com.lt.win.utils.components.response.CodeInfo;
@@ -37,14 +37,13 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class LotteryServiceImpl implements LotteryService {
-    private final LotteryPlateService lotteryPlateServiceImpl;
-    private final LotteryTypeService lotteryTypeServiceImpl;
     private final LotteryOpenService lotteryOpenServiceImpl;
     private final UserWalletService userWalletServiceImpl;
     private final LotteryBetslipsService lotteryBetslipsServiceImpl;
     private final UserCoinBase userCoinBase;
+    private final LotteryCache lotteryCache;
 
-    private static final String PK10 = "pk10";
+
     /**
      * 每期间隔时间(秒)
      **/
@@ -56,15 +55,15 @@ public class LotteryServiceImpl implements LotteryService {
      * @Param []
      **/
     @Override
-    public LotteryParams.LotteryInfoRep queryLotteryInfo() {
-        LotteryParams.LotteryInfoRep req = new LotteryParams.LotteryInfoRep();
+    public LotteryParams.LotteryInfoRes queryLotteryInfo(LotteryParams.LotteryInfoReq req) {
+        LotteryParams.LotteryInfoRes res = new LotteryParams.LotteryInfoRes();
         int toDaySecond = DateNewUtils.now() - DateNewUtils.todayStart();
         int restTime = INTERVAL - (toDaySecond % INTERVAL);
-        String periodsNo = getCurrPeriodsNo();
-        LotteryType lotteryType = lotteryTypeServiceImpl.getOne(new LambdaQueryWrapper<LotteryType>()
-                .eq(LotteryType::getCode, PK10));
+        String periodsNo = lotteryCache.getCurrPeriodsNo();
+        LotteryType lotteryType = lotteryCache.getLotteryType();
         BigDecimal odds = lotteryType.getOdds();
-        List<LotteryPlate> lotteryPlateList = lotteryPlateServiceImpl.list();
+        List<LotteryPlate> lotteryPlateList = lotteryCache.getLotteryPlateList(req.mainCode);
+        LotteryMainPlate mainPlate = lotteryCache.getLotteryMainPlate(req.mainCode);
         lotteryPlateList.sort(Comparator.comparing(LotteryPlate::getPayoutCount).reversed());
         List<LotteryParams.PlateDto> plateDtoList = new ArrayList<>();
         lotteryPlateList.forEach(lotteryPlate -> {
@@ -74,11 +73,13 @@ public class LotteryServiceImpl implements LotteryService {
             plateDto.setPayoutCount(lotteryPlate.getPayoutCount());
             plateDtoList.add(plateDto);
         });
-        req.setPeriodsNo(periodsNo);
-        req.setRestTime(restTime);
-        req.setOdds(odds);
-        req.setPlateDtoList(plateDtoList);
-        return req;
+        res.setMainCode(req.mainCode);
+        res.setMainName(mainPlate.getName());
+        res.setPeriodsNo(periodsNo);
+        res.setRestTime(restTime);
+        res.setOdds(odds);
+        res.setPlateDtoList(plateDtoList);
+        return res;
 
     }
 
@@ -88,14 +89,16 @@ public class LotteryServiceImpl implements LotteryService {
      * @Param []
      **/
     @Override
-    public ResPage<LotteryParams.LotteryResultRep> queryLotteryResult(ReqPage<Object> reqPage) {
+    public ResPage<LotteryParams.LotteryResultRes> queryLotteryResult(ReqPage<LotteryParams.LotteryResultReq> reqPage) {
+        Integer mainCode = reqPage.getData().mainCode;
         Page<LotteryOpen> page = lotteryOpenServiceImpl.page(
                 reqPage.getPage(),
-                new LambdaQueryWrapper<LotteryOpen>().eq(LotteryOpen::getStatus, 1)
+                new LambdaQueryWrapper<LotteryOpen>()
+                        .eq(LotteryOpen::getStatus, 1)
+                        .eq(LotteryOpen::getMainCode, mainCode)
                         .orderByDesc(LotteryOpen::getPeriodsNo));
-        Map<Integer, String> plateMap = lotteryPlateServiceImpl.list().stream()
-                .collect(Collectors.toMap(LotteryPlate::getCode, LotteryPlate::getName));
-        Page<LotteryParams.LotteryResultRep> lotteryResultRepPage = BeanConvertUtils.copyPageProperties(page, LotteryParams.LotteryResultRep::new, (source, target) -> {
+        Map<Integer, String> plateMap = lotteryCache.getLotteryPlateMap(mainCode);
+        Page<LotteryParams.LotteryResultRes> lotteryResultRepPage = BeanConvertUtils.copyPageProperties(page, LotteryParams.LotteryResultRes::new, (source, target) -> {
             String periodsNo = source.getPeriodsNo();
             Integer num = Integer.parseInt(periodsNo.substring(periodsNo.length() - 3));
             String openAllCode = source.getOpenAllCode();
@@ -132,11 +135,8 @@ public class LotteryServiceImpl implements LotteryService {
         if (userWallet.getCoin().compareTo(coinSum) < 0) {
             throw new BusinessException(CodeInfo.BET_COIN_EXCEPTION);
         }
-        String periodsNo = getCurrPeriodsNo();
-        Map<Integer, String> plateMap = lotteryPlateServiceImpl.list().stream()
-                .collect(Collectors.toMap(LotteryPlate::getCode, LotteryPlate::getName));
-        LotteryType lotteryType = lotteryTypeServiceImpl.getOne(new LambdaQueryWrapper<LotteryType>()
-                .eq(LotteryType::getCode, PK10));
+        String periodsNo = lotteryCache.getCurrPeriodsNo();
+        LotteryType lotteryType = lotteryCache.getLotteryType();
         Integer now = DateNewUtils.now();
         List<LotteryBetslips> lotteryBetslipsList = new ArrayList<>();
         betList.forEach(bet -> {
@@ -149,7 +149,7 @@ public class LotteryServiceImpl implements LotteryService {
             lotteryBetslips.setOdds(lotteryType.getOdds());
             lotteryBetslips.setCoinBet(bet.coin);
             lotteryBetslips.setBetCode(bet.getPlateCode());
-            lotteryBetslips.setBetName(plateMap.get(bet.plateCode));
+            lotteryBetslips.setMainCode(req.getMainCode());
             lotteryBetslips.setCreatedAt(now);
             lotteryBetslips.setUpdatedAt(now);
             lotteryBetslipsList.add(lotteryBetslips);
@@ -179,20 +179,49 @@ public class LotteryServiceImpl implements LotteryService {
                         .le(Objects.nonNull(data.getEndTime()), LotteryBetslips::getCreatedAt, data.getEndTime())
                         .eq(Objects.nonNull(data.getBetCode()), LotteryBetslips::getBetCode, data.getBetCode())
                         .eq(Objects.nonNull(data.getPayoutCode()), LotteryBetslips::getPayoutCode, data.getPayoutCode())
+                        .eq(Objects.nonNull(data.getMainCode()), LotteryBetslips::getMainCode, data.getMainCode())
                         .orderByDesc(LotteryBetslips::getCreatedAt));
-        Page<LotteryParams.BetRecordRes> betRecordResPage = BeanConvertUtils.copyPageProperties(page, LotteryParams.BetRecordRes::new);
+        Map<String, String> lotteryPlateMap = lotteryCache.getLotteryPlateMap();
+        Map<Integer, String> lotteryMainPlateMap = lotteryCache.getLotteryMainPlateMap();
+        Page<LotteryParams.BetRecordRes> betRecordResPage = BeanConvertUtils.copyPageProperties(page, LotteryParams.BetRecordRes::new,
+                (source, target) -> {
+                    target.setMainName(lotteryMainPlateMap.get(source.getMainCode()));
+                    target.setBetName(lotteryPlateMap.get(source.getMainCode() + "_" + source.getBetCode()));
+                    if (Objects.nonNull(source.getPayoutCode())) {
+                        target.setPayoutName(lotteryPlateMap.get(source.getMainCode() + "_" + source.getPayoutCode()));
+                    }
+                });
         return ResPage.get(betRecordResPage);
     }
 
     /**
-     * @return java.lang.String
-     * @Description 获取当前期号
+     * @return java.util.List<com.lt.win.apiend.io.dto.lottery.LotteryParams.MainPlateRes>
+     * @Description 查询主板列表
      * @Param []
      **/
-    private String getCurrPeriodsNo() {
-        int toDaySecond = DateNewUtils.now() - DateNewUtils.todayStart();
-        int num = toDaySecond / INTERVAL;
-        num = toDaySecond % INTERVAL == 0 ? num : num + 1;
-        return DateUtils.yyyyMMdd2(DateUtils.getCurrentTime()) + String.format("%03d", num);
+    @Override
+    public List<LotteryParams.MainPlateRes> queryMainPlateList() {
+        List<LotteryMainPlate> mainPlateList = lotteryCache.getLotteryMainPlateList();
+        return BeanConvertUtils.copyListProperties(mainPlateList, LotteryParams.MainPlateRes::new,
+                (source, target) -> {
+                    target.setMainCode(source.getCode());
+                    target.setMainName(source.getName());
+                });
     }
+
+    /**
+     * @return java.util.List<com.lt.win.apiend.io.dto.lottery.LotteryParams.PlateRes>
+     * @Description 查询板块列表
+     * @Param [req]
+     */
+    @Override
+    public List<LotteryParams.PlateRes> queryPlateList(LotteryParams.PlateReq req) {
+        List<LotteryPlate> lotteryPlateList = lotteryCache.getLotteryPlateList(req.getMainCode());
+        return BeanConvertUtils.copyListProperties(lotteryPlateList, LotteryParams.PlateRes::new, (source, target) -> {
+            target.setPlateCode(source.getCode());
+            target.setPlateName(source.getName());
+        });
+    }
+
+
 }

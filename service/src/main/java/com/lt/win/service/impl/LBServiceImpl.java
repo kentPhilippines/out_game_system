@@ -39,9 +39,7 @@ public class LBServiceImpl implements LBService {
                 .eq(Optional.ofNullable(data.getUid()).isPresent(), LotteryBetslips::getUid, data.getUid())
                 .like(Optional.ofNullable(data.getUsername()).isPresent(), LotteryBetslips::getUsername, data.getUsername())
                 .eq(Optional.ofNullable(data.getPayoutCode()).isPresent(), LotteryBetslips::getPayoutCode, data.getPayoutCode())
-                .eq(Optional.ofNullable(data.getPayoutName()).isPresent(), LotteryBetslips::getPayoutName, data.getPayoutName())
                 .eq(Optional.ofNullable(data.getBetCode()).isPresent(), LotteryBetslips::getBetCode, data.getBetCode())
-                .eq(Optional.ofNullable(data.getBetName()).isPresent(), LotteryBetslips::getBetName, data.getBetName())
                 .eq(Optional.ofNullable(data.getStatus()).isPresent(), LotteryBetslips::getStatus, data.getStatus())
                 .gt(Optional.ofNullable(data.getStartTime()).isPresent(), LotteryBetslips::getCreatedAt, data.getStartTime())
                 .lt(Optional.ofNullable(data.getEndTime()).isPresent(), LotteryBetslips::getCreatedAt, data.getEndTime()));
