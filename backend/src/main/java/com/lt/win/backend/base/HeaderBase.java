@@ -44,17 +44,19 @@ public class HeaderBase {
         HttpServletRequest request = attributes.getRequest();
         String header = request.getHeader("User-Agent");
         log.info("User-Agent=====" + header);
-        // 判定是否设置语言
-        String lang = request.getHeader(ConstData.LANG);
-        if (lang == null || !EnumUtils.isValidEnumIgnoreCase(LangEnum.class, lang)) {
-            throw new BusinessException(CodeInfo.HEADER_LANG_ERROR);
-        }
-
-        // 判定是否设置访问设备
-        String device = request.getHeader(ConstData.DEVICE);
-        if (device == null || !EnumUtils.isValidEnumIgnoreCase(DeviceEnum.class, device)) {
-            throw new BusinessException(CodeInfo.HEADER_DEVICE_ERROR);
-        }
+//        // 判定是否设置语言
+        String lang = "zh";
+        String device = "m";
+//        String lang = request.getHeader(ConstData.LANG);
+//        if (lang == null || !EnumUtils.isValidEnumIgnoreCase(LangEnum.class, lang)) {
+//            throw new BusinessException(CodeInfo.HEADER_LANG_ERROR);
+//        }
+//
+//        // 判定是否设置访问设备
+//        String device = request.getHeader(ConstData.DEVICE);
+//        if (device == null || !EnumUtils.isValidEnumIgnoreCase(DeviceEnum.class, device)) {
+//            throw new BusinessException(CodeInfo.HEADER_DEVICE_ERROR);
+//        }
 
         // 后台不强制校验Token 直接返回
         if (Boolean.FALSE.equals(isValid)) {
@@ -63,7 +65,7 @@ public class HeaderBase {
 
         try {
             String apiToken = request.getHeader(ConstData.TOKEN);
-        //    apiToken = "eyJhbGciOiJIUzI1NiJ9.eyJ3ZWJSb2xlIjoiYWRtaW4iLCJpZCI6IjMiLCJ1c2VybmFtZSI6IndlbGxzODg4IiwianRpIjoiZGRhMTRiY2ViNzM5NDMzMGJjYzI4YzUyYjgyYzc5MDEiLCJzdWIiOiIxeFdpbiIsImlhdCI6MTY5NDY3Nzc3OCwiZXhwIjoxNjk3MjY5Nzc4fQ.dkO0SFmVvKl-BShfgL0QEotyxKQ24m-kqMlrGvzX4_c";
+            //    apiToken = "eyJhbGciOiJIUzI1NiJ9.eyJ3ZWJSb2xlIjoiYWRtaW4iLCJpZCI6IjMiLCJ1c2VybmFtZSI6IndlbGxzODg4IiwianRpIjoiZGRhMTRiY2ViNzM5NDMzMGJjYzI4YzUyYjgyYzc5MDEiLCJzdWIiOiIxeFdpbiIsImlhdCI6MTY5NDY3Nzc3OCwiZXhwIjoxNjk3MjY5Nzc4fQ.dkO0SFmVvKl-BShfgL0QEotyxKQ24m-kqMlrGvzX4_c";
             if (StringUtils.isNotBlank(apiToken) && apiToken.startsWith(ConstData.TOKEN_START_WITH)) {
                 // 获取正式apiToken
                 apiToken = apiToken.substring(ConstData.TOKEN_START_WITH.length());
