@@ -179,7 +179,7 @@ public class AutoGeneratorUtils {
         // 自定义继承的Controller类全称，带包名
         // strategyConfig.setSuperControllerClass();
         // 需要包含的表名（与exclude二选一配置） [null]
-        strategyConfig.setInclude("win_lottery_plate","win_lottery_main_plate","win_lottery_open","win_lottery_betslips");
+        strategyConfig.setInclude("win_lottery_open");
         // 需要排除的表名 [null
         // strategyConfig.setExclude();
         // strategyConfig.setInclude("datasource_config");

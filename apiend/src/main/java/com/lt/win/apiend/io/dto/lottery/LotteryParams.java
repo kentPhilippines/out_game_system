@@ -123,9 +123,11 @@ public interface LotteryParams {
         @ApiModelProperty(name = "betName", value = "北京钛方", example = "1")
         public String betName;
         @ApiModelProperty(name = "payoutName", value = "北京钛方", example = "1")
-        public String payoutName;
+        public String payoutName = "";
         @ApiModelProperty(name = "mainName", value = "攻坚科技", example = "1")
         public String mainName;
+        @ApiModelProperty(name = "createdAt", value = "创建时间", example = "1694750201")
+        public Integer createdAt;
     }
 
     @Data

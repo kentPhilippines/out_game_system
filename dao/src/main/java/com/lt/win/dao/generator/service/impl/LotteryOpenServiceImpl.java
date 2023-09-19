@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author David
- * @since 2023-09-18
+ * @since 2023-09-19
  */
 @Service
 public class LotteryOpenServiceImpl extends ServiceImpl<LotteryOpenMapper, LotteryOpen> implements LotteryOpenService {

@@ -67,6 +67,7 @@ public class LotteryController {
         return Result.ok(lotteryServiceImpl.queryBetRecord(reqPage));
     }
 
+    @UnCheckToken
     @PostMapping(value = "/queryMainPlateList")
     @ApiOperation(value = "查询主板记录", notes = "查询主板记录")
     @ApiOperationSupport(author = "jess", order = 5)
@@ -74,6 +75,7 @@ public class LotteryController {
         return Result.ok(lotteryServiceImpl.queryMainPlateList());
     }
 
+    @UnCheckToken
     @PostMapping(value = "/queryPlateList")
     @ApiOperation(value = "查询板块记录", notes = "查询板块记录")
     @ApiOperationSupport(author = "jess", order = 6)
