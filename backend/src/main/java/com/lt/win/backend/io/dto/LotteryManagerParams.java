@@ -220,7 +220,7 @@ public interface LotteryManagerParams {
         public String openAllCode;
         @ApiModelProperty(name = "openAllName", value = "开奖全部板块名称", example = "--")
         public String openAllName;
-        @ApiModelProperty(name = "status", value = "开奖状态；0：未开奖 1:已开奖", example = "1")
+        @ApiModelProperty(name = "status", value = "开奖状态；0：未开奖 1:已开奖 字典：dic_lottery_open_status", example = "1")
         public Integer status;
         @ApiModelProperty(name = "updatedUser", value = "修改人", example = "admin")
         public String updatedUser = "";
@@ -270,7 +270,7 @@ public interface LotteryManagerParams {
         public Integer payoutCode;
         @ApiModelProperty(name = "mainCode", value = "主板编号", example = "1")
         public Integer mainCode;
-        @ApiModelProperty(name = "status", value = "注单状态 0:待开彩  1派彩成功  2: 退款", example = "1")
+        @ApiModelProperty(name = "status", value = "注单状态 0:未结算  1:已结算 字典：dic_lottery_betslips_status", example = "1")
         public Integer status;
     }
 
@@ -287,7 +287,7 @@ public interface LotteryManagerParams {
         public BigDecimal coinBet;
         @ApiModelProperty(name = "coinPayout", value = "派彩金额", example = "10")
         public BigDecimal coinPayout;
-        @ApiModelProperty(name = "status", value = "注单状态 0:待开彩  1派彩成功  2: 退款", example = "1")
+        @ApiModelProperty(name = "status", value = "注单状态 0:未结算  1:已结算 字典：dic_lottery_betslips_status", example = "1")
         public Integer status;
         @ApiModelProperty(name = "betName", value = "北京钛方", example = "1")
         public String betName;
