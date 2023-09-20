@@ -44,21 +44,21 @@ public class LotteryManagerController {
 
     @ApiOperationSupport(author = "jess", order = 2)
     @ApiOperation(value = "新增彩种", notes = "新增彩种")
-    @PostMapping("/ addLotteryType")
+    @PostMapping("/addLotteryType")
     public Result<Boolean> addLotteryType(@RequestBody AddLotteryTypeReq reqBody) {
         return Result.ok(lotteryManagerServiceImpl.addLotteryType(reqBody));
     }
 
     @ApiOperationSupport(author = "jess", order = 3)
     @ApiOperation(value = "修改彩种", notes = "修改彩种")
-    @PostMapping("/ updateLotteryType")
+    @PostMapping("/updateLotteryType")
     public Result<Boolean> updateLotteryType(@RequestBody UpdateLotteryTypeReq reqBody) {
         return Result.ok(lotteryManagerServiceImpl.updateLotteryType(reqBody));
     }
 
     @ApiOperationSupport(author = "jess", order = 4)
     @ApiOperation(value = "删除彩种", notes = "删除彩种")
-    @PostMapping("/ deleteLotteryType")
+    @PostMapping("/deleteLotteryType")
     public Result<Boolean> deleteLotteryType(@RequestBody DeleteLotteryTypeReq reqBody) {
         return Result.ok(lotteryManagerServiceImpl.deleteLotteryType(reqBody));
     }
@@ -73,21 +73,21 @@ public class LotteryManagerController {
 
     @ApiOperationSupport(author = "jess", order = 6)
     @ApiOperation(value = "新增主板", notes = "新增主板")
-    @PostMapping("/ addMainPlate")
+    @PostMapping("/addMainPlate")
     public Result<Boolean> addMainPlate(@RequestBody AddMainPlateReq reqBody) {
         return Result.ok(lotteryManagerServiceImpl.addMainPlate(reqBody));
     }
 
     @ApiOperationSupport(author = "jess", order = 7)
     @ApiOperation(value = "修改主板", notes = "修改主板")
-    @PostMapping("/ updateMainPlate")
+    @PostMapping("/updateMainPlate")
     public Result<Boolean> updateMainPlate(@RequestBody UpdateMainPlateReq reqBody) {
         return Result.ok(lotteryManagerServiceImpl.updateMainPlate(reqBody));
     }
 
     @ApiOperationSupport(author = "jess", order = 8)
     @ApiOperation(value = "删除主板", notes = "删除主板")
-    @PostMapping("/ deleteMainPlate")
+    @PostMapping("/deleteMainPlate")
     public Result<Boolean> deleteMainPlate(@RequestBody DeleteMainPlateReq reqBody) {
         return Result.ok(lotteryManagerServiceImpl.deleteMainPlate(reqBody));
     }
@@ -103,21 +103,21 @@ public class LotteryManagerController {
 
     @ApiOperationSupport(author = "jess", order = 10)
     @ApiOperation(value = "新增板块", notes = "新增板块")
-    @PostMapping("/ addPlate")
+    @PostMapping("/addPlate")
     public Result<Boolean> addPlate(@RequestBody AddPlateReq reqBody) {
         return Result.ok(lotteryManagerServiceImpl.addPlate(reqBody));
     }
 
     @ApiOperationSupport(author = "jess", order = 11)
     @ApiOperation(value = "修改板块", notes = "修改板块")
-    @PostMapping("/ updatePlate")
+    @PostMapping("/updatePlate")
     public Result<Boolean> updatePlate(@RequestBody UpdatePlateReq reqBody) {
         return Result.ok(lotteryManagerServiceImpl.updatePlate(reqBody));
     }
 
     @ApiOperationSupport(author = "jess", order = 12)
     @ApiOperation(value = "删除板块", notes = "删除板块")
-    @PostMapping("/ deletePlate")
+    @PostMapping("/deletePlate")
     public Result<Boolean> deletePlate(@RequestBody DeletePlateReq reqBody) {
         return Result.ok(lotteryManagerServiceImpl.deletePlate(reqBody));
     }
@@ -131,21 +131,21 @@ public class LotteryManagerController {
 
     @ApiOperationSupport(author = "jess", order = 14)
     @ApiOperation(value = "新增开奖结果", notes = "新增开奖结果")
-    @PostMapping("/ addOpen")
+    @PostMapping("/addOpen")
     public Result<Boolean> addPlate(@RequestBody AddOpenReq reqBody) {
         return Result.ok(lotteryManagerServiceImpl.addOpen(reqBody));
     }
 
     @ApiOperationSupport(author = "jess", order = 15)
     @ApiOperation(value = "修改开奖结果", notes = "修改开奖结果")
-    @PostMapping("/ updateOpen")
+    @PostMapping("/updateOpen")
     public Result<Boolean> updateOpen(@RequestBody UpdateOpenReq reqBody) {
         return Result.ok(lotteryManagerServiceImpl.updateOpen(reqBody));
     }
 
     @ApiOperationSupport(author = "jess", order = 16)
     @ApiOperation(value = "删除开奖结果", notes = "删除开奖结果")
-    @PostMapping("/ deleteOpen")
+    @PostMapping("/deleteOpen")
     public Result<Boolean> deleteOpen(@RequestBody DeleteOpenReq reqBody) {
         return Result.ok(lotteryManagerServiceImpl.deleteOpen(reqBody));
     }
