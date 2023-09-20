@@ -147,9 +147,23 @@ public interface LotteryManagerService {
     List<PlateRes> queryPlateList(PlateReq req);
 
     /**
+     * @return com.lt.win.backend.io.dto.LotteryManagerParams.PlateBetStatisticsRes
      * @Description 每期板块投注统计
      * @Param [req]
-     * @return com.lt.win.backend.io.dto.LotteryManagerParams.PlateBetStatisticsRes
      **/
     PlateBetStatisticsRes plateBetStatistics(PlateBetStatisticsReq req);
+
+    /**
+     * @return java.lang.Boolean
+     * @Description 开奖结果-结算
+     * @Param [req]
+     **/
+    Boolean openSettle(OpenSettleReq req);
+
+    /**
+     * @return java.lang.Boolean
+     * @Description 注单记录-结算
+     * @Param [req]
+     **/
+    Boolean betSettle(BetSettleReq req);
 }

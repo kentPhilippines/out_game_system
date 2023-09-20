@@ -179,4 +179,18 @@ public class LotteryManagerController {
     public Result<PlateBetStatisticsRes> plateBetStatistics(@Valid @RequestBody PlateBetStatisticsReq req) {
         return Result.ok(lotteryManagerServiceImpl.plateBetStatistics(req));
     }
+
+    @PostMapping(value = "/openSettle")
+    @ApiOperation(value = "开奖结果-结算", notes = "开奖结果-结算")
+    @ApiOperationSupport(author = "jess", order = 21)
+    public Result<Boolean> openSettle(@Valid @RequestBody OpenSettleReq req) {
+        return Result.ok(lotteryManagerServiceImpl.openSettle(req));
+    }
+
+    @PostMapping(value = "/betSettle")
+    @ApiOperation(value = "注单记录-结算", notes = "注单记录-结算")
+    @ApiOperationSupport(author = "jess", order = 21)
+    public Result<Boolean> betSettle(@Valid @RequestBody BetSettleReq req) {
+        return Result.ok(lotteryManagerServiceImpl.betSettle(req));
+    }
 }

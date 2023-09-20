@@ -277,6 +277,8 @@ public interface LotteryManagerParams {
     @Data
     @ApiModel(value = "BetRecordRes", description = "查询注单响应实体")
     class BetRecordRes {
+        @ApiModelProperty(name = "id", value = "ID", example = "491017160991313920")
+        public Long id;
         @ApiModelProperty(name = "periodsNo", value = "期号", example = "20230915001")
         public String periodsNo;
         @ApiModelProperty(name = "odds", value = "赔率", example = "1.98")
@@ -350,6 +352,22 @@ public interface LotteryManagerParams {
         public BigDecimal betTotal;
         @ApiModelProperty(name = "winTotal", value = "盈利总额", example = "100")
         public BigDecimal winTotal;
+    }
+
+    @Data
+    @ApiModel(value = "OpenSettleReq", description = "开奖结果-结算请求实体")
+    class OpenSettleReq {
+        @ApiModelProperty(name = "periodsNo", value = "期号", example = "20230915001")
+        public String periodsNo;
+        @ApiModelProperty(name = "mainCode", value = "主板编号", example = "1")
+        public Integer mainCode;
+    }
+
+    @Data
+    @ApiModel(value = "BetSettleReq", description = "注单记录-结算请求实体")
+    class BetSettleReq {
+        @ApiModelProperty(name = "id", value = "ID", example = "491017160991313920")
+        public Long id;
     }
 }
 

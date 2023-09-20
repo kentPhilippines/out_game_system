@@ -1,7 +1,9 @@
 package com.lt.win;
 
-import com.alibaba.fastjson.JSONObject;
 import com.lt.win.apiend.ApiendApplication;
+import com.lt.win.apiend.io.bo.UserParams;
+import com.lt.win.apiend.service.IUserInfoService;
+import com.lt.win.apiend.task.LotteryBetTask;
 import com.lt.win.apiend.task.LotteryTask;
 import com.lt.win.service.base.*;
 import com.lt.win.service.impl.BetslipsServiceImpl;
@@ -14,11 +16,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.util.EntityUtils;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.client.Request;
-import org.elasticsearch.client.Response;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 //import org.zxp.esclientrhl.repository.ElasticsearchTemplate;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.net.http.HttpRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,13 +44,13 @@ import java.util.stream.Stream;
 public class CodeTest {
     @Autowired
     private ActivityServiceBase activityServiceBase;
-//    @Resource
+    //    @Resource
 //    ElasticsearchTemplate<CoinLog, String> elasticsearchTemplate;
 //    @Resource
 //    private RestHighLevelClient restHighLevelClient;
     @Resource
     private UserCoinBase userCoinBase;
-//    @Resource
+    //    @Resource
 //    ElasticsearchTemplate<Betslips, String> betslipsElasticsearchTemplate;
     @Resource
     private BetslipsServiceImpl betslipsServiceImpl;
@@ -63,7 +64,14 @@ public class CodeTest {
     private BetStatisticBase betStatisticBase;
     @Resource
     private LotteryTask task;
-
+    @Resource
+    private LotteryCommBase lotteryCommBase;
+    @Resource
+    private IUserInfoService userInfoServiceImpl;
+    @Resource
+    private HttpServletRequest httpServletRequest;
+    @Resource
+    private LotteryBetTask lotteryBetTask;
 
     @Test
     public void test() {
@@ -115,7 +123,7 @@ public class CodeTest {
     public void esQueryBySql() {
         Request request = new Request("POST", "/_sql");
         String betslipsIndex = EsTableNameBase.getTableName(Betslips.class);
-        request.setJsonEntity("{\"query\":\"select xbUid,gamePlatId,sum(xbProfit) from "+betslipsIndex+"group by xbUid ,gamePlatId ORDER BY sum(xbProfit) desc  \"}");
+        request.setJsonEntity("{\"query\":\"select xbUid,gamePlatId,sum(xbProfit) from " + betslipsIndex + "group by xbUid ,gamePlatId ORDER BY sum(xbProfit) desc  \"}");
 //   //     Response response = restHighLevelClient.getLowLevelClient().performRequest(request);
 //        String responseBody = EntityUtils.toString(response.getEntity(), "utf-8");
 //        System.out.println(responseBody);
@@ -126,7 +134,7 @@ public class CodeTest {
     @Test
     public void esSqlTest() {
         String betslipsIndex = EsTableNameBase.getTableName(Betslips.class);
-        String sql = "select xbUid as uid, gameGroupId,gamePlatId,gameTypeId, sum(xbProfit) as profit from "+betslipsIndex+" group by xbUid,gameGroupId,gamePlatId,gameTypeId";
+        String sql = "select xbUid as uid, gameGroupId,gamePlatId,gameTypeId, sum(xbProfit) as profit from " + betslipsIndex + " group by xbUid,gameGroupId,gamePlatId,gameTypeId";
         // List<BetDto> betDtos = esSqlSearchBase.search(sql,BetDto::new);
         ReqPage rePage = new ReqPage();
         rePage.setPage(1, 10);
@@ -190,12 +198,30 @@ public class CodeTest {
     }
 
     @Test
-    public void testLotteryOpen(){
-        task.initLotteryOpen();
+    public void testLotteryOpen() {
+        lotteryCommBase.initLotteryOpen();
     }
+
     @Test
-    public void testLotterySettle(){
-        task.settle();
+    public void testLotterySettle() {
+        lotteryCommBase.settle();
+    }
+
+    @Test
+    public void register() {
+        UserParams.RegisterReqDto dto = UserParams.RegisterReqDto.builder().build();
+        for (int i = 1; i <= 30; i++) {
+            dto.setUsername("bet" + String.format("%02d", i));
+            dto.setPassword("1234qwer");
+            dto.setPromoCode("7L4FVD");
+            userInfoServiceImpl.register(dto, httpServletRequest);
+        }
+    }
+
+
+    @Test
+    public void testBet() {
+        lotteryBetTask.bet();
     }
 
     @Test
@@ -225,8 +251,6 @@ public class CodeTest {
         EsTableNameBase.getTableName(CoinLog.class);
         EsTableNameBase.getTableName(Betslips.class);
     }
-
-
 
 
 }

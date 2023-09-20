@@ -159,6 +159,7 @@ public enum CodeInfo {
     BET_TIME_EXCEPTION(80002, "当前期投资结束,请下期继续!"),
     LOTTERY_OPEN_STATUS_EXCEPTION(80003, "此期已开奖,不能进行修改!"),
     LOTTERY_OPEN_DELETE_EXCEPTION(80004, "此期已开奖,不能进行删除!"),
+    LOTTERY_BET_SETTLE_EXCEPTION(80005, "此注单已结算!"),
 
     // 不要直接抛出异常、仅作用于中转
     DUPLICATE_KEY_ERROR(10004, "Not Allow Duplicate data"),

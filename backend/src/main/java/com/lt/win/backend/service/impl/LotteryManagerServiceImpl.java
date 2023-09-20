@@ -7,6 +7,7 @@ import com.lt.win.backend.io.dto.LotteryManagerParams.*;
 import com.lt.win.backend.service.LotteryManagerService;
 import com.lt.win.dao.generator.po.*;
 import com.lt.win.dao.generator.service.*;
+import com.lt.win.service.base.LotteryCommBase;
 import com.lt.win.service.cache.KeyConstant;
 import com.lt.win.service.cache.redis.LotteryCache;
 import com.lt.win.service.exception.BusinessException;
@@ -49,6 +50,7 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
     private final LotteryBetslipsService lotteryBetslipsServiceImpl;
     private final LotteryCache lotteryCache;
     private final JedisUtil jedisUtil;
+    private final LotteryCommBase lotteryCommBase;
 
     /**
      * 每期间隔时间(秒)
@@ -172,7 +174,8 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
     @Override
     public ResPage<PlatePageRes> platePage(ReqPage<PlatePageReq> reqBody) {
         PlatePageReq req = reqBody.getData();
-        Page<LotteryPlate> page = lotteryPlateServiceImpl.page(reqBody.getPage(), new LambdaQueryWrapper<LotteryPlate>()
+        Page<LotteryPlate> page = lotteryPlateServiceImpl.page(
+                reqBody.getPage(), new LambdaQueryWrapper<LotteryPlate>()
                 .eq(nonNull(req.getName()), LotteryPlate::getName, req.getName())
                 .eq(nonNull(req.getMainCode()), LotteryPlate::getMainCode, req.getMainCode())
                 .orderByAsc(LotteryPlate::getMainCode, LotteryPlate::getCode));
@@ -387,7 +390,6 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
     }
 
     /**
-     * @param req
      * @return com.lt.win.backend.io.dto.LotteryManagerParams.PlateBetStatisticsRes
      * @Description 每期板块投注统计
      * @Param [req]
@@ -408,17 +410,17 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
         Map<Integer, List<LotteryBetslips>> betMap = lotteryBetslips.stream().collect(Collectors.groupingBy(LotteryBetslips::getBetCode));
         LotteryType lotteryType = lotteryCache.getLotteryType();
         List<PlateBetStatisticsDto> betStatisticsDtoList = new ArrayList<>();
-        BigDecimal betTotal =lotteryBetslips.stream().map(LotteryBetslips::getCoinBet).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+        BigDecimal betTotal = lotteryBetslips.stream().map(LotteryBetslips::getCoinBet).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
         lotteryPlateMap.forEach((betCode, plateName) -> {
             PlateBetStatisticsDto p = new PlateBetStatisticsDto();
             p.setPlateName(plateName);
             List<LotteryBetslips> lotteryBetslipsList = betMap.get(betCode);
             BigDecimal betPlateTotal = BigDecimal.ZERO;
-            if(CollUtil.isNotEmpty(lotteryBetslipsList)){
+            if (CollUtil.isNotEmpty(lotteryBetslipsList)) {
                 betPlateTotal = lotteryBetslipsList.stream().map(LotteryBetslips::getCoinBet).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
             }
-           BigDecimal payoutCoin = betPlateTotal.multiply(lotteryType.getOdds()).setScale(2, RoundingMode.DOWN);
-           BigDecimal winPlateTotal= betTotal.subtract(payoutCoin);
+            BigDecimal payoutCoin = betPlateTotal.multiply(lotteryType.getOdds()).setScale(2, RoundingMode.DOWN);
+            BigDecimal winPlateTotal = betTotal.subtract(payoutCoin);
             p.setBetTotal(betPlateTotal);
             p.setWinTotal(winPlateTotal);
             betStatisticsDtoList.add(p);
@@ -428,5 +430,25 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
         plateBetStatisticsRes.setRestTime(restTime);
         plateBetStatisticsRes.setList(betStatisticsDtoList);
         return plateBetStatisticsRes;
+    }
+
+    /**
+     * @return java.lang.Boolean
+     * @Description 开奖结果-结算
+     * @Param [req]
+     */
+    @Override
+    public Boolean openSettle(OpenSettleReq req) {
+        return lotteryCommBase.settle(req.periodsNo, req.mainCode);
+    }
+
+    /**
+     * @return java.lang.Boolean
+     * @Description 注单记录-结算
+     * @Param [req]
+     */
+    @Override
+    public Boolean betSettle(BetSettleReq req) {
+        return lotteryCommBase.settle(req.getId());
     }
 }
