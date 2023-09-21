@@ -1,6 +1,6 @@
 package com.lt.win.apiend.service.impl;
 
-import com.lt.win.apiend.base.JavaMailSenderBase;
+//import com.lt.win.apiend.base.JavaMailSenderBase;
 import com.lt.win.apiend.io.bo.UserParams;
 import com.lt.win.apiend.io.dto.mapper.UserGoogleCodeRespDto;
 import com.lt.win.apiend.io.dto.mapper.UserInfoResDto;
@@ -57,8 +57,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
     private UserCache userCache;
     @Resource
     private ConfigCache configCache;
-    @Resource
-    private JavaMailSenderBase javaMailSenderBase;
+//    @Resource
+//    private JavaMailSenderBase javaMailSenderBase;
     @Resource
     private SesRecordService sesRecordServiceImpl;
     @Resource
@@ -346,7 +346,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
         sesRecordServiceImpl.save(sesRecord);
 
         // 邮箱服务器消息发送
-        javaMailSenderBase.send(verifyCode, dto.getEmail());
+       // javaMailSenderBase.send(verifyCode, dto.getEmail());
     }
 
 
