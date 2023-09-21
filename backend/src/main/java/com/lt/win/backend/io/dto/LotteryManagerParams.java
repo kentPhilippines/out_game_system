@@ -281,6 +281,8 @@ public interface LotteryManagerParams {
         public Long id;
         @ApiModelProperty(name = "periodsNo", value = "期号", example = "20230915001")
         public String periodsNo;
+        @ApiModelProperty(name = "username", value = "用户名", example = "wells01")
+        public String username;
         @ApiModelProperty(name = "odds", value = "赔率", example = "1.98")
         public BigDecimal odds;
         @ApiModelProperty(name = "coinBet", value = "投注金额", example = "10")
