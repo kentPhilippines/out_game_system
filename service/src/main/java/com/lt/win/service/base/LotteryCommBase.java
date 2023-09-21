@@ -126,9 +126,11 @@ public class LotteryCommBase {
         lotteryOpen.setStatus(1);
         lotteryOpen.setUpdatedAt(now);
         lotteryOpenServiceImpl.updateById(lotteryOpen);
-        plate.setPayoutCount(plate.getPayoutCount() + 1);
-        plate.setUpdatedAt(now);
-        lotteryPlateServiceImpl.updateById(plate);
+        if (Objects.nonNull(plate)) {
+            plate.setPayoutCount(plate.getPayoutCount() + 1);
+            plate.setUpdatedAt(now);
+            lotteryPlateServiceImpl.updateById(plate);
+        }
         return true;
     }
 
@@ -153,13 +155,14 @@ public class LotteryCommBase {
             LotteryOpen lotteryOpen = lotteryOpenServiceImpl.getOne(new LambdaQueryWrapper<LotteryOpen>()
                     .eq(LotteryOpen::getMainCode, mainPlate.getCode())
                     .eq(LotteryOpen::getPeriodsNo, periodsNo));
-            if (Objects.isNull(lotteryOpen)) {
-                lotteryOpen = new LotteryOpen();
-                lotteryOpen.setPeriodsNo(periodsNo);
-                lotteryOpen.setLotteryCode(PK10);
-                lotteryOpen.setLotteryName(PK10);
-                lotteryOpen.setCreatedAt(now);
+            if (Objects.nonNull(lotteryOpen)) {
+                continue;
             }
+            lotteryOpen = new LotteryOpen();
+            lotteryOpen.setPeriodsNo(periodsNo);
+            lotteryOpen.setLotteryCode(PK10);
+            lotteryOpen.setLotteryName(PK10);
+            lotteryOpen.setCreatedAt(now);
             lotteryOpen.setMainCode(mainPlate.getCode());
             lotteryOpen.setOpenCode(openCode);
             lotteryOpen.setOpenAllCode(StringUtils.join(list, ","));

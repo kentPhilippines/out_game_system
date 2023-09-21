@@ -92,8 +92,6 @@ public class LotteryManagerController {
         return Result.ok(lotteryManagerServiceImpl.deleteMainPlate(reqBody));
     }
 
-
-
     @ApiOperationSupport(author = "jess", order = 9)
     @ApiOperation(value = "板块列表", notes = "板块列表")
     @PostMapping("/platePage")
