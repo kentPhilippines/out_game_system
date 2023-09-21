@@ -42,7 +42,7 @@ public class LotteryBetTask {
     private static final int INTERVAL = 300;
     Random random = new Random();
 
-    @Scheduled(cron = "20 */5 * * * ?")
+   // @Scheduled(cron = "20 */5 * * * ?")
     public void bet() {
         int toDaySecond = DateNewUtils.now() - DateNewUtils.todayStart();
         int restTime = INTERVAL - (toDaySecond % INTERVAL);
