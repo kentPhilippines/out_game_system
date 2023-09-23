@@ -155,7 +155,7 @@ public enum CodeInfo {
     WITHDRAWAL_ADDRESS_REPEAT(70313, "withdrawal address repeat"),
     COIN_INVALID(70314, "amount is invalid"),
 
-    BET_COIN_EXCEPTION(80001, "钱包余额不足!"),
+    BET_COIN_EXCEPTION(80001, "积分不足!"),
     BET_TIME_EXCEPTION(80002, "当前期投资结束,请下期继续!"),
     LOTTERY_OPEN_STATUS_EXCEPTION(80003, "此期已开奖,不能进行修改!"),
     LOTTERY_OPEN_DELETE_EXCEPTION(80004, "此期已开奖,不能进行删除!"),
