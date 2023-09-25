@@ -188,7 +188,11 @@ public class LotteryServiceImpl implements LotteryService {
                     target.setMainName(lotteryMainPlateMap.get(source.getMainCode()));
                     target.setBetName(lotteryPlateMap.get(source.getMainCode() + "_" + source.getBetCode()));
                     if (Objects.nonNull(source.getPayoutCode())) {
-                        target.setPayoutName(lotteryPlateMap.get(source.getMainCode() + "_" + source.getPayoutCode()));
+                        List<Integer> openCodeList = Stream.of(source.getPayoutCode().split(","))
+                                .map(Integer::parseInt)
+                                .collect(Collectors.toList());
+                        List<String> payoutNameList = openCodeList.stream().map(code -> lotteryPlateMap.get(source.getMainCode() + "_" + code)).collect(Collectors.toList());
+                        target.setPayoutName(StringUtils.join(payoutNameList,","));
                     }
                 });
         return ResPage.get(betRecordResPage);

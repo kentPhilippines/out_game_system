@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lt.win.dao.generator.po.*;
 import com.lt.win.dao.generator.service.LotteryBetslipsService;
 import com.lt.win.dao.generator.service.LotteryOpenService;
-import com.lt.win.dao.generator.service.LotteryPlateService;
 import com.lt.win.service.cache.redis.LotteryCache;
 import com.lt.win.service.exception.BusinessException;
 import com.lt.win.utils.DateNewUtils;
@@ -20,11 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * @Auther: Jess
@@ -35,16 +33,11 @@ import java.util.stream.IntStream;
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class LotteryCommBase {
-    private final LotteryPlateService lotteryPlateServiceImpl;
     private final LotteryOpenService lotteryOpenServiceImpl;
     private final LotteryBetslipsService lotteryBetslipsServiceImpl;
     private final UserCoinBase userCoinBase;
     private final LotteryCache lotteryCache;
 
-    /**
-     * 每期间隔时间(秒)
-     **/
-    private static final int INTERVAL_SECOND = 300;
 
     private static final String PK10 = "pk10";
 
@@ -100,7 +93,6 @@ public class LotteryCommBase {
         LotteryOpen lotteryOpen = lotteryOpenServiceImpl.getOne(new LambdaQueryWrapper<LotteryOpen>()
                 .eq(LotteryOpen::getMainCode, mainCode)
                 .eq(LotteryOpen::getPeriodsNo, periodsNo));
-        LotteryPlate plate = lotteryCache.getLotteryPlate(mainCode, lotteryOpen.getOpenCode());
         List<LotteryBetslips> lotteryBetslipsList = lotteryBetslipsServiceImpl.lambdaQuery()
                 .eq(LotteryBetslips::getPeriodsNo, periodsNo)
                 .eq(LotteryBetslips::getMainCode, mainCode)
@@ -113,7 +105,10 @@ public class LotteryCommBase {
                 lotteryBetslips.setPayoutCode(lotteryOpen.getOpenCode());
                 lotteryBetslips.setStatus(1);
                 lotteryBetslips.setUpdatedAt(now);
-                if (lotteryBetslips.getBetCode().equals(lotteryOpen.getOpenCode())) {
+                List<Integer> openCodeAList = Stream.of(lotteryOpen.getOpenCode().split(","))
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList());
+                if (openCodeAList.contains(lotteryBetslips.getBetCode())) {
                     BigDecimal coinPayout = lotteryBetslips.getCoinBet().multiply(lotteryType.getOdds())
                             .setScale(2, RoundingMode.DOWN);
                     lotteryBetslips.setCoinPayout(coinPayout);
@@ -126,11 +121,6 @@ public class LotteryCommBase {
         lotteryOpen.setStatus(1);
         lotteryOpen.setUpdatedAt(now);
         lotteryOpenServiceImpl.updateById(lotteryOpen);
-        if (Objects.nonNull(plate)) {
-            plate.setPayoutCount(plate.getPayoutCount() + 1);
-            plate.setUpdatedAt(now);
-            lotteryPlateServiceImpl.updateById(plate);
-        }
         return true;
     }
 
@@ -139,19 +129,36 @@ public class LotteryCommBase {
      * @Param []
      **/
     public void initLotteryOpen() {
-        int toDaySecond = DateNewUtils.now() - DateNewUtils.todayStart();
-        int num = toDaySecond / INTERVAL_SECOND;
-        num = toDaySecond % INTERVAL_SECOND == 0 ? num : num + 1;
         List<Integer> list = IntStream.range(1, 11)
                 .boxed()
                 .collect(Collectors.toList());
         Integer now = DateUtils.getCurrentTime();
         List<LotteryMainPlate> lotteryMainPlateList = lotteryCache.getLotteryMainPlateList();
         //生成期号
-        String periodsNo = DateUtils.yyyyMMdd2(DateUtils.getCurrentTime()) + String.format("%03d", num);
+        String periodsNo = lotteryCache.getCurrPeriodsNo();
         for (LotteryMainPlate mainPlate : lotteryMainPlateList) {
-            Collections.shuffle(list);
-            Integer openCode = list.get(0);
+            List<LotteryBetslips> lotteryBetslipsList = lotteryBetslipsServiceImpl.lambdaQuery()
+                    .eq(LotteryBetslips::getMainCode, mainPlate.getCode())
+                    .eq(LotteryBetslips::getPeriodsNo, periodsNo)
+                    .list();
+            if (CollUtil.isNotEmpty(lotteryBetslipsList)) {
+                Map<Integer, List<LotteryBetslips>> map = lotteryBetslipsList.stream().collect(Collectors.groupingBy(LotteryBetslips::getBetCode));
+                Map<Integer, BigDecimal> treeMap = new TreeMap<>();
+                map.forEach((betCode, betslips) -> {
+                    BigDecimal betCoin = betslips.stream().map(LotteryBetslips::getCoinBet).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+                    treeMap.put(betCode, betCoin);
+                });
+                List<Map.Entry<Integer, BigDecimal>> betList = new ArrayList<>(treeMap.entrySet());
+                //然后通过比较器来实现排序
+                betList.sort(Map.Entry.comparingByValue());
+                List<Integer> betCodeList = betList.stream().map(Map.Entry::getKey).collect(Collectors.toList());
+                List<Integer> noBetList = list.stream().filter(code -> !betCodeList.contains(code)).collect(Collectors.toList());
+                noBetList.addAll(betCodeList);
+                list = noBetList;
+            } else {
+                Collections.shuffle(list);
+            }
+
             LotteryOpen lotteryOpen = lotteryOpenServiceImpl.getOne(new LambdaQueryWrapper<LotteryOpen>()
                     .eq(LotteryOpen::getMainCode, mainPlate.getCode())
                     .eq(LotteryOpen::getPeriodsNo, periodsNo));
@@ -164,7 +171,7 @@ public class LotteryCommBase {
             lotteryOpen.setLotteryName(PK10);
             lotteryOpen.setCreatedAt(now);
             lotteryOpen.setMainCode(mainPlate.getCode());
-            lotteryOpen.setOpenCode(openCode);
+            lotteryOpen.setOpenCode(StringUtils.join(list.subList(0, 5), ","));
             lotteryOpen.setOpenAllCode(StringUtils.join(list, ","));
             lotteryOpen.setUpdatedAt(now);
             lotteryOpenServiceImpl.saveOrUpdate(lotteryOpen);

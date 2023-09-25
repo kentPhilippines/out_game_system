@@ -176,9 +176,9 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
         PlatePageReq req = reqBody.getData();
         Page<LotteryPlate> page = lotteryPlateServiceImpl.page(
                 reqBody.getPage(), new LambdaQueryWrapper<LotteryPlate>()
-                .eq(nonNull(req.getName()), LotteryPlate::getName, req.getName())
-                .eq(nonNull(req.getMainCode()), LotteryPlate::getMainCode, req.getMainCode())
-                .orderByAsc(LotteryPlate::getMainCode, LotteryPlate::getCode));
+                        .eq(nonNull(req.getName()), LotteryPlate::getName, req.getName())
+                        .eq(nonNull(req.getMainCode()), LotteryPlate::getMainCode, req.getMainCode())
+                        .orderByAsc(LotteryPlate::getMainCode, LotteryPlate::getCode));
         Map<Integer, String> lotteryMainPlateMap = lotteryCache.getLotteryMainPlateMap();
         Page<PlatePageRes> platePageResPage = BeanConvertUtils.copyPageProperties(page, PlatePageRes::new,
                 (s, t) ->
@@ -247,7 +247,12 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
                 (s, t) -> {
                     t.setMainName(lotteryMainPlateMap.get(s.getMainCode()));
                     Map<Integer, String> plateMap = lotteryCache.getLotteryPlateMap(s.getMainCode());
-                    t.setOpenName(plateMap.get(s.getOpenCode()));
+
+                    List<Integer> openCodeList = Stream.of(s.getOpenCode().split(","))
+                            .map(Integer::parseInt)
+                            .collect(Collectors.toList());
+                    List<String> payoutNameList = openCodeList.stream().map(plateMap::get).collect(Collectors.toList());
+                    t.setOpenName(StringUtils.join(payoutNameList, ","));
                     List<Integer> codeList = Stream.of(s.getOpenAllCode().split(","))
                             .map(Integer::parseInt)
                             .collect(Collectors.toList());
@@ -269,11 +274,14 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
     public Boolean addOpen(AddOpenReq reqBody) {
         BaseParams.HeaderInfo currentLoginUser = ThreadHeaderLocalData.HEADER_INFO_THREAD_LOCAL.get();
         LotteryOpen lotteryOpen = BeanConvertUtils.copyProperties(reqBody, LotteryOpen::new);
+
+        List<Integer> openCodeList = Stream.of(lotteryOpen.getOpenCode().split(","))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
         List<Integer> list = IntStream.range(1, 11)
                 .boxed()
-                .filter(e -> !e.equals(lotteryOpen.getOpenCode()))
+                .filter(e -> !openCodeList.contains(e))
                 .collect(Collectors.toList());
-        List<Integer> openCodeList = new java.util.ArrayList<>(List.of(lotteryOpen.getOpenCode()));
         openCodeList.addAll(list);
         Integer now = DateNewUtils.now();
         LotteryType lotteryType = lotteryCache.getLotteryType();
@@ -300,11 +308,13 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
         }
         BaseParams.HeaderInfo currentLoginUser = ThreadHeaderLocalData.HEADER_INFO_THREAD_LOCAL.get();
         LotteryOpen lotteryOpen = BeanConvertUtils.copyProperties(reqBody, LotteryOpen::new);
+        List<Integer> openCodeList = Stream.of(lotteryOpen.getOpenCode().split(","))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
         List<Integer> list = IntStream.range(1, 11)
                 .boxed()
-                .filter(e -> !e.equals(lotteryOpen.getOpenCode()))
+                .filter(e -> !openCodeList.contains(e))
                 .collect(Collectors.toList());
-        List<Integer> openCodeList = new java.util.ArrayList<>(List.of(lotteryOpen.getOpenCode()));
         openCodeList.addAll(list);
         Integer now = DateNewUtils.now();
         lotteryOpen.setOpenAllCode(StringUtils.join(openCodeList, ","));
@@ -342,7 +352,7 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
                         .ge(Objects.nonNull(data.getStartTime()), LotteryBetslips::getCreatedAt, data.getStartTime())
                         .le(Objects.nonNull(data.getEndTime()), LotteryBetslips::getCreatedAt, data.getEndTime())
                         .eq(Objects.nonNull(data.getBetCode()), LotteryBetslips::getBetCode, data.getBetCode())
-                        .eq(Objects.nonNull(data.getPayoutCode()), LotteryBetslips::getPayoutCode, data.getPayoutCode())
+                        .like(Objects.nonNull(data.getPayoutCode()), LotteryBetslips::getPayoutCode, data.getPayoutCode())
                         .eq(Objects.nonNull(data.getMainCode()), LotteryBetslips::getMainCode, data.getMainCode())
                         .eq(Objects.nonNull(data.getUsername()), LotteryBetslips::getUsername, data.getUsername())
                         .eq(Objects.nonNull(data.getStatus()), LotteryBetslips::getStatus, data.getStatus())
@@ -354,7 +364,11 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
                     target.setMainName(lotteryMainPlateMap.get(source.getMainCode()));
                     target.setBetName(lotteryPlateMap.get(source.getMainCode() + "_" + source.getBetCode()));
                     if (Objects.nonNull(source.getPayoutCode())) {
-                        target.setPayoutName(lotteryPlateMap.get(source.getMainCode() + "_" + source.getPayoutCode()));
+                        List<Integer> openCodeList = Stream.of(source.getPayoutCode().split(","))
+                                .map(Integer::parseInt)
+                                .collect(Collectors.toList());
+                        List<String> payoutNameList = openCodeList.stream().map(code -> lotteryPlateMap.get(source.getMainCode() + "_" + code)).collect(Collectors.toList());
+                        target.setPayoutName(StringUtils.join(payoutNameList, ","));
                     }
                 });
         return ResPage.get(betRecordResPage);

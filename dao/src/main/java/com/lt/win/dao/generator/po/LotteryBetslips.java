@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author David
- * @since 2023-09-18
+ * @since 2023-09-25
  */
 @TableName("win_lottery_betslips")
 public class LotteryBetslips extends Model<LotteryBetslips> {
@@ -72,7 +72,7 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
     private BigDecimal coinPayout;
 
     /**
-     * 注单状态 0:待开彩  1派彩成功  2: 退款
+     * 注单状态 0:未结算  1:已结算  
      */
     @TableField("status")
     private Integer status;
@@ -87,7 +87,7 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
      * 开奖板块编号
      */
     @TableField("payout_code")
-    private Integer payoutCode;
+    private String payoutCode;
 
     /**
      * 投注板块编号
@@ -190,11 +190,11 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
         this.mainCode = mainCode;
     }
 
-    public Integer getPayoutCode() {
+    public String getPayoutCode() {
         return payoutCode;
     }
 
-    public void setPayoutCode(Integer payoutCode) {
+    public void setPayoutCode(String payoutCode) {
         this.payoutCode = payoutCode;
     }
 

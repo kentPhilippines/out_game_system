@@ -194,7 +194,7 @@ public interface LotteryManagerParams {
         @ApiModelProperty(name = "periodsNo", value = "板块名称", example = "20230915001")
         private String periodsNo;
         @ApiModelProperty(name = "openCode", value = "板块编号", example = "1")
-        public Integer openCode;
+        public String openCode;
     }
 
     @Data
@@ -209,7 +209,7 @@ public interface LotteryManagerParams {
         @ApiModelProperty(name = "lotteryName", value = "彩种编号", example = "北京钛方")
         private String lotteryName;
         @ApiModelProperty(name = "openCode", value = "板块编号", example = "1")
-        public Integer openCode;
+        public String openCode;
         @ApiModelProperty(name = "openName", value = "板块名称", example = "1")
         public String openName;
         @ApiModelProperty(name = "mainCode", value = "主板编号", example = "1")
@@ -236,7 +236,7 @@ public interface LotteryManagerParams {
         @ApiModelProperty(name = "periodsNo", value = "板块名称", example = "20230915001")
         private String periodsNo;
         @ApiModelProperty(name = "openCode", value = "板块编号", example = "1")
-        public Integer openCode;
+        public String openCode;
         @ApiModelProperty(name = "mainCode", value = "主板编号", example = "1")
         public Integer mainCode;
     }
@@ -247,7 +247,7 @@ public interface LotteryManagerParams {
         @ApiModelProperty(value = "ID", example = "1")
         private Integer id;
         @ApiModelProperty(name = "openCode", value = "板块编号", example = "1")
-        public Integer openCode;
+        public String openCode;
     }
 
     @Data

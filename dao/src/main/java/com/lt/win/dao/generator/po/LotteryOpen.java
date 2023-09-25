@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author David
- * @since 2023-09-19
+ * @since 2023-09-25
  */
 @TableName("win_lottery_open")
 public class LotteryOpen extends Model<LotteryOpen> {
@@ -45,7 +45,7 @@ public class LotteryOpen extends Model<LotteryOpen> {
      * 开奖板块编号
      */
     @TableField("open_code")
-    private Integer openCode;
+    private String openCode;
 
     /**
      * 主板编号
@@ -110,11 +110,11 @@ public class LotteryOpen extends Model<LotteryOpen> {
         this.lotteryName = lotteryName;
     }
 
-    public Integer getOpenCode() {
+    public String getOpenCode() {
         return openCode;
     }
 
-    public void setOpenCode(Integer openCode) {
+    public void setOpenCode(String openCode) {
         this.openCode = openCode;
     }
 

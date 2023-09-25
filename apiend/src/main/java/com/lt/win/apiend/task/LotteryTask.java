@@ -26,9 +26,9 @@ public class LotteryTask {
      * @Description 生成随机的开奖号码
      * @Param []
      **/
-    @Scheduled(cron = "10 */5 * * * ?")
+    @Scheduled(cron = "51 */5 * * * ?")
     public void initFirst() {
-        String periodsNo = lotteryCache.getUpPeriodsNo();
+        String periodsNo = lotteryCache.getCurrPeriodsNo();
         log.info("开始首次生产开奖号码：{}", periodsNo);
         lotteryCommBase.initLotteryOpen();
     }
@@ -37,9 +37,9 @@ public class LotteryTask {
      * @Description 生成随机的开奖号码
      * @Param []
      **/
-    @Scheduled(cron = "15 */5 * * * ?")
+    @Scheduled(cron = "55 */5 * * * ?")
     public void initSecond() {
-        String periodsNo = lotteryCache.getUpPeriodsNo();
+        String periodsNo = lotteryCache.getCurrPeriodsNo();
         log.info("开始二次生成开奖号码：{}", periodsNo);
         lotteryCommBase.initLotteryOpen();
     }
