@@ -90,7 +90,7 @@ public interface LotteryParams {
         @ApiModelProperty(name = "plateName", value = "板块名称", example = "华为概念")
         public String plateName;
         @ApiModelProperty(name = "payoutCount", value = "开奖次数", example = "100")
-        public Integer payoutCount;
+        public Integer payoutCount = 0;
     }
 
 

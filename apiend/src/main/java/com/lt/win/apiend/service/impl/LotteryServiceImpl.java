@@ -63,16 +63,23 @@ public class LotteryServiceImpl implements LotteryService {
         LotteryType lotteryType = lotteryCache.getLotteryType();
         BigDecimal odds = lotteryType.getOdds();
         List<LotteryPlate> lotteryPlateList = lotteryCache.getLotteryPlateList(req.mainCode);
+        Map<Integer, LotteryPlate> lotteryPlateMap = lotteryPlateList.stream().collect(Collectors.toMap(LotteryPlate::getCode, v -> v));
+        LotteryOpen lotteryOpen = lotteryOpenServiceImpl.getOne(new LambdaQueryWrapper<LotteryOpen>()
+                .eq(LotteryOpen::getMainCode,req.mainCode)
+                .eq(LotteryOpen::getStatus, 1)
+                .orderByDesc(LotteryOpen::getPeriodsNo).last("limit 1"));
         LotteryMainPlate mainPlate = lotteryCache.getLotteryMainPlate(req.mainCode);
-        lotteryPlateList.sort(Comparator.comparing(LotteryPlate::getPayoutCount).reversed());
         List<LotteryParams.PlateDto> plateDtoList = new ArrayList<>();
-        lotteryPlateList.forEach(lotteryPlate -> {
-            LotteryParams.PlateDto plateDto = new LotteryParams.PlateDto();
-            plateDto.setPlateCode(lotteryPlate.getCode());
-            plateDto.setPlateName(lotteryPlate.getName());
-            plateDto.setPayoutCount(lotteryPlate.getPayoutCount());
-            plateDtoList.add(plateDto);
-        });
+        Stream.of(lotteryOpen.getOpenAllCode().split(",")).forEach(
+                code -> {
+                    Integer plateCode = Integer.parseInt(code);
+                    LotteryPlate lotteryPlate = lotteryPlateMap.get(plateCode);
+                    LotteryParams.PlateDto plateDto = new LotteryParams.PlateDto();
+                    plateDto.setPlateCode(plateCode);
+                    plateDto.setPlateName(lotteryPlate.getName());
+                    plateDto.setPayoutCount(lotteryPlate.getPayoutCount());
+                    plateDtoList.add(plateDto);
+                });
         res.setMainCode(req.mainCode);
         res.setMainName(mainPlate.getName());
         res.setPeriodsNo(periodsNo);
@@ -192,7 +199,7 @@ public class LotteryServiceImpl implements LotteryService {
                                 .map(Integer::parseInt)
                                 .collect(Collectors.toList());
                         List<String> payoutNameList = openCodeList.stream().map(code -> lotteryPlateMap.get(source.getMainCode() + "_" + code)).collect(Collectors.toList());
-                        target.setPayoutName(StringUtils.join(payoutNameList,","));
+                        target.setPayoutName(StringUtils.join(payoutNameList, ","));
                     }
                 });
         return ResPage.get(betRecordResPage);

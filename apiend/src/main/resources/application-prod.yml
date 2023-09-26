@@ -8,9 +8,9 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: org.mariadb.jdbc.Driver
-      url: jdbc:mysql://43.132.194.136:3306/lottery?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+      url: jdbc:mysql://hk-cdb-h9rku77n.sql.tencentcdb.com:63917/lottery10?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
       username: root
-      password: 123456
+      password: _+-,2&=!JJ@#$%^*()
       initial-size: 5
       min-idle: 5
       max-active: 20
@@ -33,7 +33,7 @@ spring:
   redis:
     host: 43.132.194.136
     port: 6379
-    password:
+    password: '*&^%qwer'
     database: 10
     timeout: 60000
   servlet:
