@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.lt.win.service.common.Constant.*;
@@ -64,7 +65,12 @@ public class FinanceRecordServiceImpl implements FinanceRecordService {
         }
         Map<Integer, String> levelMap = userLevelServiceImpl.list().stream()
                 .collect(Collectors.toMap(UserLevel::getId, UserLevel::getCode));
-        QueryWrapper<CoinWithdrawalRecord> wrapper = whereWithdrawalListOrStatistics(reqBody.getData(), 1, 2);
+        QueryWrapper<CoinWithdrawalRecord> wrapper;
+        if (Objects.nonNull(reqBody.getData().getStatus())) {
+            wrapper = whereWithdrawalListOrStatistics(reqBody.getData(), 1);
+        } else {
+            wrapper = whereWithdrawalListOrStatistics(reqBody.getData(), 1, 2);
+        }
         Page<CoinWithdrawalRecord> page = coinWithdrawalRecordServiceImpl.page(reqBody.getPage(), wrapper);
         String mainCurrency = configCache.getCurrency();
         Page<WithdrawalListResBody> tmpPage = BeanConvertUtils.copyPageProperties(page, WithdrawalListResBody::new,

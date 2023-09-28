@@ -181,6 +181,7 @@ public class FinanceManageServiceImpl implements FinanceManageService {
                 .set(CoinWithdrawalRecord::getUpdatedAt, DateUtils.getCurrentTime())
                 .eq(CoinWithdrawalRecord::getId, reqDto.getId()));
         //提款失败退还用户金额
+        var auditMsg = "";
         if (reqDto.getStatus() == 2) {
             CoinWithdrawalRecord coinWithdrawalRecord = coinWithdrawalRecordServiceImpl.getById(reqDto.getId());
             UserCoinChangeParams.UserCoinChangeReq userCoinChangeReq = new UserCoinChangeParams.UserCoinChangeReq();
@@ -193,16 +194,17 @@ public class FinanceManageServiceImpl implements FinanceManageService {
             //保存系统消息
             String coinStr = coinWithdrawalRecord.getWithdrawalAmount() + coinWithdrawalRecord.getCurrency();
             noticeBase.saveSystemMessage(SystemMessageEnum.WITHDRAWAL_FAIL, coinStr, null, coinWithdrawalRecord.getUid());
-
+            auditMsg = dicMap.get(WITHDRAWAL_FAIL);
         }
-        var auditMsg = dicMap.get(WITHDRAWAL_FAIL);
+        if (reqDto.getStatus() == 1) {
+            auditMsg = "提款成功";
+        }
         return UpdateWithdrawalStatusResDto.builder().auditFlag(reFlag).auditMsg(auditMsg).build();
     }
 
     /**
      * 提款记录详情
      *
-     * @param reqDto
      * @return
      */
     @Override

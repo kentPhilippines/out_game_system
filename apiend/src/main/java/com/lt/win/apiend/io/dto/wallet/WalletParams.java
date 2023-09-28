@@ -259,6 +259,8 @@ public interface WalletParams {
         private Integer status;
         @ApiModelProperty(name = "createdAt", value = "创建时间", example = "1600448057")
         private Integer createdAt;
+        @ApiModelProperty(name = "mark", value = "备注", example = "资金不足")
+        private String mark;
     }
 
     @Data
