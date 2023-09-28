@@ -69,7 +69,7 @@ public class PayServiceImpl implements PayService {
     private final CoinDepositRecordService coinDepositRecordServiceImpl;
     private final CoinWithdrawalRecordService coinWithdrawalRecordServiceImpl;
     private final UserService userServiceImpl;
-//    private final ElasticsearchTemplate<CoinLog, String> elasticsearchTemplate;
+    //    private final ElasticsearchTemplate<CoinLog, String> elasticsearchTemplate;
     private final AuditCoinBase auditCoinBase;
     private final ConfigCache configCache;
     private final CoinRateCache coinRateCache;
@@ -290,7 +290,7 @@ public class PayServiceImpl implements PayService {
         if (realAmount.compareTo(BigDecimal.ZERO) <= 0 || realAmount.compareTo(userCoin) > 0) {
             throw new BusinessException(CodeInfo.COIN_NOT_ENOUGH);
         }
-       //String mainCurrency = configCache.getCurrency();
+        //String mainCurrency = configCache.getCurrency();
         //提款率处理
 //        BigDecimal rate = BigDecimal.ONE;
 //        if (!currency.equals(mainCurrency)) {
@@ -331,8 +331,8 @@ public class PayServiceImpl implements PayService {
 //        if (COMM.equals(withdrawalRes.getCategory())) {
 //            reFlag = userCoinBase.changeCommCoin(userCoinChangeReq);
 //        } else {
-            reFlag = userCoinBase.userCoinChange(userCoinChangeReq);
-      //  }
+        reFlag = userCoinBase.userCoinChange(userCoinChangeReq);
+        //  }
         return reFlag;
     }
 
@@ -381,12 +381,12 @@ public class PayServiceImpl implements PayService {
         Page<WithdrawalRecordRes> withdrawalRecordResPage = BeanConvertUtils.copyPageProperties(page, WithdrawalRecordRes::new,
                 (source, target) -> {
                     if (COMM_TRANSFER.equals(source.getCode())) {
-                        target.setRealAmount(source.getRealAmount().setScale(2, RoundingMode.DOWN) + mainCurrency);
+                        target.setRealAmount(source.getRealAmount().setScale(2, RoundingMode.DOWN) + "");
                     } else {
                         var currency = payConfigCache.getWithdrawalCurrency(source.getCategoryCurrency(), source.getCategoryTransfer());
                         target.setRealAmount(source.getRealAmount().setScale(2, RoundingMode.DOWN) + currency);
                     }
-                    target.setWithdrawalAmount(source.getWithdrawalAmount().setScale(2, RoundingMode.DOWN) + mainCurrency);
+                    target.setWithdrawalAmount(source.getWithdrawalAmount().setScale(2, RoundingMode.DOWN) + "");
                     if (source.getCurrency().equals(mainCurrency)) {
                         target.setExchangeRate("--");
                     } else {
@@ -422,7 +422,7 @@ public class PayServiceImpl implements PayService {
             if (Objects.nonNull(req.getData().getCategory())) {
                 queryBuilder.must(QueryBuilders.termQuery("category", req.getData().getCategory()));
             }
-         //   PageList<CoinLog> pageList = elasticsearchTemplate.search(queryBuilder, psh, CoinLog.class);
+            //   PageList<CoinLog> pageList = elasticsearchTemplate.search(queryBuilder, psh, CoinLog.class);
 //            result.setCurrent(pageList.getCurrentPage());
 //            result.setSize(pageList.getPageSize());
 //            result.setTotal(pageList.getTotalElements());

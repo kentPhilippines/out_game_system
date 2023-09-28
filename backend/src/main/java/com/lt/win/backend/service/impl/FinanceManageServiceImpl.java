@@ -130,13 +130,12 @@ public class FinanceManageServiceImpl implements FinanceManageService {
         //无排序启动默认排序
         withdrawalListQuery.orderByDesc(req.getSortField().length == 0, CoinWithdrawalRecord::getUpdatedAt);
         Page<CoinWithdrawalRecord> page = coinWithdrawalRecordServiceImpl.page(req.getPage(), withdrawalListQuery);
-        String mainCurrency = configCache.getCurrency();
         Page<WithdrawalRecordRes> withdrawalRecordResPage = BeanConvertUtils.copyPageProperties(page, WithdrawalRecordRes::new,
                 ((source, target) -> {
                     String currency = payConfigCache.getWithdrawalCurrency(source.getCategoryCurrency(), source.getCategoryTransfer());
                     Integer updateAt = source.getStatus() == 0 ? 0 : source.getUpdatedAt();
                     target.setUpdatedAt(updateAt);
-                    target.setWithdrawalAmount(source.getWithdrawalAmount().setScale(2, RoundingMode.DOWN) + mainCurrency);
+                    target.setWithdrawalAmount(source.getWithdrawalAmount().setScale(2, RoundingMode.DOWN) + "");
                     target.setRealAmount(source.getRealAmount().setScale(2, RoundingMode.DOWN) + currency);
                     target.setExchangeRate("1:" + source.getExchangeRate());
                     target.setMainNetFees(source.getMainNetFees().setScale(2, RoundingMode.DOWN) + source.getCurrency());
@@ -210,13 +209,12 @@ public class FinanceManageServiceImpl implements FinanceManageService {
     @Override
     public WithdrawalDetailResDto withdrawalDetail(WithdrawalDetailReqDto reqDto) {
         CoinWithdrawalRecord coinWithdrawalRecord = coinWithdrawalRecordServiceImpl.getById(reqDto.getId());
-        String mainCurrency = configCache.getCurrency();
         return BeanConvertUtils.copyProperties(coinWithdrawalRecord, WithdrawalDetailResDto::new,
                 (source, target) -> {
                     String currency = payConfigCache.getWithdrawalCurrency(source.getCategoryCurrency(), source.getCategoryTransfer());
                     Integer updateAt = source.getStatus() == 0 ? 0 : source.getUpdatedAt();
                     target.setUpdatedAt(updateAt);
-                    target.setWithdrawalAmount(source.getWithdrawalAmount().setScale(2, RoundingMode.DOWN) + mainCurrency);
+                    target.setWithdrawalAmount(source.getWithdrawalAmount().setScale(2, RoundingMode.DOWN) +"");
                     target.setRealAmount(source.getRealAmount().setScale(2, RoundingMode.DOWN) + currency);
                     target.setExchangeRate("1:" + source.getExchangeRate());
                     target.setMainNetFees(source.getMainNetFees().setScale(2, RoundingMode.DOWN) + source.getCurrency());
