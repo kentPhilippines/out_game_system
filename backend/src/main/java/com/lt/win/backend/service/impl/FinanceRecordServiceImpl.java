@@ -67,7 +67,7 @@ public class FinanceRecordServiceImpl implements FinanceRecordService {
                 .collect(Collectors.toMap(UserLevel::getId, UserLevel::getCode));
         QueryWrapper<CoinWithdrawalRecord> wrapper;
         if (Objects.nonNull(reqBody.getData().getStatus())) {
-            wrapper = whereWithdrawalListOrStatistics(reqBody.getData(), 1);
+            wrapper = whereWithdrawalListOrStatistics(reqBody.getData(), reqBody.getData().getStatus());
         } else {
             wrapper = whereWithdrawalListOrStatistics(reqBody.getData(), 1, 2);
         }

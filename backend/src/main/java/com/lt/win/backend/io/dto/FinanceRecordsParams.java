@@ -82,6 +82,8 @@ public interface FinanceRecordsParams {
         private String mark;
         @ApiModelProperty(name = "createdAt", value = "创建时间", example = "1600448057")
         private Integer createdAt;
+        @ApiModelProperty(name = "updatedAt", value = "修改时间", example = "1600448057")
+        private Integer updatedAt;
     }
     /**
      * 公用总金额:ResBody
