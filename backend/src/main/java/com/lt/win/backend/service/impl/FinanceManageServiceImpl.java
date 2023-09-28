@@ -132,13 +132,12 @@ public class FinanceManageServiceImpl implements FinanceManageService {
         Page<CoinWithdrawalRecord> page = coinWithdrawalRecordServiceImpl.page(req.getPage(), withdrawalListQuery);
         Page<WithdrawalRecordRes> withdrawalRecordResPage = BeanConvertUtils.copyPageProperties(page, WithdrawalRecordRes::new,
                 ((source, target) -> {
-                    String currency = payConfigCache.getWithdrawalCurrency(source.getCategoryCurrency(), source.getCategoryTransfer());
                     Integer updateAt = source.getStatus() == 0 ? 0 : source.getUpdatedAt();
                     target.setUpdatedAt(updateAt);
                     target.setWithdrawalAmount(source.getWithdrawalAmount().setScale(2, RoundingMode.DOWN) + "");
-                    target.setRealAmount(source.getRealAmount().setScale(2, RoundingMode.DOWN) + currency);
+                    target.setRealAmount(source.getRealAmount().setScale(2, RoundingMode.DOWN) +"");
                     target.setExchangeRate("1:" + source.getExchangeRate());
-                    target.setMainNetFees(source.getMainNetFees().setScale(2, RoundingMode.DOWN) + source.getCurrency());
+                    target.setMainNetFees(source.getMainNetFees().setScale(2, RoundingMode.DOWN)+"" );
                     //通道列表
                     List<PayChannel> withdrawalChannelList = payConfigCache.getWithdrawalChannelList(source.getCategoryTransfer());
                     if (CollectionUtil.isNotEmpty(withdrawalChannelList)) {
@@ -211,13 +210,12 @@ public class FinanceManageServiceImpl implements FinanceManageService {
         CoinWithdrawalRecord coinWithdrawalRecord = coinWithdrawalRecordServiceImpl.getById(reqDto.getId());
         return BeanConvertUtils.copyProperties(coinWithdrawalRecord, WithdrawalDetailResDto::new,
                 (source, target) -> {
-                    String currency = payConfigCache.getWithdrawalCurrency(source.getCategoryCurrency(), source.getCategoryTransfer());
                     Integer updateAt = source.getStatus() == 0 ? 0 : source.getUpdatedAt();
                     target.setUpdatedAt(updateAt);
                     target.setWithdrawalAmount(source.getWithdrawalAmount().setScale(2, RoundingMode.DOWN) +"");
-                    target.setRealAmount(source.getRealAmount().setScale(2, RoundingMode.DOWN) + currency);
+                    target.setRealAmount(source.getRealAmount().setScale(2, RoundingMode.DOWN)+"");
                     target.setExchangeRate("1:" + source.getExchangeRate());
-                    target.setMainNetFees(source.getMainNetFees().setScale(2, RoundingMode.DOWN) + source.getCurrency());
+                    target.setMainNetFees(source.getMainNetFees().setScale(2, RoundingMode.DOWN) +"");
                 });
     }
 

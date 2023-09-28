@@ -383,8 +383,7 @@ public class PayServiceImpl implements PayService {
                     if (COMM_TRANSFER.equals(source.getCode())) {
                         target.setRealAmount(source.getRealAmount().setScale(2, RoundingMode.DOWN) + "");
                     } else {
-                        var currency = payConfigCache.getWithdrawalCurrency(source.getCategoryCurrency(), source.getCategoryTransfer());
-                        target.setRealAmount(source.getRealAmount().setScale(2, RoundingMode.DOWN) + currency);
+                        target.setRealAmount(source.getRealAmount().setScale(2, RoundingMode.DOWN) + "");
                     }
                     target.setWithdrawalAmount(source.getWithdrawalAmount().setScale(2, RoundingMode.DOWN) + "");
                     if (source.getCurrency().equals(mainCurrency)) {

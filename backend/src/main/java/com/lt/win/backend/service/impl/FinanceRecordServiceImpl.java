@@ -72,15 +72,13 @@ public class FinanceRecordServiceImpl implements FinanceRecordService {
             wrapper = whereWithdrawalListOrStatistics(reqBody.getData(), 1, 2);
         }
         Page<CoinWithdrawalRecord> page = coinWithdrawalRecordServiceImpl.page(reqBody.getPage(), wrapper);
-        String mainCurrency = configCache.getCurrency();
         Page<WithdrawalListResBody> tmpPage = BeanConvertUtils.copyPageProperties(page, WithdrawalListResBody::new,
                 ((source, target) -> {
                     //会员等级
                     Integer userLevelId = userCache.getUserInfo(source.getUid()).getLevelId();
                     target.setUserLevel(levelMap.get(userLevelId));
-                    var currency = payConfigCache.getWithdrawalCurrency(source.getCategoryCurrency(), source.getCategoryTransfer());
-                    target.setWithdrawalAmount(source.getWithdrawalAmount().setScale(2, RoundingMode.DOWN) + mainCurrency);
-                    target.setRealAmount(source.getRealAmount().setScale(2, RoundingMode.DOWN) + currency);
+                    target.setWithdrawalAmount(source.getWithdrawalAmount().setScale(2, RoundingMode.DOWN) + "");
+                    target.setRealAmount(source.getRealAmount().setScale(2, RoundingMode.DOWN) + "");
                 }));
         return ResPage.get(tmpPage);
 
