@@ -153,6 +153,7 @@ public class LotteryCommBase {
                 betList.sort(Map.Entry.comparingByValue());
                 List<Integer> betCodeList = betList.stream().map(Map.Entry::getKey).collect(Collectors.toList());
                 List<Integer> noBetList = list.stream().filter(code -> !betCodeList.contains(code)).collect(Collectors.toList());
+                Collections.shuffle(noBetList);
                 noBetList.addAll(betCodeList);
                 list = noBetList;
             } else {
