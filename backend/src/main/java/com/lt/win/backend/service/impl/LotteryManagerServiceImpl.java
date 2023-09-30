@@ -51,7 +51,7 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
     private final LotteryCache lotteryCache;
     private final JedisUtil jedisUtil;
     private final LotteryCommBase lotteryCommBase;
-
+    private final UserService userServiceImpl;
     /**
      * 每期间隔时间(秒)
      **/
@@ -274,7 +274,6 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
     public Boolean addOpen(AddOpenReq reqBody) {
         BaseParams.HeaderInfo currentLoginUser = ThreadHeaderLocalData.HEADER_INFO_THREAD_LOCAL.get();
         LotteryOpen lotteryOpen = BeanConvertUtils.copyProperties(reqBody, LotteryOpen::new);
-
         List<Integer> openCodeList = Stream.of(lotteryOpen.getOpenCode().split(","))
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
@@ -346,6 +345,16 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
     @Override
     public ResPage<BetRecordRes> betPage(ReqPage<BetRecordReq> reqPage) {
         BetRecordReq data = reqPage.getData();
+        String upUsername = data.getUpUsername();
+        List<Integer> uidList = new ArrayList<>();
+        if (Objects.nonNull(upUsername)) {
+            List<User> userList = userServiceImpl.lambdaQuery().eq(User::getSupUsername1, upUsername).list();
+            if (CollUtil.isNotEmpty(userList)) {
+                uidList = userList.stream().map(User::getId).collect(Collectors.toList());
+            }else{
+                uidList.add(-1);
+            }
+        }
         Page<LotteryBetslips> page = lotteryBetslipsServiceImpl.page(
                 reqPage.getPage(), new LambdaQueryWrapper<LotteryBetslips>()
                         .eq(Objects.nonNull(data.getPeriodsNo()), LotteryBetslips::getPeriodsNo, data.getPeriodsNo())
@@ -356,6 +365,7 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
                         .eq(Objects.nonNull(data.getMainCode()), LotteryBetslips::getMainCode, data.getMainCode())
                         .eq(Objects.nonNull(data.getUsername()), LotteryBetslips::getUsername, data.getUsername())
                         .eq(Objects.nonNull(data.getStatus()), LotteryBetslips::getStatus, data.getStatus())
+                        .in(CollUtil.isNotEmpty(uidList), LotteryBetslips::getUid, uidList)
                         .orderByDesc(LotteryBetslips::getCreatedAt));
         Map<String, String> lotteryPlateMap = lotteryCache.getLotteryPlateMap();
         Map<Integer, String> lotteryMainPlateMap = lotteryCache.getLotteryMainPlateMap();

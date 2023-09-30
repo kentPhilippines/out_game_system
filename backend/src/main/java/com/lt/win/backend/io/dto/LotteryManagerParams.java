@@ -264,6 +264,8 @@ public interface LotteryManagerParams {
         public String periodsNo;
         @ApiModelProperty(name = "username", value = "用户名", example = "wells01")
         public String username;
+        @ApiModelProperty(name = "upUsername", value = "上级用户名", example = "wells01")
+        public String upUsername;
         @ApiModelProperty(name = "betCode", value = "投注板块编号", example = "1")
         public Integer betCode;
         @ApiModelProperty(name = "payoutCode", value = "派彩板块编号", example = "1")

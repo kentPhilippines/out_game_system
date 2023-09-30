@@ -45,9 +45,9 @@ public class UserBankBusinessServiceImpl implements IUserBankBusinessService {
     @Override
     public List<UserCacheBo.WithdrawalAddressResDto> withdrawalAddressList(ReqPage<UserCacheBo.WithdrawalAddressReqDto> dto) {
         var res = withdrawalAddressServiceImpl.lambdaQuery()
-               // .orderByDesc(dto::getSortKey,)
-                .eq( WithdrawalAddress::getCategoryCurrency,dto.getData().getCategory())
-                .eq( WithdrawalAddress::getUid,dto.getData().getUid())
+                // .orderByDesc(dto::getSortKey,)
+                //    .eq( WithdrawalAddress::getCategoryCurrency,dto.getData().getCategory())
+                .eq(WithdrawalAddress::getUid, dto.getData().getUid())
                 /*
                 .eq(WithdrawalAddress::getUid, dto.getUid())
                 .eq(dto.getCategory() == 1, WithdrawalAddress::getCategoryCurrency, "PIX")
@@ -58,12 +58,10 @@ public class UserBankBusinessServiceImpl implements IUserBankBusinessService {
                 res,
                 UserCacheBo.WithdrawalAddressResDto::new,
                 (ori, dest) -> {
-                    if (ori.getCategoryCurrency().equals(ori.getCategoryCurrency())) {
-                        var temp = JSON.parseObject(ori.getAddress()).toJavaObject(UserCacheBo.WithdrawalAddressResDto.class);
-                        dest.setAccountNo(temp.getAccountNo());
-                        dest.setAccountType(temp.getAccountType());
-                        dest.setAddress(temp.getAddress());
-                    }
+                    var temp = JSON.parseObject(ori.getAddress()).toJavaObject(UserCacheBo.WithdrawalAddressResDto.class);
+                    dest.setAccountNo(temp.getAccountNo());
+                    dest.setAccountType(temp.getAccountType());
+                    dest.setAddress(temp.getAddress());
                 }
         );
     }
