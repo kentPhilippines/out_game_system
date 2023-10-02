@@ -14,7 +14,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author David
- * @since 2022-11-10
+ * @since 2023-10-03
  */
 @TableName("win_user")
 public class User extends Model<User> {
@@ -211,6 +211,12 @@ public class User extends Model<User> {
     private String passwordCoin;
 
     /**
+     * IP地址
+     */
+    @TableField("ip")
+    private String ip;
+
+    /**
      * 状态:10-正常 9-冻结 8-删除
      */
     @TableField("status")
@@ -221,6 +227,12 @@ public class User extends Model<User> {
 
     @TableField("updated_at")
     private Integer updatedAt;
+
+    /**
+     * 备注
+     */
+    @TableField("mark")
+    private String mark;
 
 
     public Integer getId() {
@@ -479,6 +491,14 @@ public class User extends Model<User> {
         this.passwordCoin = passwordCoin;
     }
 
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -501,6 +521,14 @@ public class User extends Model<User> {
 
     public void setUpdatedAt(Integer updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
     }
 
     @Override
@@ -543,9 +571,11 @@ public class User extends Model<User> {
         ", supLevelTop=" + supLevelTop +
         ", passwordHash=" + passwordHash +
         ", passwordCoin=" + passwordCoin +
+        ", ip=" + ip +
         ", status=" + status +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
+        ", mark=" + mark +
         "}";
     }
 }

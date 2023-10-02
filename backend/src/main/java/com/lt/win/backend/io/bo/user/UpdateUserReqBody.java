@@ -50,4 +50,7 @@ public class UpdateUserReqBody {
 
     @ApiModelProperty(name = "areaCode", value = "区号", example = "86")
     private String areaCode;
+
+    @ApiModelProperty(name = "mark", value = "备注", example = "无效用户")
+    private String mark;
 }

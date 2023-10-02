@@ -39,4 +39,6 @@ public class DetailResBody extends ListResBody {
     private String ip;
     @ApiModelProperty(name = "areaCode", value = "区号")
     private String areaCode;
+    @ApiModelProperty(name = "mark", value = "备注", example = "无效用户")
+    private String mark;
 }

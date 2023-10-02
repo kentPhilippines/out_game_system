@@ -36,14 +36,16 @@
         <result column="sup_level_top" property="supLevelTop" />
         <result column="password_hash" property="passwordHash" />
         <result column="password_coin" property="passwordCoin" />
+        <result column="ip" property="ip" />
         <result column="status" property="status" />
         <result column="created_at" property="createdAt" />
         <result column="updated_at" property="updatedAt" />
+        <result column="mark" property="mark" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, username, avatar, fcoin, coin_commission, level_id, role, is_promoter, flag, real_name, signature, birthday, area_code, mobile, email, sex, bind_bank, address, score, promo_code, sup_uid_1, sup_username_1, sup_uid_2, sup_uid_3, sup_uid_4, sup_uid_5, sup_uid_6, sup_uid_top, sup_username_top, sup_level_top, password_hash, password_coin, status, created_at, updated_at
+        id, username, avatar, fcoin, coin_commission, level_id, role, is_promoter, flag, real_name, signature, birthday, area_code, mobile, email, sex, bind_bank, address, score, promo_code, sup_uid_1, sup_username_1, sup_uid_2, sup_uid_3, sup_uid_4, sup_uid_5, sup_uid_6, sup_uid_top, sup_username_top, sup_level_top, password_hash, password_coin, ip, status, created_at, updated_at, mark
     </sql>
 
 </mapper>

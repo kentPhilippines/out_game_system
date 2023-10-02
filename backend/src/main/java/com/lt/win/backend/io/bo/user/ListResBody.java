@@ -39,5 +39,7 @@ public class ListResBody {
     private Integer role;
     @ApiModelProperty(name = "status", value = "账号状态:10-正常 9-冻结 8-永久冻结", example = "10")
     private Integer status;
+    @ApiModelProperty(name = "mark", value = "备注", example = "无效用户")
+    private String mark;
 }
 
