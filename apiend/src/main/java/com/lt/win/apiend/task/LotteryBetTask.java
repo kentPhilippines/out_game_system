@@ -8,12 +8,14 @@ import com.lt.win.dao.generator.po.UserWallet;
 import com.lt.win.dao.generator.service.LotteryBetslipsService;
 import com.lt.win.dao.generator.service.UserWalletService;
 import com.lt.win.service.base.UserCoinBase;
+import com.lt.win.service.cache.redis.ConfigCache;
 import com.lt.win.service.cache.redis.LotteryCache;
 import com.lt.win.service.exception.BusinessException;
 import com.lt.win.utils.DateNewUtils;
 import com.lt.win.utils.components.response.CodeInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -36,14 +38,22 @@ public class LotteryBetTask {
     private final LotteryBetslipsService lotteryBetslipsServiceImpl;
     private final UserCoinBase userCoinBase;
     private final LotteryCache lotteryCache;
+    private final ConfigCache configCache;
     /**
      * 每期间隔时间(秒)
      **/
     private static final int INTERVAL = 300;
     Random random = new Random();
 
-   // @Scheduled(cron = "20 */5 * * * ?")
+    @Scheduled(cron = "20 */5 * * * ?")
     public void bet() {
+
+        String autoBet = configCache.getAutoBet();
+        if (!(StringUtils.isNotEmpty(autoBet) && Integer.parseInt(autoBet) == 1)) {
+            return;
+        }
+        String periodsNo = lotteryCache.getCurrPeriodsNo();
+        log.info("开始模拟投注;期号:{}",periodsNo);
         int toDaySecond = DateNewUtils.now() - DateNewUtils.todayStart();
         int restTime = INTERVAL - (toDaySecond % INTERVAL);
         if (restTime <= 10) {
@@ -65,7 +75,6 @@ public class LotteryBetTask {
             if (userWallet.getCoin().compareTo(coinSum) < 0) {
                 throw new BusinessException(CodeInfo.BET_COIN_EXCEPTION);
             }
-            String periodsNo = lotteryCache.getCurrPeriodsNo();
             LotteryType lotteryType = lotteryCache.getLotteryType();
             Integer now = DateNewUtils.now();
             List<LotteryBetslips> lotteryBetslipsList = new ArrayList<>();

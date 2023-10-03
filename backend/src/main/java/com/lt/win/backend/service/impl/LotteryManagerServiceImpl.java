@@ -351,7 +351,7 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
             List<User> userList = userServiceImpl.lambdaQuery().eq(User::getSupUsername1, upUsername).list();
             if (CollUtil.isNotEmpty(userList)) {
                 uidList = userList.stream().map(User::getId).collect(Collectors.toList());
-            }else{
+            } else {
                 uidList.add(-1);
             }
         }
@@ -474,5 +474,49 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
     @Override
     public Boolean betSettle(BetSettleReq req) {
         return lotteryCommBase.settle(req.getId());
+    }
+
+    /**
+     * @return java.util.List<com.lt.win.backend.io.dto.LotteryManagerParams.BetRecordRes>
+     * @Description 注单导出
+     * @Param [req]
+     */
+    @Override
+    public List<BetRecordRes> betExport(BetRecordReq req) {
+        String upUsername = req.getUpUsername();
+        List<Integer> uidList = new ArrayList<>();
+        if (Objects.nonNull(upUsername)) {
+            List<User> userList = userServiceImpl.lambdaQuery().eq(User::getSupUsername1, upUsername).list();
+            if (CollUtil.isNotEmpty(userList)) {
+                uidList = userList.stream().map(User::getId).collect(Collectors.toList());
+            } else {
+                uidList.add(-1);
+            }
+        }
+        List<LotteryBetslips> list = lotteryBetslipsServiceImpl.lambdaQuery()
+                .eq(Objects.nonNull(req.getPeriodsNo()), LotteryBetslips::getPeriodsNo, req.getPeriodsNo())
+                .ge(Objects.nonNull(req.getStartTime()), LotteryBetslips::getCreatedAt, req.getStartTime())
+                .le(Objects.nonNull(req.getEndTime()), LotteryBetslips::getCreatedAt, req.getEndTime())
+                .eq(Objects.nonNull(req.getBetCode()), LotteryBetslips::getBetCode, req.getBetCode())
+                .like(Objects.nonNull(req.getPayoutCode()), LotteryBetslips::getPayoutCode, req.getPayoutCode())
+                .eq(Objects.nonNull(req.getMainCode()), LotteryBetslips::getMainCode, req.getMainCode())
+                .eq(Objects.nonNull(req.getUsername()), LotteryBetslips::getUsername, req.getUsername())
+                .eq(Objects.nonNull(req.getStatus()), LotteryBetslips::getStatus, req.getStatus())
+                .in(CollUtil.isNotEmpty(uidList), LotteryBetslips::getUid, uidList)
+                .orderByDesc(LotteryBetslips::getCreatedAt).list();
+        Map<String, String> lotteryPlateMap = lotteryCache.getLotteryPlateMap();
+        Map<Integer, String> lotteryMainPlateMap = lotteryCache.getLotteryMainPlateMap();
+        return BeanConvertUtils.copyListProperties(list, BetRecordRes::new,
+                (source, target) -> {
+                    target.setMainName(lotteryMainPlateMap.get(source.getMainCode()));
+                    target.setBetName(lotteryPlateMap.get(source.getMainCode() + "_" + source.getBetCode()));
+                    if (Objects.nonNull(source.getPayoutCode())) {
+                        List<Integer> openCodeList = Stream.of(source.getPayoutCode().split(","))
+                                .map(Integer::parseInt)
+                                .collect(Collectors.toList());
+                        List<String> payoutNameList = openCodeList.stream().map(code -> lotteryPlateMap.get(source.getMainCode() + "_" + code)).collect(Collectors.toList());
+                        target.setPayoutName(StringUtils.join(payoutNameList, ","));
+                    }
+                });
     }
 }

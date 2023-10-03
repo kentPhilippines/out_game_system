@@ -117,6 +117,10 @@ public class ConfigCache {
         return getConfigByTitle("mainCurrency");
     }
 
+    public String getAutoBet() {
+        return getConfigByTitle("autoBet");
+    }
+
     /**
      * 注册是否强制邀请码
      *

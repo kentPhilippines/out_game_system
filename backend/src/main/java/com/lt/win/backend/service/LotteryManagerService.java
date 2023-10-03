@@ -3,7 +3,6 @@ package com.lt.win.backend.service;
 import com.lt.win.backend.io.dto.LotteryManagerParams.*;
 import com.lt.win.utils.components.pagination.ReqPage;
 import com.lt.win.utils.components.pagination.ResPage;
-import com.lt.win.utils.components.response.CodeInfo;
 
 import java.util.List;
 
@@ -166,4 +165,11 @@ public interface LotteryManagerService {
      * @Param [req]
      **/
     Boolean betSettle(BetSettleReq req);
+
+    /**
+     * @return java.util.List<com.lt.win.backend.io.dto.LotteryManagerParams.BetRecordRes>
+     * @Description 注单导出
+     * @Param [req]
+     **/
+    List<BetRecordRes> betExport(BetRecordReq req);
 }

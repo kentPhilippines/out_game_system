@@ -191,4 +191,11 @@ public class LotteryManagerController {
     public Result<Boolean> betSettle(@Valid @RequestBody BetSettleReq req) {
         return Result.ok(lotteryManagerServiceImpl.betSettle(req));
     }
+
+    @PostMapping(value = "/betExport")
+    @ApiOperation(value = "注单导出", notes = "注单导出")
+    @ApiOperationSupport(author = "jess", order = 22)
+    public Result<List<BetRecordRes>> betExport(@Valid @RequestBody BetRecordReq req ) {
+        return Result.ok(lotteryManagerServiceImpl.betExport(req));
+    }
 }

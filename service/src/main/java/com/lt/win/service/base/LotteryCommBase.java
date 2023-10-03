@@ -153,12 +153,25 @@ public class LotteryCommBase {
                 betList.sort(Map.Entry.comparingByValue());
                 List<Integer> betCodeList = betList.stream().map(Map.Entry::getKey).collect(Collectors.toList());
                 List<Integer> noBetList = list.stream().filter(code -> !betCodeList.contains(code)).collect(Collectors.toList());
-                Collections.shuffle(noBetList);
                 noBetList.addAll(betCodeList);
                 list = noBetList;
             } else {
                 Collections.shuffle(list);
             }
+            int xIndex = list.indexOf(7);
+            //信弘天禾(7)处理,主板为1
+            if (1 == mainPlate.getCode() && xIndex < 5) {
+                int ele = list.get(5);
+                list.set(5, 7);
+                list.set(xIndex, ele);
+            }
+            //打乱算法
+            List<Integer> openList = list.subList(0, 5);
+            List<Integer> noOpenList = list.subList(5, 10);
+            Collections.shuffle(openList);
+            Collections.shuffle(noOpenList);
+            openList.addAll(noOpenList);
+            list = openList;
 
             LotteryOpen lotteryOpen = lotteryOpenServiceImpl.getOne(new LambdaQueryWrapper<LotteryOpen>()
                     .eq(LotteryOpen::getMainCode, mainPlate.getCode())
