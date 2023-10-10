@@ -59,6 +59,9 @@ public interface Log {
         @ApiModelProperty(name = "device", value = "设备:H5-手机 PC-电脑 ANDROID-安卓 IOS-苹果")
         private String device;
 
+        @ApiModelProperty(name = "userAgent", value = "登录信息")
+        private String userAgent;
+
         @ApiModelProperty(name = "category", value = "类型:0-登出 1-登录 2-进入游戏")
         private Integer category;
 
@@ -85,6 +88,8 @@ public interface Log {
         private Integer category;
         @ApiModelProperty(name = "onLineNumFlag", value = "是否按在线人数查询:Y-需要 N-不需要", example = "N")
         private String onLineNumFlag;
+        @ApiModelProperty(name = "userAgent", value = "登录信息")
+        private String userAgent;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.lt.win.dao.generator.po;
 
+import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -13,7 +14,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author David
- * @since 2022-09-20
+ * @since 2023-10-09
  */
 @TableName("win_user_login_log")
 public class UserLoginLog extends Model<UserLoginLog> {
@@ -36,6 +37,12 @@ public class UserLoginLog extends Model<UserLoginLog> {
     private String username;
 
     /**
+     * 账户余额
+     */
+    @TableField("coin")
+    private BigDecimal coin;
+
+    /**
      * IP地址
      */
     @TableField("ip")
@@ -48,10 +55,22 @@ public class UserLoginLog extends Model<UserLoginLog> {
     private String gameName;
 
     /**
+     * 登录链接
+     */
+    @TableField("url")
+    private String url;
+
+    /**
      * 设备:m-手机 d-电脑 ANDROID-安卓 IOS-苹果
      */
     @TableField("device")
     private String device;
+
+    /**
+     * 设备详情
+     */
+    @TableField("user_agent")
+    private String userAgent;
 
     /**
      * 类型:0-登出 1-登录 2-进入游戏
@@ -96,6 +115,14 @@ public class UserLoginLog extends Model<UserLoginLog> {
         this.username = username;
     }
 
+    public BigDecimal getCoin() {
+        return coin;
+    }
+
+    public void setCoin(BigDecimal coin) {
+        this.coin = coin;
+    }
+
     public String getIp() {
         return ip;
     }
@@ -112,12 +139,28 @@ public class UserLoginLog extends Model<UserLoginLog> {
         this.gameName = gameName;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public String getDevice() {
         return device;
     }
 
     public void setDevice(String device) {
         this.device = device;
+    }
+
+    public String getUserAgent() {
+        return userAgent;
+    }
+
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
     }
 
     public Integer getCategory() {
@@ -163,9 +206,12 @@ public class UserLoginLog extends Model<UserLoginLog> {
         "id=" + id +
         ", uid=" + uid +
         ", username=" + username +
+        ", coin=" + coin +
         ", ip=" + ip +
         ", gameName=" + gameName +
+        ", url=" + url +
         ", device=" + device +
+        ", userAgent=" + userAgent +
         ", category=" + category +
         ", remark=" + remark +
         ", createdAt=" + createdAt +

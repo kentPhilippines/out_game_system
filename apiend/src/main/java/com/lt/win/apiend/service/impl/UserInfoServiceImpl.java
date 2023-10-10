@@ -207,6 +207,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userCache.setUserToken(userInfo.getId(), jwtToken);
         userCache.delInvalidLoginTimes(userInfo.getId());
         userServiceImpl.lambdaUpdate().eq(User::getId, userInfo.getId()).set(User::getUpdatedAt, DateNewUtils.now()).update();
+        String userAgent = request.getHeader("User-Agent");
         // 插入登陆日志
         var log = new UserLoginLog();
         log.setUid(userInfo.getId());
@@ -217,6 +218,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
         var now = DateNewUtils.now();
         log.setUpdatedAt(now);
         log.setCreatedAt(now);
+        log.setUserAgent(userAgent);
         userLoginLogServiceImpl.save(log);
 
         return userInfo;

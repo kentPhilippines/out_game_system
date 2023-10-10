@@ -7,9 +7,12 @@
         <id column="id" property="id" />
         <result column="uid" property="uid" />
         <result column="username" property="username" />
+        <result column="coin" property="coin" />
         <result column="ip" property="ip" />
         <result column="game_name" property="gameName" />
+        <result column="url" property="url" />
         <result column="device" property="device" />
+        <result column="user_agent" property="userAgent" />
         <result column="category" property="category" />
         <result column="remark" property="remark" />
         <result column="created_at" property="createdAt" />
@@ -18,7 +21,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, uid, username, ip, game_name, device, category, remark, created_at, updated_at
+        id, uid, username, coin, ip, game_name, url, device, user_agent, category, remark, created_at, updated_at
     </sql>
 
 </mapper>
