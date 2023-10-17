@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author David
- * @since 2023-09-25
+ * @since 2023-10-17
  */
 @TableName("win_lottery_betslips")
 public class LotteryBetslips extends Model<LotteryBetslips> {
@@ -94,6 +94,12 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
      */
     @TableField("bet_code")
     private Integer betCode;
+
+    /**
+     *  修改人
+     */
+    @TableField("update_user")
+    private String updateUser;
 
     @TableField("created_at")
     private Integer createdAt;
@@ -206,6 +212,14 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
         this.betCode = betCode;
     }
 
+    public String getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser;
+    }
+
     public Integer getCreatedAt() {
         return createdAt;
     }
@@ -243,6 +257,7 @@ public class LotteryBetslips extends Model<LotteryBetslips> {
         ", mainCode=" + mainCode +
         ", payoutCode=" + payoutCode +
         ", betCode=" + betCode +
+        ", updateUser=" + updateUser +
         ", createdAt=" + createdAt +
         ", updatedAt=" + updatedAt +
         "}";

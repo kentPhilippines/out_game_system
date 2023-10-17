@@ -198,4 +198,10 @@ public class LotteryManagerController {
     public Result<List<BetRecordRes>> betExport(@Valid @RequestBody BetRecordReq req ) {
         return Result.ok(lotteryManagerServiceImpl.betExport(req));
     }
+    @PostMapping(value = "/updateBetRecord")
+    @ApiOperation(value = "修改注单记录", notes = "修改注单记录")
+    @ApiOperationSupport(author = "jess", order = 23)
+    public Result<Boolean> updateBetRecord(@Valid @RequestBody UpdateBetRecordReq req ) {
+        return Result.ok(lotteryManagerServiceImpl.updateBetRecord(req));
+    }
 }

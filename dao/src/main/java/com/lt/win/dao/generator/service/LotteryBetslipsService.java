@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author David
- * @since 2023-09-25
+ * @since 2023-10-17
  */
 public interface LotteryBetslipsService extends IService<LotteryBetslips> {
 

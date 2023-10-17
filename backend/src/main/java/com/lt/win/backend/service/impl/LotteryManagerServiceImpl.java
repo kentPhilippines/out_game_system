@@ -519,4 +519,25 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
                     }
                 });
     }
+
+    /**
+     * @param req
+     * @return java.lang.Boolean
+     * @Description 修改注单信息
+     * @Param [req]
+     */
+    @Override
+    public Boolean updateBetRecord(UpdateBetRecordReq req) {
+        LotteryBetslips betslips = lotteryBetslipsServiceImpl.getById(req.getId());
+        //开奖状态不能改修改
+        if (nonNull(betslips) && betslips.getStatus() != 0) {
+            throw new BusinessException(CodeInfo.LOTTERY_BET_SETTLE_EXCEPTION);
+        }
+        BaseParams.HeaderInfo currentLoginUser = ThreadHeaderLocalData.HEADER_INFO_THREAD_LOCAL.get();
+        Integer now = DateNewUtils.now();
+        betslips.setCoinBet(req.getCoinBet());
+        betslips.setUpdateUser(currentLoginUser.getUsername());
+        betslips.setUpdatedAt(now);
+        return lotteryBetslipsServiceImpl.updateById(betslips);
+    }
 }

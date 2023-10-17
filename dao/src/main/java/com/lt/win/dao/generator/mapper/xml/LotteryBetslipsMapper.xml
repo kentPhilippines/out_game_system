@@ -17,13 +17,14 @@
         <result column="main_code" property="mainCode" />
         <result column="payout_code" property="payoutCode" />
         <result column="bet_code" property="betCode" />
+        <result column="update_user" property="updateUser" />
         <result column="created_at" property="createdAt" />
         <result column="updated_at" property="updatedAt" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, periods_no, uid, username, code, name, odds, coin_bet, coin_payout, status, main_code, payout_code, bet_code, created_at, updated_at
+        id, periods_no, uid, username, code, name, odds, coin_bet, coin_payout, status, main_code, payout_code, bet_code, update_user, created_at, updated_at
     </sql>
 
 </mapper>

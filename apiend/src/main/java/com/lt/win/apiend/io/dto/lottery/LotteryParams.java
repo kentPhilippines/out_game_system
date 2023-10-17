@@ -154,5 +154,4 @@ public interface LotteryParams {
         @ApiModelProperty(name = "plateName", value = "板块名称", example = "北京钛方")
         public String plateName;
     }
-
 }

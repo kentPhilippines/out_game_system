@@ -172,4 +172,11 @@ public interface LotteryManagerService {
      * @Param [req]
      **/
     List<BetRecordRes> betExport(BetRecordReq req);
+
+    /**
+     * @Description   修改注单信息
+     * @Param [req]
+     * @return java.lang.Boolean
+     **/
+    Boolean updateBetRecord(UpdateBetRecordReq req);
 }

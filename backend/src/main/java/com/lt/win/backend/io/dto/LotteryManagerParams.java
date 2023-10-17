@@ -301,6 +301,10 @@ public interface LotteryManagerParams {
         public String mainName;
         @ApiModelProperty(name = "createdAt", value = "创建时间", example = "1694750201")
         public Integer createdAt;
+        @ApiModelProperty(name = "updatedAt", value = "修改时间", example = "1694750201")
+        public Integer updatedAt;
+        @ApiModelProperty(name = "updateUser", value = "修改人", example = "admin")
+        public String updateUser = "";
     }
 
     @Data
@@ -373,5 +377,15 @@ public interface LotteryManagerParams {
         @ApiModelProperty(name = "id", value = "ID", example = "491017160991313920")
         public Long id;
     }
+
+    @Data
+    @ApiModel(value = "UpdateBetRecordReq", description = "修改注单请求实体类")
+    class UpdateBetRecordReq {
+        @ApiModelProperty(name = "id", value = "ID", example = "1")
+        public Long id;
+        @ApiModelProperty(name = "coinBet", value = "投注金额", example = "100")
+        public BigDecimal coinBet;
+    }
+
 }
 
