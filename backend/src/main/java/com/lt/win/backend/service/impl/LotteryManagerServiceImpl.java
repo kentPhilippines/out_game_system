@@ -8,6 +8,7 @@ import com.lt.win.backend.service.LotteryManagerService;
 import com.lt.win.dao.generator.po.*;
 import com.lt.win.dao.generator.service.*;
 import com.lt.win.service.base.LotteryCommBase;
+import com.lt.win.service.base.UserCoinBase;
 import com.lt.win.service.cache.KeyConstant;
 import com.lt.win.service.cache.redis.LotteryCache;
 import com.lt.win.service.exception.BusinessException;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 /**
@@ -52,6 +54,8 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
     private final JedisUtil jedisUtil;
     private final LotteryCommBase lotteryCommBase;
     private final UserService userServiceImpl;
+    private final UserWalletService userWalletServiceImpl;
+    private final UserCoinBase userCoinBase;
     /**
      * 每期间隔时间(秒)
      **/
@@ -529,10 +533,19 @@ public class LotteryManagerServiceImpl implements LotteryManagerService {
     @Override
     public Boolean updateBetRecord(UpdateBetRecordReq req) {
         LotteryBetslips betslips = lotteryBetslipsServiceImpl.getById(req.getId());
+        if(isNull(betslips)){
+            return false;
+        }
         //开奖状态不能改修改
-        if (nonNull(betslips) && betslips.getStatus() != 0) {
+        if (betslips.getStatus() != 0) {
             throw new BusinessException(CodeInfo.LOTTERY_BET_SETTLE_EXCEPTION);
         }
+        BigDecimal subValue =req.getCoinBet().subtract(betslips.getCoinBet());
+        UserWallet userWallet = userWalletServiceImpl.getOne(new LambdaQueryWrapper<UserWallet>().eq(UserWallet::getId, betslips.getUid()));
+        if (userWallet.getCoin().compareTo(subValue) < 0) {
+            throw new BusinessException(CodeInfo.BET_COIN_EXCEPTION);
+        }
+        userCoinBase.updateConcurrentUserCoin(subValue.negate(), betslips.getUid());
         BaseParams.HeaderInfo currentLoginUser = ThreadHeaderLocalData.HEADER_INFO_THREAD_LOCAL.get();
         Integer now = DateNewUtils.now();
         betslips.setCoinBet(req.getCoinBet());
